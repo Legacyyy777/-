@@ -21,8 +21,8 @@ export const useTelegram = () => {
                 tg.expand();
             }
 
-            // Включаем подтверждение закрытия
-            tg.enableClosingConfirmation();
+            // Отключаем подтверждение закрытия (чтобы не раздражать пользователя)
+            tg.disableClosingConfirmation();
         }
     }, [tg]);
 
