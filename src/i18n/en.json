@@ -211,9 +211,10 @@
             "manual_select": "Or select your device manually:"
         },
         "step2": {
-            "title": "Download Application",
-            "description": "Choose one of the applications to connect to VPN",
+            "title": "Select Application",
+            "description": "Select an application and download it for connection",
             "recommended": "Recommended",
+            "download": "Download",
             "installed": "Application Installed"
         },
         "step3": {
