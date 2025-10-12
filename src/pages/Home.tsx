@@ -74,11 +74,11 @@ const Home = () => {
                 <div className="card mb-4 animate-fade-in">
                     <div className="flex items-center justify-between mb-3">
                         <h2 className="text-lg font-semibold text-tg-text">
-                            {t('home.status.title')}
+                            Статус подписки
                         </h2>
                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${hasSubscription
-                                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                                : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400'
+                            ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                            : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400'
                             }`}>
                             {hasSubscription ? t('home.status.active') : t('home.status.none')}
                         </span>
@@ -100,13 +100,16 @@ const Home = () => {
                             {t('home.traffic.title')}
                         </h2>
 
-                        {/* Progress bar */}
+                        {/* Progress bar с градиентом */}
                         <div className="mb-3">
-                            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden relative">
                                 <div
-                                    className="h-full bg-tg-link rounded-full transition-all duration-500"
+                                    className="h-full bg-gradient-to-r from-blue-500 to-tg-link rounded-full transition-all duration-700 relative overflow-hidden"
                                     style={{ width: `${Math.min(trafficUsedPercent, 100)}%` }}
-                                />
+                                >
+                                    {/* Shimmer эффект */}
+                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-[shimmer_2s_infinite]" />
+                                </div>
                             </div>
                         </div>
 

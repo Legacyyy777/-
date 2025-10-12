@@ -32,10 +32,12 @@ const Subscribe = () => {
         setLoading(true);
         try {
             const data = await getPurchaseOptions();
+            console.log('Purchase options loaded:', data);
             setOptions(data);
 
             // Автоматически выбираем рекомендованный тариф
             const periods = data.data?.periods as PurchasePeriod[] | undefined;
+            console.log('Periods:', periods);
             if (periods && periods.length > 0) {
                 const recommended = periods.find(p => p.isRecommended);
                 setSelectedPeriod(recommended?.id || periods[0].id);

@@ -58,10 +58,11 @@ const Button = ({
         ${sizeStyles[size]}
         ${fullWidth ? 'w-full' : ''}
         rounded-lg font-medium
-        transition-all duration-200
+        transition-all duration-300
         disabled:opacity-50 disabled:cursor-not-allowed
         flex items-center justify-center gap-2
-        active:scale-95 transform
+        active:scale-95 hover:scale-105 transform
+        shadow-sm hover:shadow-md
         ${className}
       `}
             {...props}

@@ -213,6 +213,16 @@ html {
     }
 }
 
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
 /* Темная тема */
 [data-theme='dark'] {
     --tg-theme-bg-color: #0f172a;
@@ -248,7 +258,11 @@ html {
 }
 
 .card {
-    @apply bg-tg-secondaryBg rounded-xl p-4 shadow-sm;
+    @apply bg-tg-secondaryBg rounded-xl p-4 shadow-sm transition-all duration-300;
+}
+
+.card:hover {
+    @apply shadow-md;
 }
 
 .input {

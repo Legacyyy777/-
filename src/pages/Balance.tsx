@@ -29,8 +29,15 @@ const Balance = () => {
     const [paying, setPaying] = useState(false);
 
     useEffect(() => {
-        loadPaymentMethods();
-        loadSubscription();
+        const init = async () => {
+            try {
+                await loadPaymentMethods();
+                await loadSubscription();
+            } catch (err) {
+                console.error('Error initializing balance page:', err);
+            }
+        };
+        init();
     }, []);
 
     const handleMethodSelect = (methodId: string) => {
