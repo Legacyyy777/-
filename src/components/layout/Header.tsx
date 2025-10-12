@@ -25,7 +25,7 @@ const Header = ({ title, subtitle, showBack, rightAction }: HeaderProps) => {
     };
 
     return (
-        <header className="sticky top-0 z-40 bg-tg-bg/95 backdrop-blur-sm border-b border-tg-hint/10">
+        <header className="sticky top-0 z-40 backdrop-blur-xl bg-tg-bg/70 border-b border-tg-hint/20 shadow-lg">
             <div className="max-w-screen-lg mx-auto px-4 py-4 flex items-center justify-between">
                 <div className="flex items-center gap-3 flex-1">
                     {showBack && (

@@ -1,18 +1,18 @@
-// Плавающие CSS объекты (легковесная альтернатива Three.js)
+// Крутые плавающие объекты с градиентами и эффектами
 
 import { motion } from 'framer-motion';
 import { useUIStore } from '@/store/uiStore';
 
 /**
- * Плавающие геометрические объекты на CSS
+ * Плавающие геометрические объекты с крутыми эффектами
  */
 const FloatingObjects = () => {
-    const { enable3D } = useUIStore();
+  const { enable3D } = useUIStore();
 
-    if (!enable3D) return null;
+  if (!enable3D) return null;
 
-    return (
-        <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none opacity-30">
+  return (
+    <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none opacity-40" style={{ filter: 'blur(80px)' }}>
             {/* Круг 1 - Синий */}
             <motion.div
                 className="absolute w-96 h-96 rounded-full bg-gradient-to-br from-blue-400 to-cyan-600 blur-3xl"

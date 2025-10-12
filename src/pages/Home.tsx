@@ -6,6 +6,7 @@ import Header from '@/components/layout/Header';
 import { useTranslation } from '@/i18n';
 import { useSubscription } from '@/hooks/useSubscription';
 import { useTelegram } from '@/hooks/useTelegram';
+import { useCountUp } from '@/hooks/useCountUp';
 import { formatPrice, formatTraffic, formatTimeUntil } from '@/utils/format';
 
 /**
@@ -52,6 +53,11 @@ const Home = () => {
     const hasSubscription = user?.has_active_subscription;
     const trafficUsedPercent = user ?
         (user.traffic_limit_gb ? (user.traffic_used_gb / user.traffic_limit_gb) * 100 : 0) : 0;
+
+    // Анимация счётчиков
+    const animatedBalance = useCountUp(subscription?.balance_kopeks || 0, 2000);
+    const animatedTrafficUsed = useCountUp(user?.traffic_used_gb || 0, 1500);
+    const animatedDevicesCount = useCountUp(subscription?.connected_devices_count || 0, 1000);
 
     return (
         <>
@@ -115,8 +121,8 @@ const Home = () => {
 
                         <div className="flex justify-between text-sm">
                             <span className="text-tg-hint">
-                                {t('home.traffic.used')}: <span className="font-medium text-tg-text">
-                                    {formatTraffic(user?.traffic_used_gb || 0)}
+                                {t('home.traffic.used')}: <span className="font-medium text-tg-text tabular-nums">
+                                    {formatTraffic(animatedTrafficUsed)}
                                 </span>
                             </span>
                             <span className="text-tg-hint">
@@ -138,8 +144,8 @@ const Home = () => {
                         </h2>
                         <div className="flex items-center justify-between">
                             <span className="text-tg-hint">{t('home.devices.connected')}</span>
-                            <span className="text-2xl font-bold text-tg-link">
-                                {subscription?.connected_devices_count || 0} / {user?.device_limit || 0}
+                            <span className="text-2xl font-bold text-tg-link tabular-nums">
+                                {animatedDevicesCount} / {user?.device_limit || 0}
                             </span>
                         </div>
                     </div>
@@ -152,8 +158,8 @@ const Home = () => {
                             <h2 className="text-lg font-semibold text-tg-text">
                                 {t('balance.current')}
                             </h2>
-                            <p className="text-2xl font-bold text-tg-link mt-1">
-                                {formatPrice(subscription?.balance_kopeks || 0)}
+                            <p className="text-3xl font-bold text-tg-link mt-1 tabular-nums">
+                                {formatPrice(animatedBalance)}
                             </p>
                         </div>
                         <button
@@ -165,14 +171,56 @@ const Home = () => {
                     </div>
                 </div>
 
-                {/* Быстрые действия */}
-                {!hasSubscription && subscription?.trial_available && (
+                {/* Если есть подписка - показываем ссылку и кнопку получения */}
+                {hasSubscription && subscription?.subscription_url && (
+                    <div className="space-y-3 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+                        <Card>
+                            <h3 className="font-semibold mb-3">🔗 Ссылка на подписку</h3>
+                            <div className="flex gap-2">
+                                <input
+                                    readOnly
+                                    value={subscription.subscription_url}
+                                    className="input flex-1 text-sm"
+                                />
+                                <button
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(subscription.subscription_url!);
+                                        hapticNotification('success');
+                                    }}
+                                    className="btn-primary"
+                                >
+                                    {t('common.copy')}
+                                </button>
+                            </div>
+                        </Card>
+
+                        <Card>
+                            <p className="text-sm text-tg-hint mb-3">
+                                Используйте эту ссылку для подключения в вашем VPN клиенте:
+                            </p>
+                            <div className="space-y-2">
+                                <p className="text-sm">
+                                    <span className="font-semibold">iOS:</span> Happ, Streisand, Shadowrocket
+                                </p>
+                                <p className="text-sm">
+                                    <span className="font-semibold">Android:</span> Happ, Clash Meta
+                                </p>
+                                <p className="text-sm">
+                                    <span className="font-semibold">Windows/macOS:</span> Clash Verge, Hiddify
+                                </p>
+                            </div>
+                        </Card>
+                    </div>
+                )}
+
+                {/* Если нет подписки - кнопка покупки */}
+                {!hasSubscription && (
                     <button
                         onClick={() => window.location.href = '/subscribe'}
                         className="w-full btn-primary py-4 text-lg animate-fade-in"
                         style={{ animationDelay: '0.4s' }}
                     >
-                        {t('home.actions.getTrial')}
+                        {subscription?.trial_available ? t('home.actions.getTrial') : 'Купить подписку'}
                     </button>
                 )}
             </Container>
