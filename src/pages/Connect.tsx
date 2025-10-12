@@ -294,13 +294,8 @@ const Connect = () => {
                         // Формируем deep link как в оригинале
                         const deepLink = `${app.urlScheme}${subscriptionUrl}`;
 
-                        // Показываем диалог как в оригинале
-                        const confirmed = confirm(`Открыть ${deepLink}?`);
-
-                        if (confirmed) {
-                            // Пробуем открыть deep link
-                            window.location.href = deepLink;
-                        }
+                        // Сразу открываем deep link через window.open как в оригинале
+                        window.open(deepLink, '_blank');
                     }}
                     className="mb-3 py-6 text-xl"
                     disabled={!selectedApp}
