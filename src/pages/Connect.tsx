@@ -519,7 +519,19 @@ const Connect = () => {
                             <div className="text-center">
                                 <div className="text-6xl mb-4">🔗</div>
                                 <h2 className="text-xl font-bold mb-2">{t('connect.step3.title')}</h2>
-                                <p className="text-sm text-tg-hint mb-4">{t('connect.step3.description')}</p>
+                                <p className="text-sm text-tg-hint mb-2">{t('connect.step3.description')}</p>
+                                
+                                {/* Показываем выбранное приложение */}
+                                {selectedApp && currentLinks.find(app => app.id === selectedApp) && (
+                                    <div className="mt-3 inline-flex items-center gap-2 bg-tg-link/10 px-4 py-2 rounded-lg">
+                                        <span className="text-2xl">
+                                            {currentLinks.find(app => app.id === selectedApp)?.icon}
+                                        </span>
+                                        <span className="text-sm font-medium text-tg-link">
+                                            {currentLinks.find(app => app.id === selectedApp)?.name}
+                                        </span>
+                                    </div>
+                                )}
                             </div>
                         </Card>
 
