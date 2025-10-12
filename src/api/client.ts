@@ -3,7 +3,10 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 // Получение базового URL из переменных окружения
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+// Если открыто через HTTPS - используем относительный путь для избежания Mixed Content
+const API_BASE_URL = window.location.protocol === 'https:'
+    ? '/miniapp'  // Используем Nginx проксирование
+    : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080');
 
 // Создание экземпляра Axios
 export const apiClient: AxiosInstance = axios.create({
