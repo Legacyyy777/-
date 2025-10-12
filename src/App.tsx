@@ -6,7 +6,7 @@ import { useTelegram } from './hooks/useTelegram';
 import { useAuthStore } from './store/authStore';
 import { useUIStore } from './store/uiStore';
 
-// Импорт страниц (lazy loading будет добавлен позже для оптимизации)
+// Импорт страниц
 import Home from './pages/Home';
 import Subscribe from './pages/Subscribe';
 import Settings from './pages/Settings';
@@ -14,6 +14,7 @@ import Balance from './pages/Balance';
 import Referral from './pages/Referral';
 import Profile from './pages/Profile';
 import Help from './pages/Help';
+import Connect from './pages/Connect';
 
 // Импорт Layout компонентов (будут созданы позже)
 import Layout from './components/layout/Layout';
@@ -64,6 +65,7 @@ function App() {
             <Layout>
                 <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="/connect" element={<Connect />} />
                     <Route path="/subscribe" element={<Subscribe />} />
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/balance" element={<Balance />} />

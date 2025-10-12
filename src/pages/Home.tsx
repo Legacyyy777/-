@@ -172,46 +172,16 @@ const Home = () => {
                     </div>
                 </div>
 
-                {/* Если есть подписка - показываем ссылку и кнопку получения */}
+                {/* Если есть подписка - большая кнопка подключения */}
                 {hasSubscription && subscription?.subscription_url && (
-                    <div className="space-y-3 animate-fade-in" style={{ animationDelay: '0.4s' }}>
-                        <Card>
-                            <h3 className="font-semibold mb-3">🔗 Ссылка на подписку</h3>
-                            <div className="flex gap-2">
-                                <input
-                                    readOnly
-                                    value={subscription.subscription_url}
-                                    className="input flex-1 text-sm"
-                                />
-                                <button
-                                    onClick={() => {
-                                        navigator.clipboard.writeText(subscription.subscription_url!);
-                                        hapticNotification('success');
-                                    }}
-                                    className="btn-primary"
-                                >
-                                    {t('common.copy')}
-                                </button>
-                            </div>
-                        </Card>
-
-                        <Card>
-                            <p className="text-sm text-tg-hint mb-3">
-                                Используйте эту ссылку для подключения в вашем VPN клиенте:
-                            </p>
-                            <div className="space-y-2">
-                                <p className="text-sm">
-                                    <span className="font-semibold">iOS:</span> Happ, Streisand, Shadowrocket
-                                </p>
-                                <p className="text-sm">
-                                    <span className="font-semibold">Android:</span> Happ, Clash Meta
-                                </p>
-                                <p className="text-sm">
-                                    <span className="font-semibold">Windows/macOS:</span> Clash Verge, Hiddify
-                                </p>
-                            </div>
-                        </Card>
-                    </div>
+                    <button
+                        onClick={() => window.location.href = '/connect'}
+                        className="w-full btn-primary py-6 text-xl animate-fade-in mb-4"
+                        style={{ animationDelay: '0.4s' }}
+                    >
+                        <span className="mr-2">🚀</span>
+                        Подключиться к VPN
+                    </button>
                 )}
 
                 {/* Если нет подписки - кнопка покупки */}

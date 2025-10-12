@@ -198,6 +198,40 @@
         },
         "totalSpent": "Total Spent"
     },
+    "connect": {
+        "title": "Connect",
+        "no_subscription": "No Active Subscription",
+        "need_subscription": "You need to purchase a subscription to connect to VPN",
+        "buy_subscription": "Buy Subscription",
+        "unknown_device": "Unknown Device",
+        "step1": {
+            "title": "Detecting Your Device",
+            "detected": "Detected",
+            "continue": "Continue",
+            "manual_select": "Select your device manually"
+        },
+        "step2": {
+            "title": "Download Application",
+            "description": "Choose one of the applications to connect to VPN",
+            "recommended": "Recommended",
+            "installed": "Application Installed"
+        },
+        "step3": {
+            "title": "Connect to VPN",
+            "description": "Click the button below to automatically add subscription to the app",
+            "your_link": "Your subscription link:",
+            "connect_button": "Connect",
+            "manual_hint": "Link copied to clipboard. If the app didn't open automatically, paste the link manually."
+        },
+        "step4": {
+            "title": "Manual Connection",
+            "instruction1": "Open the installed app (Happ, Streisand, etc.)",
+            "instruction2": "Find the add subscription button (usually '+' or 'Add')",
+            "instruction3": "Paste the copied subscription link",
+            "instruction4": "Click 'Connect'",
+            "copy_link_again": "Copy Link Again"
+        }
+    },
     "help": {
         "title": "Help",
         "faq": {
