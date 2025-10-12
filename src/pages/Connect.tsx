@@ -91,7 +91,7 @@ const Connect = () => {
         if (currentApps.length > 0 && !selectedApp) {
             setSelectedApp(currentApps[0].id);
         }
-    }, [deviceType, currentApps]);
+    }, [deviceType, currentApps, selectedApp]);
 
     // Подключение
     const handleConnect = () => {
@@ -114,7 +114,7 @@ const Connect = () => {
             deepLink = `${app.urlScheme}${encodeURIComponent(subscriptionUrl)}`;
         }
 
-        console.log('🚀 Opening:', deepLink);
+        console.log('🚀 Opening:', app.name, deepLink);
         openLink(deepLink);
     };
 
