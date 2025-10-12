@@ -1,0 +1,246 @@
+{
+    "common": {
+        "loading": "Загрузка...",
+        "error": "Ошибка",
+        "success": "Успешно",
+        "cancel": "Отмена",
+        "confirm": "Подтвердить",
+        "save": "Сохранить",
+        "delete": "Удалить",
+        "edit": "Редактировать",
+        "back": "Назад",
+        "next": "Далее",
+        "close": "Закрыть",
+        "refresh": "Обновить",
+        "retry": "Повторить",
+        "copy": "Скопировать",
+        "copied": "Скопировано!",
+        "select": "Выбрать",
+        "selected": "Выбрано",
+        "all": "Все",
+        "none": "Нет",
+        "search": "Поиск",
+        "filter": "Фильтр",
+        "sort": "Сортировать",
+        "apply": "Применить",
+        "reset": "Сбросить"
+    },
+    "navigation": {
+        "home": "Главная",
+        "subscribe": "Подписка",
+        "settings": "Настройки",
+        "balance": "Баланс",
+        "referral": "Реферальная",
+        "profile": "Профиль",
+        "help": "Помощь"
+    },
+    "home": {
+        "title": "Моя подписка",
+        "status": {
+            "active": "Активна",
+            "expired": "Истекла",
+            "trial": "Пробная",
+            "none": "Нет подписки"
+        },
+        "expiresIn": "Истекает через",
+        "expired": "Истекла",
+        "traffic": {
+            "title": "Трафик",
+            "used": "Использовано",
+            "remaining": "Осталось",
+            "unlimited": "Безлимитный"
+        },
+        "devices": {
+            "title": "Устройства",
+            "connected": "Подключено"
+        },
+        "actions": {
+            "renew": "Продлить",
+            "configure": "Настроить",
+            "getTrial": "Получить триал"
+        }
+    },
+    "subscribe": {
+        "title": "Купить подписку",
+        "selectPlan": "Выберите тариф",
+        "selectServers": "Выберите серверы",
+        "selectTraffic": "Выберите трафик",
+        "selectDevices": "Количество устройств",
+        "preview": {
+            "title": "Итого",
+            "period": "Период",
+            "servers": "Серверы",
+            "traffic": "Трафик",
+            "devices": "Устройства",
+            "price": "Цена",
+            "discount": "Скидка",
+            "total": "К оплате"
+        },
+        "recommended": "Рекомендуем",
+        "perMonth": "в месяц",
+        "buy": "Купить"
+    },
+    "settings": {
+        "title": "Настройки подписки",
+        "servers": {
+            "title": "Серверы",
+            "description": "Выберите серверы для подключения",
+            "min": "Минимум",
+            "max": "Максимум",
+            "online": "Онлайн",
+            "offline": "Оффлайн"
+        },
+        "traffic": {
+            "title": "Лимит трафика",
+            "description": "Изменить лимит трафика"
+        },
+        "devices": {
+            "title": "Устройства",
+            "description": "Управление устройствами",
+            "limit": "Лимит устройств",
+            "connected": "Подключенные устройства",
+            "remove": "Удалить устройство",
+            "removeConfirm": "Удалить это устройство?"
+        },
+        "autopay": {
+            "title": "Автопродление",
+            "description": "Автоматическое продление подписки",
+            "enabled": "Включено",
+            "disabled": "Выключено",
+            "daysBefore": "Продлевать за"
+        }
+    },
+    "balance": {
+        "title": "Баланс",
+        "current": "Текущий баланс",
+        "topup": "Пополнить",
+        "history": "История транзакций",
+        "selectMethod": "Выберите способ оплаты",
+        "enterAmount": "Введите сумму",
+        "min": "Минимум",
+        "max": "Максимум",
+        "pay": "Оплатить",
+        "promocode": {
+            "title": "Промокод",
+            "placeholder": "Введите промокод",
+            "activate": "Активировать",
+            "success": "Промокод активирован!",
+            "error": "Неверный промокод"
+        },
+        "transaction": {
+            "type": {
+                "topup": "Пополнение",
+                "payment": "Оплата",
+                "refund": "Возврат",
+                "bonus": "Бонус"
+            },
+            "status": {
+                "pending": "В обработке",
+                "completed": "Завершено",
+                "failed": "Ошибка",
+                "cancelled": "Отменено"
+            }
+        }
+    },
+    "referral": {
+        "title": "Реферальная программа",
+        "myLink": "Моя реферальная ссылка",
+        "terms": {
+            "title": "Условия",
+            "minTopup": "Минимальное пополнение",
+            "firstBonus": "Бонус за первое пополнение",
+            "commission": "Комиссия",
+            "yourReward": "Ваша награда"
+        },
+        "stats": {
+            "title": "Статистика",
+            "invited": "Приглашено",
+            "active": "Активных",
+            "earned": "Заработано",
+            "thisMonth": "За месяц",
+            "conversion": "Конверсия"
+        },
+        "referrals": {
+            "title": "Мои рефералы",
+            "name": "Имя",
+            "registered": "Зарегистрирован",
+            "status": "Статус",
+            "earned": "Заработано",
+            "noReferrals": "У вас пока нет рефералов"
+        },
+        "earnings": {
+            "title": "История заработка",
+            "reason": "Причина",
+            "amount": "Сумма",
+            "date": "Дата"
+        }
+    },
+    "profile": {
+        "title": "Профиль",
+        "user": {
+            "title": "Информация",
+            "id": "ID",
+            "username": "Имя пользователя",
+            "premium": "Premium"
+        },
+        "settings": {
+            "title": "Настройки приложения",
+            "language": "Язык",
+            "theme": "Тема",
+            "light": "Светлая",
+            "dark": "Темная",
+            "effects": {
+                "title": "Эффекты",
+                "3d": "3D эффекты",
+                "particles": "Частицы"
+            }
+        },
+        "totalSpent": "Всего потрачено"
+    },
+    "help": {
+        "title": "Помощь",
+        "faq": {
+            "title": "Часто задаваемые вопросы",
+            "noItems": "Нет доступных вопросов"
+        },
+        "instructions": {
+            "title": "Инструкции по настройке",
+            "platforms": {
+                "ios": "iOS",
+                "android": "Android",
+                "windows": "Windows",
+                "macos": "macOS",
+                "linux": "Linux"
+            }
+        },
+        "legal": {
+            "title": "Юридические документы",
+            "publicOffer": "Публичная оферта",
+            "serviceRules": "Правила сервиса",
+            "privacyPolicy": "Политика конфиденциальности"
+        },
+        "support": {
+            "title": "Поддержка",
+            "contact": "Связаться с поддержкой"
+        }
+    },
+    "errors": {
+        "network": "Ошибка сети. Проверьте подключение к интернету.",
+        "server": "Ошибка сервера. Попробуйте позже.",
+        "unauthorized": "Требуется авторизация.",
+        "forbidden": "Доступ запрещён.",
+        "notFound": "Ресурс не найден.",
+        "validation": "Ошибка валидации данных.",
+        "unknown": "Неизвестная ошибка.",
+        "insufficientFunds": "Недостаточно средств на балансе.",
+        "subscriptionNotFound": "Подписка не найдена.",
+        "invalidPromoCode": "Неверный промокод."
+    },
+    "validation": {
+        "required": "Это поле обязательно",
+        "minAmount": "Минимальная сумма: {min}",
+        "maxAmount": "Максимальная сумма: {max}",
+        "invalidEmail": "Неверный email адрес",
+        "invalidPromoCode": "Неверный формат промокода"
+    }
+}

@@ -1,0 +1,246 @@
+{
+    "common": {
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "back": "Back",
+        "next": "Next",
+        "close": "Close",
+        "refresh": "Refresh",
+        "retry": "Retry",
+        "copy": "Copy",
+        "copied": "Copied!",
+        "select": "Select",
+        "selected": "Selected",
+        "all": "All",
+        "none": "None",
+        "search": "Search",
+        "filter": "Filter",
+        "sort": "Sort",
+        "apply": "Apply",
+        "reset": "Reset"
+    },
+    "navigation": {
+        "home": "Home",
+        "subscribe": "Subscribe",
+        "settings": "Settings",
+        "balance": "Balance",
+        "referral": "Referral",
+        "profile": "Profile",
+        "help": "Help"
+    },
+    "home": {
+        "title": "My Subscription",
+        "status": {
+            "active": "Active",
+            "expired": "Expired",
+            "trial": "Trial",
+            "none": "No Subscription"
+        },
+        "expiresIn": "Expires in",
+        "expired": "Expired",
+        "traffic": {
+            "title": "Traffic",
+            "used": "Used",
+            "remaining": "Remaining",
+            "unlimited": "Unlimited"
+        },
+        "devices": {
+            "title": "Devices",
+            "connected": "Connected"
+        },
+        "actions": {
+            "renew": "Renew",
+            "configure": "Configure",
+            "getTrial": "Get Trial"
+        }
+    },
+    "subscribe": {
+        "title": "Buy Subscription",
+        "selectPlan": "Select Plan",
+        "selectServers": "Select Servers",
+        "selectTraffic": "Select Traffic",
+        "selectDevices": "Number of Devices",
+        "preview": {
+            "title": "Summary",
+            "period": "Period",
+            "servers": "Servers",
+            "traffic": "Traffic",
+            "devices": "Devices",
+            "price": "Price",
+            "discount": "Discount",
+            "total": "Total"
+        },
+        "recommended": "Recommended",
+        "perMonth": "per month",
+        "buy": "Buy"
+    },
+    "settings": {
+        "title": "Subscription Settings",
+        "servers": {
+            "title": "Servers",
+            "description": "Select servers to connect",
+            "min": "Minimum",
+            "max": "Maximum",
+            "online": "Online",
+            "offline": "Offline"
+        },
+        "traffic": {
+            "title": "Traffic Limit",
+            "description": "Change traffic limit"
+        },
+        "devices": {
+            "title": "Devices",
+            "description": "Manage devices",
+            "limit": "Device Limit",
+            "connected": "Connected Devices",
+            "remove": "Remove Device",
+            "removeConfirm": "Remove this device?"
+        },
+        "autopay": {
+            "title": "Auto-renewal",
+            "description": "Automatic subscription renewal",
+            "enabled": "Enabled",
+            "disabled": "Disabled",
+            "daysBefore": "Renew before"
+        }
+    },
+    "balance": {
+        "title": "Balance",
+        "current": "Current Balance",
+        "topup": "Top Up",
+        "history": "Transaction History",
+        "selectMethod": "Select Payment Method",
+        "enterAmount": "Enter Amount",
+        "min": "Minimum",
+        "max": "Maximum",
+        "pay": "Pay",
+        "promocode": {
+            "title": "Promo Code",
+            "placeholder": "Enter promo code",
+            "activate": "Activate",
+            "success": "Promo code activated!",
+            "error": "Invalid promo code"
+        },
+        "transaction": {
+            "type": {
+                "topup": "Top Up",
+                "payment": "Payment",
+                "refund": "Refund",
+                "bonus": "Bonus"
+            },
+            "status": {
+                "pending": "Pending",
+                "completed": "Completed",
+                "failed": "Failed",
+                "cancelled": "Cancelled"
+            }
+        }
+    },
+    "referral": {
+        "title": "Referral Program",
+        "myLink": "My Referral Link",
+        "terms": {
+            "title": "Terms",
+            "minTopup": "Minimum Top Up",
+            "firstBonus": "First Top Up Bonus",
+            "commission": "Commission",
+            "yourReward": "Your Reward"
+        },
+        "stats": {
+            "title": "Statistics",
+            "invited": "Invited",
+            "active": "Active",
+            "earned": "Earned",
+            "thisMonth": "This Month",
+            "conversion": "Conversion"
+        },
+        "referrals": {
+            "title": "My Referrals",
+            "name": "Name",
+            "registered": "Registered",
+            "status": "Status",
+            "earned": "Earned",
+            "noReferrals": "You don't have any referrals yet"
+        },
+        "earnings": {
+            "title": "Earnings History",
+            "reason": "Reason",
+            "amount": "Amount",
+            "date": "Date"
+        }
+    },
+    "profile": {
+        "title": "Profile",
+        "user": {
+            "title": "Information",
+            "id": "ID",
+            "username": "Username",
+            "premium": "Premium"
+        },
+        "settings": {
+            "title": "App Settings",
+            "language": "Language",
+            "theme": "Theme",
+            "light": "Light",
+            "dark": "Dark",
+            "effects": {
+                "title": "Effects",
+                "3d": "3D Effects",
+                "particles": "Particles"
+            }
+        },
+        "totalSpent": "Total Spent"
+    },
+    "help": {
+        "title": "Help",
+        "faq": {
+            "title": "Frequently Asked Questions",
+            "noItems": "No questions available"
+        },
+        "instructions": {
+            "title": "Setup Instructions",
+            "platforms": {
+                "ios": "iOS",
+                "android": "Android",
+                "windows": "Windows",
+                "macos": "macOS",
+                "linux": "Linux"
+            }
+        },
+        "legal": {
+            "title": "Legal Documents",
+            "publicOffer": "Public Offer",
+            "serviceRules": "Service Rules",
+            "privacyPolicy": "Privacy Policy"
+        },
+        "support": {
+            "title": "Support",
+            "contact": "Contact Support"
+        }
+    },
+    "errors": {
+        "network": "Network error. Check your internet connection.",
+        "server": "Server error. Please try again later.",
+        "unauthorized": "Authorization required.",
+        "forbidden": "Access denied.",
+        "notFound": "Resource not found.",
+        "validation": "Data validation error.",
+        "unknown": "Unknown error.",
+        "insufficientFunds": "Insufficient funds.",
+        "subscriptionNotFound": "Subscription not found.",
+        "invalidPromoCode": "Invalid promo code."
+    },
+    "validation": {
+        "required": "This field is required",
+        "minAmount": "Minimum amount: {min}",
+        "maxAmount": "Maximum amount: {max}",
+        "invalidEmail": "Invalid email address",
+        "invalidPromoCode": "Invalid promo code format"
+    }
+}

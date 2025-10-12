@@ -1,0 +1,272 @@
+/* Глобальные стили приложения */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS переменные для Telegram темы */
+:root {
+    --tg-theme-bg-color: #ffffff;
+    --tg-theme-text-color: #000000;
+    --tg-theme-hint-color: #999999;
+    --tg-theme-link-color: #2481cc;
+    --tg-theme-button-color: #2481cc;
+    --tg-theme-button-text-color: #ffffff;
+    --tg-theme-secondary-bg-color: #f0f0f0;
+}
+
+/* Базовые стили */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    background-color: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);
+}
+
+#root {
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Отключение выделения текста для мобильных устройств */
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+/* Плавная прокрутка */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Скрываем scrollbar но оставляем функциональность */
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(var(--tg-theme-hint-color), 0.3);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(var(--tg-theme-hint-color), 0.5);
+}
+
+/* Утилиты */
+.safe-area-inset-top {
+    padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-inset-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-area-inset-left {
+    padding-left: env(safe-area-inset-left);
+}
+
+.safe-area-inset-right {
+    padding-right: env(safe-area-inset-right);
+}
+
+/* Анимация fade */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+/* Анимация slide */
+@keyframes slideInUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateY(-100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* Анимация scale */
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes scaleOut {
+    from {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    to {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+}
+
+/* Кастомные утилиты Tailwind */
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+
+    .glass {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .glass-dark {
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .skeleton {
+        @apply animate-pulse bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700;
+        background-size: 200% 100%;
+        animation: skeleton 1.5s ease-in-out infinite;
+    }
+}
+
+@keyframes skeleton {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Темная тема */
+[data-theme='dark'] {
+    --tg-theme-bg-color: #0f172a;
+    --tg-theme-text-color: #f8fafc;
+    --tg-theme-hint-color: #94a3b8;
+    --tg-theme-link-color: #3b82f6;
+    --tg-theme-button-color: #3b82f6;
+    --tg-theme-button-text-color: #ffffff;
+    --tg-theme-secondary-bg-color: rgba(30, 41, 59, 0.85);
+}
+
+/* Предотвращение масштабирования на мобильных */
+@media (max-width: 768px) {
+
+    input,
+    textarea,
+    select {
+        font-size: 16px !important;
+    }
+}
+
+/* Кастомные компоненты */
+.btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 active:scale-95;
+}
+
+.btn-primary {
+    @apply btn bg-tg-button text-tg-buttonText hover:opacity-90;
+}
+
+.btn-secondary {
+    @apply btn bg-tg-secondaryBg text-tg-text hover:opacity-80;
+}
+
+.card {
+    @apply bg-tg-secondaryBg rounded-xl p-4 shadow-sm;
+}
+
+.input {
+    @apply w-full px-4 py-3 rounded-lg bg-tg-secondaryBg text-tg-text border-2 border-transparent focus:border-tg-link outline-none transition-colors;
+}
+
+/* Loader */
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 3px solid rgba(var(--tg-theme-button-color), 0.3);
+    border-top-color: var(--tg-theme-button-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

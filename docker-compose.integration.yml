@@ -1,0 +1,57 @@
+# Пример интеграции мини-апп в существующий docker-compose.yml бота
+# 
+# ИНСТРУКЦИЯ:
+# 1. Скопируйте этот файл в папку с ботом
+# 2. Добавьте секцию miniapp в ваш существующий docker-compose.yml
+# 3. Или используйте этот файл вместе с основным:
+#    docker-compose -f docker-compose.yml -f docker-compose.integration.yml up -d
+
+version: '3.8'
+
+services:
+  # Мини-приложение для бота
+  miniapp:
+    build:
+      context: ./miniapp  # Путь к папке с мини-апп
+      dockerfile: docker/Dockerfile
+    image: remnawave-miniapp:latest
+    container_name: remnawave-miniapp
+    restart: unless-stopped
+    
+    # Порт доступен только локально для безопасности
+    ports:
+      - "127.0.0.1:3000:3000"
+    
+    environment:
+      - NODE_ENV=production
+    
+    # Подключаемся к той же сети что и бот
+    networks:
+      - bot_network
+    
+    # Healthcheck для мониторинга
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    # Логирование
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# Если у вас сеть называется bot_network (как в оригинальном боте)
+networks:
+  bot_network:
+    external: false
+
+# Если нужно подключиться к существующей сети
+# networks:
+#   bot_network:
+#     external: true
+#     name: remnawave-network
+
