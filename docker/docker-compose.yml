@@ -11,7 +11,7 @@ services:
     container_name: remnawave-miniapp
     restart: unless-stopped
     ports:
-      - "${MINIAPP_PORT:-3000}:3000"
+      - "${MINIAPP_PORT:-3001}:3000"
     environment:
       - NODE_ENV=production
     networks:
