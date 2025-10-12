@@ -1,28 +1,203 @@
 // Страница покупки подписки
 
+import { useEffect, useState } from 'react';
 import Container from '@/components/layout/Container';
 import Header from '@/components/layout/Header';
+import Button from '@/components/ui/Button';
+import Card from '@/components/ui/Card';
 import { useTranslation } from '@/i18n';
+import { useTelegram } from '@/hooks/useTelegram';
+import { getPurchaseOptions, previewPurchase, purchaseSubscription, activateTrial } from '@/api/subscriptions';
+import { formatPrice } from '@/utils/format';
+import type { PurchaseOptions, PurchasePeriod } from '@/types/api';
 
 /**
  * Страница покупки подписки
- * TODO: Полная реализация с выбором тарифа, серверов, трафика
  */
 const Subscribe = () => {
     const { t } = useTranslation();
+    const { hapticFeedback, hapticNotification, showAlert } = useTelegram();
+
+    const [loading, setLoading] = useState(true);
+    const [purchasing, setPurchasing] = useState(false);
+    const [options, setOptions] = useState<PurchaseOptions | null>(null);
+    const [selectedPeriod, setSelectedPeriod] = useState<string | null>(null);
+    const [preview, setPreview] = useState<any>(null);
+
+    // Загрузка опций при монтировании
+    useEffect(() => {
+        loadOptions();
+    }, []);
+
+    const loadOptions = async () => {
+        setLoading(true);
+        try {
+            const data = await getPurchaseOptions();
+            setOptions(data);
+
+            // Автоматически выбираем рекомендованный тариф
+            const periods = data.data?.periods as PurchasePeriod[] | undefined;
+            if (periods && periods.length > 0) {
+                const recommended = periods.find(p => p.isRecommended);
+                setSelectedPeriod(recommended?.id || periods[0].id);
+            }
+        } catch (err) {
+            console.error('Error loading options:', err);
+            hapticNotification('error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const loadPreview = async (periodId: string) => {
+        try {
+            const data = await previewPurchase({ periodId });
+            setPreview(data);
+        } catch (err) {
+            console.error('Error loading preview:', err);
+        }
+    };
+
+    const handlePeriodSelect = (periodId: string) => {
+        hapticFeedback('light');
+        setSelectedPeriod(periodId);
+        loadPreview(periodId);
+    };
+
+    const handlePurchase = async () => {
+        if (!selectedPeriod) return;
+
+        setPurchasing(true);
+        hapticFeedback('medium');
+
+        try {
+            await purchaseSubscription({ periodId: selectedPeriod });
+            hapticNotification('success');
+            showAlert('Подписка успешно оформлена!', () => {
+                window.location.href = '/';
+            });
+        } catch (err: any) {
+            hapticNotification('error');
+            showAlert(err.message || 'Ошибка при покупке подписки');
+        } finally {
+            setPurchasing(false);
+        }
+    };
+
+    const handleActivateTrial = async () => {
+        setPurchasing(true);
+        hapticFeedback('medium');
+
+        try {
+            await activateTrial();
+            hapticNotification('success');
+            showAlert('Пробная подписка активирована!', () => {
+                window.location.href = '/';
+            });
+        } catch (err: any) {
+            hapticNotification('error');
+            showAlert(err.message || 'Ошибка активации триала');
+        } finally {
+            setPurchasing(false);
+        }
+    };
+
+    if (loading) {
+        return (
+            <Container className="flex items-center justify-center min-h-[60vh]">
+                <div className="loader"></div>
+            </Container>
+        );
+    }
+
+    const periods = options?.data?.periods as PurchasePeriod[] | undefined;
+    const balance = options?.balance_kopeks || 0;
 
     return (
         <>
             <Header title={t('subscribe.title')} showBack />
 
             <Container>
-                <div className="card text-center py-12">
-                    <p className="text-4xl mb-4">📦</p>
-                    <h2 className="text-xl font-semibold mb-2">{t('subscribe.title')}</h2>
-                    <p className="text-tg-hint">
-                        {t('common.loading')}...
-                    </p>
+                {/* Баланс */}
+                <Card className="mb-4">
+                    <div className="flex items-center justify-between">
+                        <span className="text-tg-hint">{t('balance.current')}</span>
+                        <span className="text-xl font-bold text-tg-link">
+                            {formatPrice(balance)}
+                        </span>
+                    </div>
+                </Card>
+
+                {/* Выбор тарифа */}
+                <h2 className="text-lg font-semibold mb-3">{t('subscribe.selectPlan')}</h2>
+
+                <div className="space-y-3 mb-6">
+                    {periods?.map((period) => (
+                        <Card
+                            key={period.id}
+                            hover
+                            onClick={() => handlePeriodSelect(period.id)}
+                            className={`cursor-pointer transition-all ${selectedPeriod === period.id
+                                    ? 'ring-2 ring-tg-link'
+                                    : ''
+                                }`}
+                        >
+                            <div className="flex items-center justify-between">
+                                <div className="flex-1">
+                                    <div className="flex items-center gap-2">
+                                        <h3 className="font-semibold text-tg-text">
+                                            {period.title || `${period.days} дней`}
+                                        </h3>
+                                        {period.isRecommended && (
+                                            <span className="px-2 py-0.5 bg-tg-link text-white text-xs rounded-full">
+                                                {t('subscribe.recommended')}
+                                            </span>
+                                        )}
+                                        {period.badge && (
+                                            <span className="px-2 py-0.5 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs rounded-full">
+                                                {period.badge}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {period.description && (
+                                        <p className="text-sm text-tg-hint mt-1">{period.description}</p>
+                                    )}
+
+                                    {period.pricePerMonthLabel && (
+                                        <p className="text-xs text-tg-hint mt-1">
+                                            {period.pricePerMonthLabel} {t('subscribe.perMonth')}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div className="text-right">
+                                    {period.discountPercent > 0 && period.originalPriceLabel && (
+                                        <p className="text-xs text-tg-hint line-through">
+                                            {period.originalPriceLabel}
+                                        </p>
+                                    )}
+                                    <p className="text-lg font-bold text-tg-link">
+                                        {period.priceLabel}
+                                    </p>
+                                </div>
+                            </div>
+                        </Card>
+                    ))}
                 </div>
+
+                {/* Кнопка покупки */}
+                {selectedPeriod && (
+                    <Button
+                        variant="primary"
+                        size="lg"
+                        fullWidth
+                        isLoading={purchasing}
+                        onClick={handlePurchase}
+                    >
+                        {t('subscribe.buy')}
+                    </Button>
+                )}
             </Container>
         </>
     );
