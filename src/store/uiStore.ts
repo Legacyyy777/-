@@ -73,15 +73,17 @@ export const useUIStore = create<UIState>((set, get) => ({
     loading: {
         isGlobalLoading: false,
     },
-    enable3D: false, // Отключено для быстрой сборки
-    enableParticles: false, // Отключено для быстрой сборки
+    enable3D: localStorage.getItem('enable_3d') === 'true', // Загружаем из localStorage
+    enableParticles: localStorage.getItem('enable_particles') === 'true', // Загружаем из localStorage
 
     // Управление темой - новая система
     setTheme: (theme) => {
         set({ theme });
         localStorage.setItem('app_theme', theme);
         // Применяем data-theme атрибут для новой системы тем
-        document.documentElement.setAttribute('data-theme', theme);
+        if (typeof document !== 'undefined') {
+            document.documentElement.setAttribute('data-theme', theme);
+        }
     },
 
     toggleTheme: () => {
