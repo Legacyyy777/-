@@ -12,14 +12,33 @@ const FloatingObjects = () => {
     if (!enable3D) return null;
 
     return (
-        <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none opacity-10">
-            {/* Круг 1 */}
+        <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none opacity-30">
+            {/* Круг 1 - Синий */}
             <motion.div
-                className="absolute w-64 h-64 rounded-full bg-gradient-to-br from-tg-link to-blue-600 blur-3xl"
+                className="absolute w-96 h-96 rounded-full bg-gradient-to-br from-blue-400 to-cyan-600 blur-3xl"
                 animate={{
-                    x: [0, 100, 0],
-                    y: [0, -50, 0],
-                    scale: [1, 1.2, 1],
+                    x: [0, 150, 0],
+                    y: [0, -80, 0],
+                    scale: [1, 1.4, 1],
+                }}
+                transition={{
+                    duration: 15,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                }}
+                style={{
+                    top: '5%',
+                    left: '5%',
+                }}
+            />
+
+            {/* Круг 2 - Фиолетовый */}
+            <motion.div
+                className="absolute w-[500px] h-[500px] rounded-full bg-gradient-to-br from-purple-500 to-pink-600 blur-3xl"
+                animate={{
+                    x: [0, -120, 0],
+                    y: [0, 120, 0],
+                    scale: [1, 1.5, 1],
                 }}
                 transition={{
                     duration: 20,
@@ -27,17 +46,18 @@ const FloatingObjects = () => {
                     ease: 'easeInOut',
                 }}
                 style={{
-                    top: '10%',
-                    left: '10%',
+                    bottom: '5%',
+                    right: '5%',
                 }}
             />
 
-            {/* Круг 2 */}
+            {/* Круг 3 - Зелёный */}
             <motion.div
-                className="absolute w-96 h-96 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 blur-3xl"
+                className="absolute w-80 h-80 rounded-full bg-gradient-to-br from-green-400 to-teal-600 blur-3xl"
                 animate={{
-                    x: [0, -100, 0],
-                    y: [0, 100, 0],
+                    rotate: [0, 180, 360],
+                    x: [0, 80, 0],
+                    y: [0, -120, 0],
                     scale: [1, 1.3, 1],
                 }}
                 transition={{
@@ -46,28 +66,28 @@ const FloatingObjects = () => {
                     ease: 'easeInOut',
                 }}
                 style={{
-                    bottom: '10%',
-                    right: '10%',
+                    top: '40%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
                 }}
             />
 
-            {/* Квадрат */}
+            {/* Круг 4 - Оранжевый */}
             <motion.div
-                className="absolute w-48 h-48 bg-gradient-to-br from-green-500 to-teal-500 blur-3xl"
+                className="absolute w-72 h-72 rounded-full bg-gradient-to-br from-orange-400 to-red-500 blur-3xl"
                 animate={{
-                    rotate: [0, 180, 360],
-                    x: [0, 50, 0],
-                    y: [0, -100, 0],
+                    x: [0, -90, 0],
+                    y: [0, 90, 0],
+                    scale: [1, 1.2, 1],
                 }}
                 transition={{
-                    duration: 30,
+                    duration: 18,
                     repeat: Infinity,
                     ease: 'easeInOut',
                 }}
                 style={{
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
+                    top: '60%',
+                    left: '20%',
                 }}
             />
         </div>

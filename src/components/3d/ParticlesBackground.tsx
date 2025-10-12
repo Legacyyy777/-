@@ -30,8 +30,8 @@ const ParticlesBackground = () => {
             size: number;
         }> = [];
 
-        // Создание частиц
-        for (let i = 0; i < 50; i++) {
+        // Создание частиц (увеличено количество)
+        for (let i = 0; i < 100; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
@@ -87,7 +87,7 @@ const ParticlesBackground = () => {
     return (
         <canvas
             ref={canvasRef}
-            className="fixed inset-0 -z-10 pointer-events-none opacity-30"
+            className="fixed inset-0 -z-10 pointer-events-none opacity-50"
         />
     );
 };
