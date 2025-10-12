@@ -75,12 +75,14 @@ const Connect = () => {
     // Ссылки на приложения для каждой платформы
     const appLinks: Record<DeviceType, AppLink[]> = {
         ios: [
-            { name: 'Happ', url: 'https://apps.apple.com/app/happ-vpn/id6443709445', icon: '🚀' },
+            { name: 'Happ [EU]', url: 'https://apps.apple.com/us/app/happ-proxy-utility/id6504287215', icon: '🚀' },
+            { name: 'Happ [RU]', url: 'https://apps.apple.com/ru/app/happ-proxy-utility-plus/id6746188973', icon: '🚀' },
             { name: 'Streisand', url: 'https://apps.apple.com/app/streisand/id6450534064', icon: '🎭' },
-            { name: 'Shadowrocket', url: 'https://apps.apple.com/app/shadowrocket/id932747118', icon: '🚀' },
+            { name: 'Shadowrocket', url: 'https://apps.apple.com/app/shadowrocket/id932747118', icon: '⚡' },
         ],
         android: [
-            { name: 'Happ', url: 'https://play.google.com/store/apps/details?id=com.happ.android', icon: '🚀' },
+            { name: 'Happ', url: 'https://play.google.com/store/apps/details?id=com.happproxy', icon: '🚀' },
+            { name: 'Happ [APK]', url: 'https://github.com/Happ-proxy/happ-android/releases/latest/download/Happ.apk', icon: '📦' },
             { name: 'Clash Meta', url: 'https://github.com/MetaCubeX/ClashMetaForAndroid/releases', icon: '⚡' },
         ],
         windows: [
@@ -131,7 +133,7 @@ const Connect = () => {
 
         // Формируем deep link в зависимости от платформы
         let deepLinkUrl = subscriptionUrl;
-        
+
         if (deviceType === 'ios') {
             // Для iOS используем happ://add/
             deepLinkUrl = `happ://add/${encodeURIComponent(subscriptionUrl)}`;
@@ -283,7 +285,7 @@ const Connect = () => {
                                     ▼
                                 </span>
                             </button>
-                            
+
                             {showManualSelect && (
                                 <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3 animate-fade-in">
                                     {(['ios', 'android', 'windows', 'macos', 'linux'] as DeviceType[]).map((type) => (
@@ -296,8 +298,8 @@ const Connect = () => {
                                                 setTimeout(() => setStep(2), 300);
                                             }}
                                             className={`p-4 rounded-xl border-2 transition-all duration-200 active:scale-95 ${deviceType === type
-                                                    ? 'border-tg-link bg-tg-link/10 shadow-lg'
-                                                    : 'border-transparent bg-tg-secondaryBg hover:border-tg-link/30 hover:shadow-md'
+                                                ? 'border-tg-link bg-tg-link/10 shadow-lg'
+                                                : 'border-transparent bg-tg-secondaryBg hover:border-tg-link/30 hover:shadow-md'
                                                 }`}
                                         >
                                             <div className="text-4xl mb-2">

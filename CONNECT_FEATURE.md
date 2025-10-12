@@ -133,12 +133,14 @@ Desktop:
 ## 🔗 Ссылки на приложения
 
 ### iOS:
-- Happ: `https://apps.apple.com/app/happ-vpn/id6443709445`
+- Happ [EU]: `https://apps.apple.com/us/app/happ-proxy-utility/id6504287215` ⭐
+- Happ [RU]: `https://apps.apple.com/ru/app/happ-proxy-utility-plus/id6746188973` ⭐
 - Streisand: `https://apps.apple.com/app/streisand/id6450534064`
 - Shadowrocket: `https://apps.apple.com/app/shadowrocket/id932747118`
 
 ### Android:
-- Happ: `https://play.google.com/store/apps/details?id=com.happ.android`
+- Happ: `https://play.google.com/store/apps/details?id=com.happproxy` ⭐
+- Happ [APK]: `https://github.com/Happ-proxy/happ-android/releases/latest/download/Happ.apk`
 - Clash Meta: `https://github.com/MetaCubeX/ClashMetaForAndroid/releases`
 
 ### Desktop:
