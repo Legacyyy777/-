@@ -128,30 +128,19 @@ const Connect = () => {
             console.error('Failed to copy to clipboard');
         });
 
-        // Пытаемся открыть через разные методы
+        // Используем Telegram API для открытия ссылок
         if (deviceType === 'ios' || deviceType === 'android') {
-            // Вариант 1: Прямая ссылка (работает для большинства клиентов)
-            // Многие VPN клиенты распознают ссылки типа sub://...
             try {
-                // Пробуем разные варианты deep links
-                const deepLinks = [
-                    subscriptionUrl, // Прямая ссылка
-                    `happ://install-config?url=${encodeURIComponent(subscriptionUrl)}`,
-                    `sing-box://import-remote-profile?url=${encodeURIComponent(subscriptionUrl)}`,
-                    `clash://install-config?url=${encodeURIComponent(subscriptionUrl)}`,
-                ];
-
-                // Пробуем открыть первый вариант
-                const link = document.createElement('a');
-                link.href = deepLinks[0];
-                link.click();
+                // Для мобильных открываем ссылку через Telegram API
+                // Это позволяет системе определить какое приложение должно открыться
+                openLink(subscriptionUrl);
 
                 // Показываем инструкцию через 1.5 секунды
                 setTimeout(() => {
                     setStep(4);
                 }, 1500);
             } catch (err) {
-                console.error('Failed to open deep link:', err);
+                console.error('Failed to open link:', err);
                 setStep(4);
             }
         } else {
@@ -420,8 +409,8 @@ const Connect = () => {
                                 fullWidth
                                 onClick={() => {
                                     hapticFeedback('light');
-                                    // Открываем ссылку в новой вкладке/приложении
-                                    window.open(subscriptionUrl, '_blank');
+                                    // Используем Telegram API для надежного открытия
+                                    openLink(subscriptionUrl, { try_instant_view: false });
                                 }}
                                 className="mb-4"
                             >
