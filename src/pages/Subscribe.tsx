@@ -84,11 +84,36 @@ const Subscribe = () => {
     }
 
     // Периоды могут быть в разных местах в зависимости от структуры ответа
-    const periods = (options?.data?.periods || options?.data?.renewal_periods || []) as PurchasePeriod[] | undefined;
+    // Пробуем разные варианты структуры API
+    let periods: PurchasePeriod[] | undefined;
+
+    if (options?.data?.periods) {
+        periods = options.data.periods as PurchasePeriod[];
+    } else if (options?.data?.renewal_periods) {
+        periods = options.data.renewal_periods as PurchasePeriod[];
+    } else if (Array.isArray(options?.data)) {
+        periods = options.data as PurchasePeriod[];
+    } else if (options?.data) {
+        // Возможно периоды находятся в другом месте
+        const dataKeys = Object.keys(options.data);
+        console.log('🔍 Available keys in data:', dataKeys);
+
+        // Ищем массив периодов
+        for (const key of dataKeys) {
+            if (Array.isArray(options.data[key])) {
+                console.log(`✅ Found array in data.${key}:`, options.data[key]);
+                periods = options.data[key] as PurchasePeriod[];
+                break;
+            }
+        }
+    }
+
     const balance = options?.balance_kopeks || 0;
 
-    console.log('Rendering periods:', periods);
-    console.log('Options data:', options?.data);
+    console.log('📦 Full options object:', options);
+    console.log('📋 Extracted periods:', periods);
+    console.log('📋 Periods length:', periods?.length);
+    console.log('💰 Balance:', balance);
 
     return (
         <>
@@ -107,6 +132,23 @@ const Subscribe = () => {
 
                 {/* Выбор тарифа */}
                 <h2 className="text-lg font-semibold mb-3">{t('subscribe.selectPlan')}</h2>
+
+                {/* Если нет тарифов - показываем сообщение */}
+                {(!periods || periods.length === 0) && (
+                    <Card className="text-center mb-4">
+                        <div className="text-4xl mb-3">📦</div>
+                        <p className="text-tg-hint mb-2">Тарифы не найдены</p>
+                        <p className="text-xs text-tg-hint">Проверьте консоль для отладки</p>
+                        <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={loadOptions}
+                            className="mt-3"
+                        >
+                            {t('common.retry')}
+                        </Button>
+                    </Card>
+                )}
 
                 <div className="space-y-3 mb-6">
                     {periods?.map((period) => (
