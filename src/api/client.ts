@@ -5,7 +5,7 @@ import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'ax
 // Получение базового URL из переменных окружения
 // Если открыто через HTTPS - используем относительный путь для избежания Mixed Content
 const API_BASE_URL = window.location.protocol === 'https:'
-    ? '/miniapp'  // Используем Nginx проксирование
+    ? ''  // Пустой baseURL, т.к. пути уже содержат /miniapp/
     : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080');
 
 // Создание экземпляра Axios
