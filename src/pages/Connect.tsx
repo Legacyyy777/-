@@ -78,102 +78,102 @@ const Connect = () => {
     // Ссылки на приложения для каждой платформы с URL схемами
     const appLinks: Record<DeviceType, AppLink[]> = {
         ios: [
-            { 
+            {
                 id: 'happ-eu',
-                name: 'Happ [EU]', 
-                url: 'https://apps.apple.com/us/app/happ-proxy-utility/id6504287215', 
+                name: 'Happ [EU]',
+                url: 'https://apps.apple.com/us/app/happ-proxy-utility/id6504287215',
                 icon: '🚀',
                 urlScheme: 'happ://add/'
             },
-            { 
+            {
                 id: 'happ-ru',
-                name: 'Happ [RU]', 
-                url: 'https://apps.apple.com/ru/app/happ-proxy-utility-plus/id6746188973', 
+                name: 'Happ [RU]',
+                url: 'https://apps.apple.com/ru/app/happ-proxy-utility-plus/id6746188973',
                 icon: '🚀',
                 urlScheme: 'happ://add/'
             },
-            { 
+            {
                 id: 'streisand',
-                name: 'Streisand', 
-                url: 'https://apps.apple.com/app/streisand/id6450534064', 
+                name: 'Streisand',
+                url: 'https://apps.apple.com/app/streisand/id6450534064',
                 icon: '🎭',
                 urlScheme: 'streisand://import/'
             },
-            { 
+            {
                 id: 'shadowrocket',
-                name: 'Shadowrocket', 
-                url: 'https://apps.apple.com/app/shadowrocket/id932747118', 
+                name: 'Shadowrocket',
+                url: 'https://apps.apple.com/app/shadowrocket/id932747118',
                 icon: '⚡',
                 urlScheme: 'sub://'
             },
         ],
         android: [
-            { 
+            {
                 id: 'happ-play',
-                name: 'Happ', 
-                url: 'https://play.google.com/store/apps/details?id=com.happproxy', 
+                name: 'Happ',
+                url: 'https://play.google.com/store/apps/details?id=com.happproxy',
                 icon: '🚀',
                 urlScheme: 'happ://add/'
             },
-            { 
+            {
                 id: 'happ-apk',
-                name: 'Happ [APK]', 
-                url: 'https://github.com/Happ-proxy/happ-android/releases/latest/download/Happ.apk', 
+                name: 'Happ [APK]',
+                url: 'https://github.com/Happ-proxy/happ-android/releases/latest/download/Happ.apk',
                 icon: '📦',
                 urlScheme: 'happ://add/'
             },
-            { 
+            {
                 id: 'clash-meta',
-                name: 'Clash Meta', 
-                url: 'https://github.com/MetaCubeX/ClashMetaForAndroid/releases', 
+                name: 'Clash Meta',
+                url: 'https://github.com/MetaCubeX/ClashMetaForAndroid/releases',
                 icon: '⚡',
                 urlScheme: 'clash://install-config?url='
             },
         ],
         windows: [
-            { 
+            {
                 id: 'hiddify-win',
-                name: 'Hiddify', 
-                url: 'https://github.com/hiddify/hiddify-next/releases', 
+                name: 'Hiddify',
+                url: 'https://github.com/hiddify/hiddify-next/releases',
                 icon: '🔒',
                 urlScheme: 'hiddify://import/'
             },
-            { 
+            {
                 id: 'clash-verge-win',
-                name: 'Clash Verge', 
-                url: 'https://github.com/clash-verge-rev/clash-verge-rev/releases', 
+                name: 'Clash Verge',
+                url: 'https://github.com/clash-verge-rev/clash-verge-rev/releases',
                 icon: '⚡',
                 urlScheme: 'clash://install-config?url='
             },
         ],
         macos: [
-            { 
+            {
                 id: 'hiddify-mac',
-                name: 'Hiddify', 
-                url: 'https://github.com/hiddify/hiddify-next/releases', 
+                name: 'Hiddify',
+                url: 'https://github.com/hiddify/hiddify-next/releases',
                 icon: '🔒',
                 urlScheme: 'hiddify://import/'
             },
-            { 
+            {
                 id: 'clash-verge-mac',
-                name: 'Clash Verge', 
-                url: 'https://github.com/clash-verge-rev/clash-verge-rev/releases', 
+                name: 'Clash Verge',
+                url: 'https://github.com/clash-verge-rev/clash-verge-rev/releases',
                 icon: '⚡',
                 urlScheme: 'clash://install-config?url='
             },
         ],
         linux: [
-            { 
+            {
                 id: 'hiddify-linux',
-                name: 'Hiddify', 
-                url: 'https://github.com/hiddify/hiddify-next/releases', 
+                name: 'Hiddify',
+                url: 'https://github.com/hiddify/hiddify-next/releases',
                 icon: '🔒',
                 urlScheme: 'hiddify://import/'
             },
-            { 
+            {
                 id: 'clash-verge-linux',
-                name: 'Clash Verge', 
-                url: 'https://github.com/clash-verge-rev/clash-verge-rev/releases', 
+                name: 'Clash Verge',
+                url: 'https://github.com/clash-verge-rev/clash-verge-rev/releases',
                 icon: '⚡',
                 urlScheme: 'clash://install-config?url='
             },
@@ -225,7 +225,7 @@ const Connect = () => {
 
         // Формируем deep link в зависимости от выбранного приложения
         let deepLinkUrl: string;
-        
+
         if (urlScheme === 'sub://') {
             // Shadowrocket требует base64 кодирование
             const base64Url = btoa(subscriptionUrl);
@@ -424,21 +424,20 @@ const Connect = () => {
                             {currentLinks.map((app, index) => {
                                 const isSelected = selectedApp === app.id;
                                 const isFirst = index === 0;
-                                
+
                                 return (
                                     <Card
                                         key={app.id}
                                         hover
-                                        className={`cursor-pointer transition-all ${
-                                            isSelected 
-                                                ? 'ring-2 ring-tg-link bg-tg-link/5' 
-                                                : isFirst && !selectedApp 
-                                                    ? 'ring-2 ring-tg-link/50' 
+                                        className={`cursor-pointer transition-all ${isSelected
+                                                ? 'ring-2 ring-tg-link bg-tg-link/5'
+                                                : isFirst && !selectedApp
+                                                    ? 'ring-2 ring-tg-link/50'
                                                     : ''
-                                        }`}
+                                            }`}
                                     >
                                         {/* Выбор приложения (радио кнопка) */}
-                                        <div 
+                                        <div
                                             className="flex items-center justify-between mb-3"
                                             onClick={() => {
                                                 hapticFeedback('light');
@@ -457,11 +456,10 @@ const Connect = () => {
                                                 </div>
                                             </div>
                                             {/* Радио индикатор */}
-                                            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
-                                                isSelected 
-                                                    ? 'border-tg-link bg-tg-link' 
+                                            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${isSelected
+                                                    ? 'border-tg-link bg-tg-link'
                                                     : 'border-tg-hint'
-                                            }`}>
+                                                }`}>
                                                 {isSelected && (
                                                     <div className="w-3 h-3 bg-white rounded-full" />
                                                 )}
@@ -520,7 +518,7 @@ const Connect = () => {
                                 <div className="text-6xl mb-4">🔗</div>
                                 <h2 className="text-xl font-bold mb-2">{t('connect.step3.title')}</h2>
                                 <p className="text-sm text-tg-hint mb-2">{t('connect.step3.description')}</p>
-                                
+
                                 {/* Показываем выбранное приложение */}
                                 {selectedApp && currentLinks.find(app => app.id === selectedApp) && (
                                     <div className="mt-3 inline-flex items-center gap-2 bg-tg-link/10 px-4 py-2 rounded-lg">
