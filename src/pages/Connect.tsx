@@ -98,6 +98,7 @@ const Connect = () => {
         hapticFeedback('medium');
         if (!subscriptionUrl || !selectedApp) return;
 
+        // Копируем ссылку
         navigator.clipboard.writeText(subscriptionUrl).then(() => {
             hapticNotification('success');
         });
@@ -105,6 +106,7 @@ const Connect = () => {
         const app = currentApps.find(a => a.id === selectedApp);
         if (!app) return;
 
+        // Формируем deep link
         let deepLink: string;
         if (app.urlScheme === 'sub://') {
             deepLink = `sub://${btoa(subscriptionUrl)}`;
@@ -114,8 +116,48 @@ const Connect = () => {
             deepLink = `${app.urlScheme}${encodeURIComponent(subscriptionUrl)}`;
         }
 
-        console.log('🚀 Opening:', app.name, deepLink);
-        openLink(deepLink);
+        console.log('🚀 App:', app.name);
+        console.log('🔗 Deep link:', deepLink);
+        console.log('📋 Original URL:', subscriptionUrl);
+
+        // МЕТОД 1: Создаем невидимую ссылку и кликаем (работает в некоторых WebView)
+        const link = document.createElement('a');
+        link.href = deepLink;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        document.body.appendChild(link);
+        
+        try {
+            link.click();
+            console.log('✅ Method 1: link.click() executed');
+        } catch (err) {
+            console.error('❌ Method 1 failed:', err);
+        }
+        
+        // МЕТОД 2: Пробуем через Telegram API (может не работать для custom schemes)
+        setTimeout(() => {
+            try {
+                openLink(deepLink);
+                console.log('✅ Method 2: openLink() executed');
+            } catch (err) {
+                console.error('❌ Method 2 failed:', err);
+            }
+        }, 100);
+        
+        // МЕТОД 3: Пробуем прямую ссылку через Telegram API
+        setTimeout(() => {
+            try {
+                openLink(subscriptionUrl);
+                console.log('✅ Method 3: openLink(direct) executed');
+            } catch (err) {
+                console.error('❌ Method 3 failed:', err);
+            }
+        }, 200);
+
+        // Очищаем временный элемент
+        setTimeout(() => {
+            document.body.removeChild(link);
+        }, 1000);
     };
 
     if (loading) {
@@ -238,18 +280,37 @@ const Connect = () => {
                     )}
                 </Card>
 
-                {/* Большая кнопка подключения */}
-                <Button
-                    variant="primary"
-                    size="lg"
-                    fullWidth
-                    onClick={handleConnect}
-                    className="mb-3 py-6 text-xl"
-                    disabled={!selectedApp}
-                >
-                    <span className="mr-2">🚀</span>
-                    {t('connect.connect_now')}
-                </Button>
+                {/* Большая кнопка подключения - используем HTML ссылку */}
+                {selectedApp && (() => {
+                    const app = currentApps.find(a => a.id === selectedApp);
+                    if (!app) return null;
+                    
+                    let deepLink: string;
+                    if (app.urlScheme === 'sub://') {
+                        deepLink = `sub://${btoa(subscriptionUrl)}`;
+                    } else if (app.urlScheme.includes('?url=')) {
+                        deepLink = `${app.urlScheme}${encodeURIComponent(subscriptionUrl)}`;
+                    } else {
+                        deepLink = `${app.urlScheme}${encodeURIComponent(subscriptionUrl)}`;
+                    }
+                    
+                    return (
+                        <a
+                            href={deepLink}
+                            onClick={(e) => {
+                                hapticFeedback('medium');
+                                // Копируем ссылку в буфер обмена
+                                navigator.clipboard.writeText(subscriptionUrl);
+                                hapticNotification('success');
+                                console.log('🚀 Opening:', app.name, deepLink);
+                            }}
+                            className="block w-full btn-primary py-6 text-xl text-center mb-3"
+                        >
+                            <span className="mr-2">🚀</span>
+                            {t('connect.connect_now')}
+                        </a>
+                    );
+                })()}
 
                 {/* Альтернатива - просто скопировать */}
                 <Button
