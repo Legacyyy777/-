@@ -34,9 +34,9 @@ const ParticlesBackground = () => {
     };
     setCanvasSize();
 
-    // Создание частиц - звёздное небо
+    // Максимально простые частицы для быстрой сборки
     const particles: Particle[] = [];
-    const particleCount = 50; // Меньше, но красивее
+    const particleCount = 15; // Очень мало для скорости
 
     for (let i = 0; i < particleCount; i++) {
       particles.push({
@@ -53,33 +53,15 @@ const ParticlesBackground = () => {
     // Анимация
     let animationId: number;
     const animate = () => {
-      // Тёмный фон для звёзд
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.02)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Простая очистка
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const time = Date.now() * 0.001;
-
+      // Простые статичные точки без анимации
       particles.forEach((particle) => {
-        // Мерцание звёзд
-        const twinkle = Math.sin(time * 2 + particle.twinkle) * 0.5 + 0.5;
-        const currentOpacity = particle.opacity * (0.3 + twinkle * 0.7);
-
-        // Отрисовка звезды
-        ctx.fillStyle = `rgba(255, 255, 255, ${currentOpacity})`;
+        ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity})`;
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         ctx.fill();
-
-        // Свечение для больших звёзд
-        if (particle.size > 1.5) {
-          ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
-          ctx.shadowBlur = 10;
-          ctx.fillStyle = `rgba(255, 255, 255, ${currentOpacity * 0.3})`;
-          ctx.beginPath();
-          ctx.arc(particle.x, particle.y, particle.size * 2, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        }
       });
 
       animationId = requestAnimationFrame(animate);
