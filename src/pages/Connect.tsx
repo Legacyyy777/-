@@ -296,15 +296,10 @@ const Connect = () => {
 
                         // Показываем диалог как в оригинале
                         const confirmed = confirm(`Открыть ${deepLink}?`);
-                        
+
                         if (confirmed) {
-                            // Сразу копируем ссылку и показываем инструкцию
-                            navigator.clipboard.writeText(subscriptionUrl);
-                            hapticFeedback('medium');
-                            hapticNotification('success');
-                            
-                            // Показываем инструкцию
-                            alert(`✅ Ссылка скопирована!\n\n1. Закройте Telegram\n2. Откройте ${app.name}\n3. Нажмите "+" для добавления\n4. Вставьте ссылку (Ctrl+V)\n5. Подключитесь!`);
+                            // Пробуем открыть deep link
+                            window.location.href = deepLink;
                         }
                     }}
                     className="mb-3 py-6 text-xl"
