@@ -6,12 +6,12 @@
  * @returns отформатированная строка с ценой
  */
 export const formatPrice = (kopeks: number): string => {
-    const rubles = kopeks / 100;
+    const rubles = Math.floor(kopeks / 100); // Округляем до целых рублей
     return new Intl.NumberFormat('ru-RU', {
         style: 'currency',
         currency: 'RUB',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
+        maximumFractionDigits: 0, // Убираем копейки
     }).format(rubles);
 };
 
