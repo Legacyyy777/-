@@ -280,40 +280,50 @@ const Connect = () => {
                     )}
                 </Card>
 
-                {/* Большая кнопка подключения - прямая HTML ссылка */}
-                {selectedApp && (() => {
-                    const app = currentApps.find(a => a.id === selectedApp);
-                    if (!app) return null;
+                {/* Большая кнопка подключения */}
+                <Button
+                    variant="primary"
+                    size="lg"
+                    fullWidth
+                    onClick={() => {
+                        if (!selectedApp) return;
 
-                    let deepLink: string;
-                    if (app.urlScheme === 'sub://') {
-                        deepLink = `sub://${btoa(subscriptionUrl)}`;
-                    } else if (app.urlScheme.includes('?url=')) {
-                        deepLink = `${app.urlScheme}${encodeURIComponent(subscriptionUrl)}`;
-                    } else {
-                        deepLink = `${app.urlScheme}${encodeURIComponent(subscriptionUrl)}`;
-                    }
+                        const app = currentApps.find(a => a.id === selectedApp);
+                        if (!app) return;
 
-                    return (
-                        <a
-                            href={deepLink}
-                            onClick={(e) => {
-                                // Копируем ссылку в буфер обмена
-                                navigator.clipboard.writeText(subscriptionUrl);
-                                hapticFeedback('medium');
-                                hapticNotification('success');
-                                console.log('🚀 App:', app.name);
-                                console.log('🔗 Deep link:', deepLink);
-                                // НЕ preventDefault - пусть браузер обработает ссылку
-                            }}
-                            className="block w-full btn-primary py-6 text-xl text-center mb-3 no-underline"
-                            style={{ textDecoration: 'none' }}
-                        >
-                            <span className="mr-2">🚀</span>
-                            {t('connect.connect_now')}
-                        </a>
-                    );
-                })()}
+                        // Копируем ссылку
+                        navigator.clipboard.writeText(subscriptionUrl);
+                        hapticFeedback('medium');
+                        hapticNotification('success');
+
+                        // Формируем deep link
+                        let deepLink: string;
+                        if (app.urlScheme === 'sub://') {
+                            deepLink = `sub://${btoa(subscriptionUrl)}`;
+                        } else if (app.urlScheme.includes('?url=')) {
+                            deepLink = `${app.urlScheme}${encodeURIComponent(subscriptionUrl)}`;
+                        } else {
+                            deepLink = `${app.urlScheme}${encodeURIComponent(subscriptionUrl)}`;
+                        }
+
+                        console.log('🚀 App:', app.name);
+                        console.log('🔗 Deep link:', deepLink);
+                        console.log('📋 Subscription URL:', subscriptionUrl);
+
+                        // Используем window.location для мобильных (единственный способ который работает)
+                        try {
+                            window.location.href = deepLink;
+                            console.log('✅ window.location.href = deepLink');
+                        } catch (err) {
+                            console.error('❌ Failed:', err);
+                        }
+                    }}
+                    className="mb-3 py-6 text-xl"
+                    disabled={!selectedApp}
+                >
+                    <span className="mr-2">🚀</span>
+                    {t('connect.connect_now')}
+                </Button>
 
                 {/* Альтернатива - просто скопировать */}
                 <Button
