@@ -308,15 +308,10 @@ const Connect = () => {
 
                         console.log('🚀 App:', app.name);
                         console.log('🔗 Deep link:', deepLink);
-                        console.log('📋 Subscription URL:', subscriptionUrl);
 
-                        // Используем window.location для мобильных (единственный способ который работает)
-                        try {
-                            window.location.href = deepLink;
-                            console.log('✅ window.location.href = deepLink');
-                        } catch (err) {
-                            console.error('❌ Failed:', err);
-                        }
+                        // Открываем промежуточную страницу редиректа
+                        const redirectUrl = `/redirect.html?url=${encodeURIComponent(deepLink)}`;
+                        window.location.href = redirectUrl;
                     }}
                     className="mb-3 py-6 text-xl"
                     disabled={!selectedApp}

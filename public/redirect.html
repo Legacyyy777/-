@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подключение...</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .timer {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="icon">🚀</div>
+        <h1>Открываем приложение...</h1>
+        <p id="message">Приложение откроется автоматически</p>
+        <div class="timer" id="timer">3</div>
+        <a href="#" id="connectBtn" class="btn">Подключиться сейчас</a>
+    </div>
+
+    <script>
+        // Получаем URL из параметров
+        const params = new URLSearchParams(window.location.search);
+        const deepLink = params.get('url');
+        const btn = document.getElementById('connectBtn');
+
+        if (deepLink) {
+            btn.href = deepLink;
+
+            // Автоматический редирект через 3 секунды
+            let count = 3;
+            const timer = document.getElementById('timer');
+
+            const interval = setInterval(() => {
+                count--;
+                timer.textContent = count;
+
+                if (count <= 0) {
+                    clearInterval(interval);
+                    window.location.href = deepLink;
+                }
+            }, 1000);
+
+            // Или сразу при клике
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = deepLink;
+            });
+        } else {
+            document.getElementById('message').textContent = 'Ошибка: отсутствует ссылка';
+            btn.style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>
