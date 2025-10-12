@@ -85,7 +85,7 @@ const Subscribe = () => {
 
     // Периоды могут быть в разных местах в зависимости от структуры ответа
     const periods = (options?.data?.periods || options?.data?.renewal_periods || []) as PurchasePeriod[] | undefined;
-    const balance = options?.balance_kopeks || options?.balanceKopeks || 0;
+    const balance = options?.balance_kopeks || 0;
 
     console.log('Rendering periods:', periods);
     console.log('Options data:', options?.data);
