@@ -27,11 +27,11 @@ const Button = ({
 }: ButtonProps) => {
     const { hapticFeedback } = useTelegram();
 
-    // Стили вариантов - используем новую систему тем
+    // Стили вариантов
     const variantStyles = {
-        primary: 'theme-btn-primary',
-        secondary: 'theme-btn-secondary',
-        outline: 'bg-transparent border-2 border-current theme-accent-primary hover:bg-current/10 theme-text-primary',
+        primary: 'btn-primary',
+        secondary: 'btn-secondary',
+        outline: 'bg-transparent border-2 border-current text-tg-link hover:bg-current/10',
         danger: 'bg-red-500 text-white hover:bg-red-600',
     };
 

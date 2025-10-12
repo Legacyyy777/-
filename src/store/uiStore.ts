@@ -73,8 +73,8 @@ export const useUIStore = create<UIState>((set, get) => ({
     loading: {
         isGlobalLoading: false,
     },
-    enable3D: localStorage.getItem('enable_3d') === 'true', // Загружаем из localStorage
-    enableParticles: localStorage.getItem('enable_particles') === 'true', // Загружаем из localStorage
+    enable3D: localStorage.getItem('enable_3d') !== 'false', // По умолчанию включено
+    enableParticles: localStorage.getItem('enable_particles') !== 'false', // По умолчанию включено
 
     // Управление темой - новая система
     setTheme: (theme) => {
