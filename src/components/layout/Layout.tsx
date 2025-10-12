@@ -1,13 +1,11 @@
 // Основной layout приложения с навигацией
 
-import { ReactNode, lazy, Suspense } from 'react';
+import { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import TabBar from './TabBar';
 import { useUIStore } from '@/store/uiStore';
-
-// Lazy loading 3D компонентов для оптимизации
-const FloatingObjects = lazy(() => import('../3d/FloatingObjects'));
-const ParticlesBackground = lazy(() => import('../3d/ParticlesBackground'));
+import FloatingObjects from '../3d/FloatingObjects';
+import ParticlesBackground from '../3d/ParticlesBackground';
 
 interface LayoutProps {
     children: ReactNode;
@@ -28,11 +26,9 @@ const Layout = ({ children }: LayoutProps) => {
 
     return (
         <div className="min-h-screen flex flex-col bg-tg-bg relative overflow-hidden">
-            {/* 3D фоновые эффекты */}
-            <Suspense fallback={null}>
-                {enable3D && <FloatingObjects />}
-                {enableParticles && <ParticlesBackground />}
-            </Suspense>
+            {/* Легкие фоновые эффекты */}
+            {enable3D && <FloatingObjects />}
+            {enableParticles && <ParticlesBackground />}
 
             {/* Контент страницы */}
             <main className="flex-1 pb-20 relative" style={{ zIndex: 5 }}>

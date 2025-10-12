@@ -17,12 +17,13 @@ export default defineConfig({
     build: {
         outDir: 'dist',
         sourcemap: false,
+        minify: 'esbuild', // Быстрее чем terser
+        target: 'es2015',
         rollupOptions: {
             output: {
                 manualChunks: {
-                    // Разделение на чанки для оптимизации загрузки
+                    // Простое разделение на чанки
                     'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-                    'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
                     'animation-vendor': ['framer-motion'],
                 },
             },
