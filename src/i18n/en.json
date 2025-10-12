@@ -37,6 +37,7 @@
     "home": {
         "title": "My Subscription",
         "status": {
+            "title": "Subscription Status",
             "active": "Active",
             "expired": "Expired",
             "trial": "Trial",
