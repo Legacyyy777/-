@@ -291,32 +291,21 @@ const Connect = () => {
                         const app = currentApps.find(a => a.id === selectedApp);
                         if (!app) return;
 
-                        // Копируем ссылку
-                        navigator.clipboard.writeText(subscriptionUrl);
-                        hapticFeedback('medium');
-                        hapticNotification('success');
+                        // Формируем deep link как в оригинале
+                        const deepLink = `${app.urlScheme}${subscriptionUrl}`;
 
-                        // Формируем deep link
-                        let deepLink: string;
-                        if (app.urlScheme === 'sub://') {
-                            deepLink = `sub://${btoa(subscriptionUrl)}`;
-                        } else if (app.urlScheme.includes('?url=')) {
-                            deepLink = `${app.urlScheme}${encodeURIComponent(subscriptionUrl)}`;
-                        } else {
-                            deepLink = `${app.urlScheme}${encodeURIComponent(subscriptionUrl)}`;
+                        // Показываем диалог как в оригинале
+                        const confirmed = confirm(`Открыть ${deepLink}?`);
+                        
+                        if (confirmed) {
+                            // Пробуем открыть как в оригинале
+                            window.location.href = deepLink;
                         }
-
-                        console.log('🚀 App:', app.name);
-                        console.log('🔗 Deep link:', deepLink);
-
-                        // Открываем промежуточную страницу редиректа
-                        const redirectUrl = `/redirect.html?url=${encodeURIComponent(deepLink)}`;
-                        window.location.href = redirectUrl;
                     }}
                     className="mb-3 py-6 text-xl"
                     disabled={!selectedApp}
                 >
-                    <span className="mr-2">🚀</span>
+                    <span className="mr-2">⚡</span>
                     {t('connect.connect_now')}
                 </Button>
 
