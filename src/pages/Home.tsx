@@ -20,6 +20,11 @@ const Home = () => {
     const { hapticNotification } = useTelegram();
     const [refreshing, setRefreshing] = useState(false);
 
+    // Анимация счётчиков - ВСЕГДА вызываем хуки!
+    const animatedBalance = useCountUp(subscription?.balance_kopeks || 0, 2000);
+    const animatedTrafficUsed = useCountUp(subscription?.user?.traffic_used_gb || 0, 1500);
+    const animatedDevicesCount = useCountUp(subscription?.connected_devices_count || 0, 1000);
+
     // Загрузка данных при монтировании
     useEffect(() => {
         loadSubscription().catch((err) => {
@@ -54,11 +59,6 @@ const Home = () => {
     const hasSubscription = user?.has_active_subscription;
     const trafficUsedPercent = user ?
         (user.traffic_limit_gb ? (user.traffic_used_gb / user.traffic_limit_gb) * 100 : 0) : 0;
-
-    // Анимация счётчиков
-    const animatedBalance = useCountUp(subscription?.balance_kopeks || 0, 2000);
-    const animatedTrafficUsed = useCountUp(user?.traffic_used_gb || 0, 1500);
-    const animatedDevicesCount = useCountUp(subscription?.connected_devices_count || 0, 1000);
 
     return (
         <>
