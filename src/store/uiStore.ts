@@ -73,8 +73,8 @@ export const useUIStore = create<UIState>((set, get) => ({
     loading: {
         isGlobalLoading: false,
     },
-    enable3D: false, // Отключено для производительности
-    enableParticles: false, // Отключено для производительности
+    enable3D: true, // Включено для демо
+    enableParticles: true, // Включено для демо
 
     // Управление темой
     setTheme: (theme) => {

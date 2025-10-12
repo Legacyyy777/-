@@ -12,7 +12,7 @@ const FloatingObjects = () => {
     if (!enable3D) return null;
 
     return (
-        <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none" style={{ opacity: 0.6 }}>
+        <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ opacity: 0.8, zIndex: 1 }}>
             {/* Круг 1 - Синий */}
             <motion.div
                 className="absolute w-[600px] h-[600px] rounded-full"

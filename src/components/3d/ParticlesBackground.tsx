@@ -52,26 +52,21 @@ const ParticlesBackground = () => {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 1.5,
-        vy: (Math.random() - 0.5) * 1.5,
-        size: Math.random() * 4 + 2,
+        vx: (Math.random() - 0.5) * 0.5, // Медленнее
+        vy: (Math.random() - 0.5) * 0.5,
+        size: Math.random() * 2 + 1, // Меньше
         color: colors[Math.floor(Math.random() * colors.length)],
         alpha: Math.random() * 0.5 + 0.3,
       });
     }
 
-    // Отслеживание мыши для интерактивности
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
-    };
-    window.addEventListener('mousemove', handleMouseMove);
+    // Убираем отслеживание мыши для производительности
 
     // Анимация
     let animationId: number;
     const animate = () => {
-      // Полупрозрачная очистка для эффекта следа
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Полная очистка для производительности
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach((particle, index) => {
         // Обновление позиции
@@ -88,16 +83,7 @@ const ParticlesBackground = () => {
           particle.y = Math.max(0, Math.min(canvas.height, particle.y));
         }
 
-        // Интерактивность с мышью
-        const dx = mouseRef.current.x - particle.x;
-        const dy = mouseRef.current.y - particle.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist < 150) {
-          const force = (150 - dist) / 150;
-          particle.vx -= (dx / dist) * force * 0.3;
-          particle.vy -= (dy / dist) * force * 0.3;
-        }
+        // Убираем интерактивность с мышью
 
         // Пульсация размера
         const pulseSize = particle.size + Math.sin(Date.now() * 0.001 + index) * 0.5;
@@ -170,9 +156,8 @@ const ParticlesBackground = () => {
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none"
       style={{
-        zIndex: 0,
-        opacity: 0.8,
-        mixBlendMode: 'screen'
+        zIndex: 1,
+        opacity: 0.6
       }}
     />
   );
