@@ -73,24 +73,6 @@ const Subscribe = () => {
         }
     };
 
-    const handleActivateTrial = async () => {
-        setPurchasing(true);
-        hapticFeedback('medium');
-
-        try {
-            await activateTrial();
-            hapticNotification('success');
-            showAlert('Пробная подписка активирована!', () => {
-                window.location.href = '/';
-            });
-        } catch (err: any) {
-            hapticNotification('error');
-            showAlert(err.message || 'Ошибка активации триала');
-        } finally {
-            setPurchasing(false);
-        }
-    };
-
     if (loading) {
         return (
             <Container className="flex items-center justify-center min-h-[60vh]">
