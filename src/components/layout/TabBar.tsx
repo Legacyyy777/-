@@ -20,8 +20,8 @@ const TabBar = () => {
         { path: '/profile', label: t('navigation.profile'), icon: '👤' },
     ];
 
-  return (
-    <nav className="fixed bottom-0 left-0 right-0 safe-area-inset-bottom z-50 backdrop-blur-xl bg-tg-secondaryBg/80 border-t border-tg-hint/20 shadow-2xl">
+    return (
+        <nav className="fixed bottom-0 left-0 right-0 safe-area-inset-bottom z-50 backdrop-blur-xl bg-tg-secondaryBg/80 border-t border-tg-hint/20 shadow-2xl">
             <div className="flex justify-around items-center h-16 max-w-screen-lg mx-auto">
                 {navItems.map((item) => (
                     <NavLink
