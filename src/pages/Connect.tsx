@@ -296,11 +296,11 @@ const Connect = () => {
 
                         // Показываем диалог как в оригинале
                         const confirmed = confirm(`Открыть ${deepLink}?`);
-                        
+
                         if (confirmed) {
                             // Пробуем открыть как в оригинале через window.open
                             const testWindow = window.open(deepLink, '_blank');
-                            
+
                             // Если не открылось (например, приложение не установлено)
                             setTimeout(() => {
                                 if (testWindow) {
