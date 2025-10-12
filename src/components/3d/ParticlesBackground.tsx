@@ -19,7 +19,6 @@ interface Particle {
 const ParticlesBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { enableParticles } = useUIStore();
-  const mouseRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     if (!enableParticles || !canvasRef.current) return;
@@ -145,7 +144,6 @@ const ParticlesBackground = () => {
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('mousemove', handleMouseMove);
     };
   }, [enableParticles]);
 
