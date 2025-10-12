@@ -19,6 +19,8 @@ const FloatingObjects = () => {
                 style={{
                     background: 'radial-gradient(circle, rgba(59,130,246,0.8) 0%, rgba(37,99,235,0.4) 50%, transparent 70%)',
                     filter: 'blur(100px)',
+                    top: '5%',
+                    left: '5%',
                 }}
                 animate={{
                     x: [0, 150, 0],
@@ -30,10 +32,6 @@ const FloatingObjects = () => {
                     repeat: Infinity,
                     ease: 'easeInOut',
                 }}
-                style={{
-                    top: '5%',
-                    left: '5%',
-                }}
             />
 
             {/* Круг 2 - Фиолетовый */}
@@ -42,6 +40,8 @@ const FloatingObjects = () => {
                 style={{
                     background: 'radial-gradient(circle, rgba(139,92,246,0.9) 0%, rgba(236,72,153,0.5) 50%, transparent 70%)',
                     filter: 'blur(100px)',
+                    bottom: '5%',
+                    right: '5%',
                 }}
                 animate={{
                     x: [0, -120, 0],
@@ -53,10 +53,6 @@ const FloatingObjects = () => {
                     repeat: Infinity,
                     ease: 'easeInOut',
                 }}
-                style={{
-                    bottom: '5%',
-                    right: '5%',
-                }}
             />
 
             {/* Круг 3 - Зелёный */}
@@ -65,6 +61,9 @@ const FloatingObjects = () => {
                 style={{
                     background: 'radial-gradient(circle, rgba(16,185,129,0.8) 0%, rgba(5,150,105,0.4) 50%, transparent 70%)',
                     filter: 'blur(100px)',
+                    top: '40%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
                 }}
                 animate={{
                     rotate: [0, 180, 360],
@@ -77,11 +76,6 @@ const FloatingObjects = () => {
                     repeat: Infinity,
                     ease: 'easeInOut',
                 }}
-                style={{
-                    top: '40%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                }}
             />
 
             {/* Круг 4 - Оранжевый */}
@@ -90,6 +84,8 @@ const FloatingObjects = () => {
                 style={{
                     background: 'radial-gradient(circle, rgba(251,146,60,0.8) 0%, rgba(239,68,68,0.4) 50%, transparent 70%)',
                     filter: 'blur(100px)',
+                    top: '60%',
+                    left: '20%',
                 }}
                 animate={{
                     x: [0, -90, 0],
@@ -100,10 +96,6 @@ const FloatingObjects = () => {
                     duration: 18,
                     repeat: Infinity,
                     ease: 'easeInOut',
-                }}
-                style={{
-                    top: '60%',
-                    left: '20%',
                 }}
             />
         </div>
