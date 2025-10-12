@@ -221,6 +221,7 @@
             "description": "Click the button below to automatically add subscription to the app",
             "your_link": "Your subscription link:",
             "connect_button": "Connect",
+            "open_link": "Open Link Directly",
             "manual_hint": "Link copied to clipboard. If the app didn't open automatically, paste the link manually."
         },
         "step4": {

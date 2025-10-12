@@ -111,7 +111,7 @@ const Connect = () => {
         unknown: t('connect.unknown_device'),
     };
 
-    // Открыть приложение с подпиской (deep link для Happ)
+    // Открыть приложение с подпиской
     const handleConnectToApp = () => {
         hapticFeedback('medium');
 
@@ -121,24 +121,40 @@ const Connect = () => {
         }
 
         // Копируем ссылку в буфер обмена
-        navigator.clipboard.writeText(subscriptionUrl);
-        hapticNotification('success');
+        navigator.clipboard.writeText(subscriptionUrl).then(() => {
+            hapticNotification('success');
+        }).catch(() => {
+            console.error('Failed to copy to clipboard');
+        });
 
-        // Пытаемся открыть Happ с deep link
-        // Формат: happ://install-config?url=encoded_subscription_url
-        const encodedUrl = encodeURIComponent(subscriptionUrl);
-
+        // Пытаемся открыть через разные методы
         if (deviceType === 'ios' || deviceType === 'android') {
-            // Для мобильных пытаемся открыть через deep link
-            const deepLink = `happ://install-config?url=${encodedUrl}`;
-            window.location.href = deepLink;
+            // Вариант 1: Прямая ссылка (работает для большинства клиентов)
+            // Многие VPN клиенты распознают ссылки типа sub://...
+            try {
+                // Пробуем разные варианты deep links
+                const deepLinks = [
+                    subscriptionUrl, // Прямая ссылка
+                    `happ://install-config?url=${encodeURIComponent(subscriptionUrl)}`,
+                    `sing-box://import-remote-profile?url=${encodeURIComponent(subscriptionUrl)}`,
+                    `clash://install-config?url=${encodeURIComponent(subscriptionUrl)}`,
+                ];
 
-            // Если не открылось через 2 секунды, показываем инструкцию
-            setTimeout(() => {
-                setStep(4); // Переход к ручной инструкции
-            }, 2000);
+                // Пробуем открыть первый вариант
+                const link = document.createElement('a');
+                link.href = deepLinks[0];
+                link.click();
+
+                // Показываем инструкцию через 1.5 секунды
+                setTimeout(() => {
+                    setStep(4);
+                }, 1500);
+            } catch (err) {
+                console.error('Failed to open deep link:', err);
+                setStep(4);
+            }
         } else {
-            // Для десктопа просто копируем и показываем инструкцию
+            // Для десктопа показываем инструкцию
             setStep(4);
         }
     };
@@ -375,11 +391,28 @@ const Connect = () => {
                             size="lg"
                             fullWidth
                             onClick={handleConnectToApp}
-                            className="mb-4 py-6 text-xl"
+                            className="mb-3 py-6 text-xl"
                         >
                             <span className="mr-2">🚀</span>
                             {t('connect.step3.connect_button')}
                         </Button>
+
+                        {/* Альтернатива - открыть ссылку напрямую */}
+                        {(deviceType === 'ios' || deviceType === 'android') && (
+                            <Button
+                                variant="secondary"
+                                fullWidth
+                                onClick={() => {
+                                    hapticFeedback('light');
+                                    // Открываем ссылку в новой вкладке/приложении
+                                    window.open(subscriptionUrl, '_blank');
+                                }}
+                                className="mb-4"
+                            >
+                                <span className="mr-2">🔗</span>
+                                {t('connect.step3.open_link')}
+                            </Button>
+                        )}
 
                         <Card>
                             <p className="text-xs text-tg-hint text-center">
