@@ -92,7 +92,7 @@ const ParticlesBackground = () => {
         const dx = mouseRef.current.x - particle.x;
         const dy = mouseRef.current.y - particle.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        
+
         if (dist < 150) {
           const force = (150 - dist) / 150;
           particle.vx -= (dx / dist) * force * 0.3;
@@ -127,7 +127,7 @@ const ParticlesBackground = () => {
         // Связи между близкими частицами
         particles.forEach((other, otherIndex) => {
           if (otherIndex <= index) return;
-          
+
           const dx = other.x - particle.x;
           const dy = other.y - particle.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
@@ -168,8 +168,12 @@ const ParticlesBackground = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 -z-10 pointer-events-none"
-      style={{ opacity: 0.7 }}
+      className="fixed inset-0 pointer-events-none"
+      style={{
+        zIndex: 0,
+        opacity: 0.8,
+        mixBlendMode: 'screen'
+      }}
     />
   );
 };

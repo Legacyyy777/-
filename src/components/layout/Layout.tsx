@@ -34,7 +34,7 @@ const Layout = ({ children }: LayoutProps) => {
             </Suspense>
 
             {/* Контент страницы */}
-            <main className="flex-1 pb-20 relative z-10">
+            <main className="flex-1 pb-20 relative" style={{ zIndex: 10 }}>
                 {children}
             </main>
 
