@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Container from '@/components/layout/Container';
 import Header from '@/components/layout/Header';
+import Card from '@/components/ui/Card';
 import { useTranslation } from '@/i18n';
 import { useSubscription } from '@/hooks/useSubscription';
 import { useTelegram } from '@/hooks/useTelegram';
