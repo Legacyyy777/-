@@ -29,6 +29,7 @@ const Connect = () => {
     const [step, setStep] = useState(1);
     const [deviceType, setDeviceType] = useState<DeviceType>('unknown');
     const [loading, setLoading] = useState(true);
+    const [showManualSelect, setShowManualSelect] = useState(false);
 
     // Определяем тип устройства
     useEffect(() => {
@@ -261,38 +262,53 @@ const Connect = () => {
                             </div>
                         </Card>
 
-                        {/* Ручной выбор устройства */}
+                        {/* Ручной выбор устройства (спойлер) */}
                         <Card>
-                            <h3 className="text-sm font-semibold mb-3 text-center text-tg-hint">
-                                {t('connect.step1.manual_select')}
-                            </h3>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                {(['ios', 'android', 'windows', 'macos', 'linux'] as DeviceType[]).map((type) => (
-                                    <button
-                                        key={type}
-                                        onClick={() => {
-                                            hapticFeedback('light');
-                                            setDeviceType(type);
-                                            setTimeout(() => setStep(2), 300);
-                                        }}
-                                        className={`p-4 rounded-xl border-2 transition-all duration-200 active:scale-95 ${deviceType === type
-                                                ? 'border-tg-link bg-tg-link/10 shadow-lg'
-                                                : 'border-transparent bg-tg-secondaryBg hover:border-tg-link/30 hover:shadow-md'
-                                            }`}
-                                    >
-                                        <div className="text-4xl mb-2">
-                                            {type === 'ios' && '📱'}
-                                            {type === 'android' && '🤖'}
-                                            {type === 'windows' && '💻'}
-                                            {type === 'macos' && '🍎'}
-                                            {type === 'linux' && '🐧'}
-                                        </div>
-                                        <div className="text-sm font-medium text-tg-text">
-                                            {deviceNames[type].replace(/\s*\(.*?\)\s*/g, '')}
-                                        </div>
-                                    </button>
-                                ))}
-                            </div>
+                            <button
+                                onClick={() => {
+                                    hapticFeedback('light');
+                                    setShowManualSelect(!showManualSelect);
+                                }}
+                                className="w-full flex items-center justify-between text-left transition-colors"
+                            >
+                                <h3 className="text-sm font-semibold text-tg-hint">
+                                    {t('connect.step1.manual_select')}
+                                </h3>
+                                <span className={`text-xl transition-transform duration-200 ${showManualSelect ? 'rotate-180' : ''}`}>
+                                    ▼
+                                </span>
+                            </button>
+                            
+                            {showManualSelect && (
+                                <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3 animate-fade-in">
+                                    {(['ios', 'android', 'windows', 'macos', 'linux'] as DeviceType[]).map((type) => (
+                                        <button
+                                            key={type}
+                                            onClick={() => {
+                                                hapticFeedback('light');
+                                                setDeviceType(type);
+                                                setShowManualSelect(false);
+                                                setTimeout(() => setStep(2), 300);
+                                            }}
+                                            className={`p-4 rounded-xl border-2 transition-all duration-200 active:scale-95 ${deviceType === type
+                                                    ? 'border-tg-link bg-tg-link/10 shadow-lg'
+                                                    : 'border-transparent bg-tg-secondaryBg hover:border-tg-link/30 hover:shadow-md'
+                                                }`}
+                                        >
+                                            <div className="text-4xl mb-2">
+                                                {type === 'ios' && '📱'}
+                                                {type === 'android' && '🤖'}
+                                                {type === 'windows' && '💻'}
+                                                {type === 'macos' && '🍎'}
+                                                {type === 'linux' && '🐧'}
+                                            </div>
+                                            <div className="text-sm font-medium text-tg-text">
+                                                {deviceNames[type].replace(/\s*\(.*?\)\s*/g, '')}
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </Card>
                     </>
                 )}

@@ -91,6 +91,10 @@ html {
     }
 }
 
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
 @keyframes fadeOut {
     from {
         opacity: 1;
