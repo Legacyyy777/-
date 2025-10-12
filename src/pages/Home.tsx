@@ -78,14 +78,14 @@ const Home = () => {
 
             <Container>
                 {/* Статус подписки */}
-                <div className="card mb-4 animate-fade-in">
+                <div className="theme-card mb-4">
                     <div className="flex items-center justify-between mb-3">
-                        <h2 className="text-lg font-semibold text-tg-text">
+                        <h2 className="text-lg font-semibold theme-text-primary">
                             Статус подписки
                         </h2>
                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${hasSubscription
-                            ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                            : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400'
+                            ? 'theme-status-success'
+                            : 'theme-status-danger'
                             }`}>
                             {hasSubscription ? t('home.status.active') : t('home.status.none')}
                         </span>

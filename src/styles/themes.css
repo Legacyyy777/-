@@ -1,0 +1,228 @@
+/* Единая система тем - переделано с нуля */
+
+/* Базовые CSS переменные */
+:root {
+    /* Светлая тема - значения по умолчанию */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-card: rgba(255, 255, 255, 0.9);
+    --bg-glass: rgba(255, 255, 255, 0.1);
+
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+
+    --accent-primary: #3b82f6;
+    --accent-secondary: #8b5cf6;
+    --accent-success: #10b981;
+    --accent-warning: #f59e0b;
+    --accent-danger: #ef4444;
+
+    --border-primary: rgba(148, 163, 184, 0.2);
+    --border-secondary: rgba(148, 163, 184, 0.1);
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Тёмная тема */
+[data-theme="dark"] {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-card: rgba(30, 41, 59, 0.8);
+    --bg-glass: rgba(255, 255, 255, 0.05);
+
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+
+    --accent-primary: #3b82f6;
+    --accent-secondary: #8b5cf6;
+    --accent-success: #10b981;
+    --accent-warning: #f59e0b;
+    --accent-danger: #ef4444;
+
+    --border-primary: rgba(148, 163, 184, 0.2);
+    --border-secondary: rgba(148, 163, 184, 0.1);
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+/* Применение тем к body */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Универсальные классы для всех компонентов */
+.theme-bg-primary {
+    background-color: var(--bg-primary);
+}
+
+.theme-bg-secondary {
+    background-color: var(--bg-secondary);
+}
+
+.theme-bg-card {
+    background-color: var(--bg-card);
+}
+
+.theme-bg-glass {
+    background-color: var(--bg-glass);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.theme-text-primary {
+    color: var(--text-primary);
+}
+
+.theme-text-secondary {
+    color: var(--text-secondary);
+}
+
+.theme-text-muted {
+    color: var(--text-muted);
+}
+
+.theme-accent-primary {
+    color: var(--accent-primary);
+}
+
+.theme-accent-secondary {
+    color: var(--accent-secondary);
+}
+
+.theme-accent-success {
+    color: var(--accent-success);
+}
+
+.theme-accent-warning {
+    color: var(--accent-warning);
+}
+
+.theme-accent-danger {
+    color: var(--accent-danger);
+}
+
+.theme-border {
+    border-color: var(--border-primary);
+}
+
+.theme-border-light {
+    border-color: var(--border-secondary);
+}
+
+.theme-shadow-sm {
+    box-shadow: var(--shadow-sm);
+}
+
+.theme-shadow-md {
+    box-shadow: var(--shadow-md);
+}
+
+.theme-shadow-lg {
+    box-shadow: var(--shadow-lg);
+}
+
+/* Универсальные карточки */
+.theme-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-primary);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+}
+
+.theme-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.theme-card-glass {
+    background-color: var(--bg-glass);
+    border: 1px solid var(--border-secondary);
+    border-radius: 12px;
+    padding: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Универсальные кнопки */
+.theme-btn-primary {
+    background-color: var(--accent-primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.theme-btn-primary:hover {
+    background-color: color-mix(in srgb, var(--accent-primary) 85%, black);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.theme-btn-primary:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+.theme-btn-secondary {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.theme-btn-secondary:hover {
+    background-color: var(--bg-card);
+    border-color: var(--accent-primary);
+}
+
+/* Универсальные инпуты */
+.theme-input {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    padding: 12px 16px;
+    transition: all 0.2s ease;
+}
+
+.theme-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 20%, transparent);
+}
+
+/* Статусы */
+.theme-status-success {
+    background-color: color-mix(in srgb, var(--accent-success) 20%, transparent);
+    color: var(--accent-success);
+    border: 1px solid color-mix(in srgb, var(--accent-success) 30%, transparent);
+}
+
+.theme-status-warning {
+    background-color: color-mix(in srgb, var(--accent-warning) 20%, transparent);
+    color: var(--accent-warning);
+    border: 1px solid color-mix(in srgb, var(--accent-warning) 30%, transparent);
+}
+
+.theme-status-danger {
+    background-color: color-mix(in srgb, var(--accent-danger) 20%, transparent);
+    color: var(--accent-danger);
+    border: 1px solid color-mix(in srgb, var(--accent-danger) 30%, transparent);
+}

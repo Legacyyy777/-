@@ -66,7 +66,7 @@ interface UIState {
  */
 export const useUIStore = create<UIState>((set, get) => ({
     // Начальное состояние
-    theme: (localStorage.getItem('app_theme') as 'light' | 'dark') || 'light',
+    theme: (localStorage.getItem('app_theme') as 'light' | 'dark') || 'dark',
     modals: [],
     toasts: [],
     bottomSheet: null,
@@ -76,18 +76,12 @@ export const useUIStore = create<UIState>((set, get) => ({
     enable3D: false, // Отключено для быстрой сборки
     enableParticles: false, // Отключено для быстрой сборки
 
-    // Управление темой
+    // Управление темой - новая система
     setTheme: (theme) => {
         set({ theme });
         localStorage.setItem('app_theme', theme);
+        // Применяем data-theme атрибут для новой системы тем
         document.documentElement.setAttribute('data-theme', theme);
-
-        // Применяем класс для Tailwind
-        if (theme === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
     },
 
     toggleTheme: () => {

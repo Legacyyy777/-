@@ -20,11 +20,11 @@ const Card = ({
     className = '',
     ...props
 }: CardProps) => {
-    // Стили вариантов
+    // Стили вариантов - используем новую систему тем
     const variantStyles = {
-        default: 'bg-white/10 backdrop-blur-sm border border-white/20',
-        elevated: 'bg-white/15 backdrop-blur-md border border-white/30 shadow-lg',
-        glass: 'bg-white/5 backdrop-blur-lg border border-white/10',
+        default: 'theme-card',
+        elevated: 'theme-card theme-shadow-md',
+        glass: 'theme-card-glass',
     };
 
     // Стили padding
