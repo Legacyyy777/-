@@ -208,7 +208,7 @@
             "title": "Detecting Your Device",
             "detected": "Detected",
             "continue": "Continue",
-            "manual_select": "Select your device manually"
+            "manual_select": "Or select your device manually:"
         },
         "step2": {
             "title": "Download Application",

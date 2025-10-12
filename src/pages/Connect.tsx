@@ -195,8 +195,8 @@ const Connect = () => {
                         <div key={s} className="flex items-center flex-1">
                             <div
                                 className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${step >= s
-                                        ? 'bg-tg-link text-white'
-                                        : 'bg-tg-secondaryBg text-tg-hint'
+                                    ? 'bg-tg-link text-white'
+                                    : 'bg-tg-secondaryBg text-tg-hint'
                                     }`}
                             >
                                 {s}
@@ -213,38 +213,72 @@ const Connect = () => {
 
                 {/* Шаг 1: Определение устройства */}
                 {step === 1 && (
-                    <Card className="mb-4">
-                        <div className="text-center">
-                            <div className="text-6xl mb-4">
-                                {deviceType === 'ios' && '📱'}
-                                {deviceType === 'android' && '🤖'}
-                                {deviceType === 'windows' && '💻'}
-                                {deviceType === 'macos' && '🍎'}
-                                {deviceType === 'linux' && '🐧'}
-                                {deviceType === 'unknown' && '❓'}
-                            </div>
-                            <h2 className="text-xl font-bold mb-2">{t('connect.step1.title')}</h2>
-                            <p className="text-tg-hint mb-4">
-                                {t('connect.step1.detected')}: <strong>{deviceNames[deviceType]}</strong>
-                            </p>
+                    <>
+                        <Card className="mb-4">
+                            <div className="text-center">
+                                <div className="text-6xl mb-4">
+                                    {deviceType === 'ios' && '📱'}
+                                    {deviceType === 'android' && '🤖'}
+                                    {deviceType === 'windows' && '💻'}
+                                    {deviceType === 'macos' && '🍎'}
+                                    {deviceType === 'linux' && '🐧'}
+                                    {deviceType === 'unknown' && '❓'}
+                                </div>
+                                <h2 className="text-xl font-bold mb-2">{t('connect.step1.title')}</h2>
+                                <p className="text-tg-hint mb-4">
+                                    {t('connect.step1.detected')}: <strong>{deviceNames[deviceType]}</strong>
+                                </p>
 
-                            {deviceType !== 'unknown' ? (
-                                <Button
-                                    variant="primary"
-                                    size="lg"
-                                    fullWidth
-                                    onClick={() => {
-                                        hapticFeedback('light');
-                                        setStep(2);
-                                    }}
-                                >
-                                    {t('connect.step1.continue')}
-                                </Button>
-                            ) : (
-                                <p className="text-sm text-tg-hint">{t('connect.step1.manual_select')}</p>
-                            )}
-                        </div>
-                    </Card>
+                                {deviceType !== 'unknown' && (
+                                    <Button
+                                        variant="primary"
+                                        size="lg"
+                                        fullWidth
+                                        onClick={() => {
+                                            hapticFeedback('light');
+                                            setStep(2);
+                                        }}
+                                    >
+                                        {t('connect.step1.continue')}
+                                    </Button>
+                                )}
+                            </div>
+                        </Card>
+
+                        {/* Ручной выбор устройства */}
+                        <Card>
+                            <h3 className="text-sm font-semibold mb-3 text-center text-tg-hint">
+                                {t('connect.step1.manual_select')}
+                            </h3>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                {(['ios', 'android', 'windows', 'macos', 'linux'] as DeviceType[]).map((type) => (
+                                    <button
+                                        key={type}
+                                        onClick={() => {
+                                            hapticFeedback('light');
+                                            setDeviceType(type);
+                                            setTimeout(() => setStep(2), 300);
+                                        }}
+                                        className={`p-4 rounded-xl border-2 transition-all duration-200 active:scale-95 ${deviceType === type
+                                                ? 'border-tg-link bg-tg-link/10 shadow-lg'
+                                                : 'border-transparent bg-tg-secondaryBg hover:border-tg-link/30 hover:shadow-md'
+                                            }`}
+                                    >
+                                        <div className="text-4xl mb-2">
+                                            {type === 'ios' && '📱'}
+                                            {type === 'android' && '🤖'}
+                                            {type === 'windows' && '💻'}
+                                            {type === 'macos' && '🍎'}
+                                            {type === 'linux' && '🐧'}
+                                        </div>
+                                        <div className="text-sm font-medium text-tg-text">
+                                            {deviceNames[type].replace(/\s*\(.*?\)\s*/g, '')}
+                                        </div>
+                                    </button>
+                                ))}
+                            </div>
+                        </Card>
+                    </>
                 )}
 
                 {/* Шаг 2: Выбор и скачивание приложения */}
