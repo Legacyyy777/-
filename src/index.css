@@ -236,6 +236,17 @@ html {
     --tg-theme-secondary-bg-color: rgba(30, 41, 59, 0.85);
 }
 
+/* Светлая тема */
+[data-theme='light'] {
+    --tg-theme-bg-color: #ffffff;
+    --tg-theme-text-color: #1e293b;
+    --tg-theme-hint-color: #64748b;
+    --tg-theme-link-color: #2563eb;
+    --tg-theme-button-color: #2563eb;
+    --tg-theme-button-text-color: #ffffff;
+    --tg-theme-secondary-bg-color: rgba(248, 250, 252, 0.85);
+}
+
 /* Предотвращение масштабирования на мобильных */
 @media (max-width: 768px) {
 

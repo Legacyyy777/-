@@ -22,9 +22,9 @@ const Card = ({
 }: CardProps) => {
     // Стили вариантов
     const variantStyles = {
-        default: 'bg-tg-secondaryBg',
-        elevated: 'bg-tg-secondaryBg shadow-md',
-        glass: 'bg-white/5 backdrop-blur-sm border border-white/10',
+        default: 'bg-white/10 backdrop-blur-sm border border-white/20',
+        elevated: 'bg-white/15 backdrop-blur-md border border-white/30 shadow-lg',
+        glass: 'bg-white/5 backdrop-blur-lg border border-white/10',
     };
 
     // Стили padding

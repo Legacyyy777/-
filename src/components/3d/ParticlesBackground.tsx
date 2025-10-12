@@ -1,4 +1,4 @@
-// Продвинутый фон с частицами и интерактивностью
+// Звёздное небо с мерцающими частицами
 
 import { useEffect, useRef } from 'react';
 import { useUIStore } from '@/store/uiStore';
@@ -9,12 +9,12 @@ interface Particle {
   vx: number;
   vy: number;
   size: number;
-  color: string;
-  alpha: number;
+  opacity: number;
+  twinkle: number;
 }
 
 /**
- * Крутой фон с анимированными частицами
+ * Звёздное небо с мерцающими частицами
  */
 const ParticlesBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -34,99 +34,52 @@ const ParticlesBackground = () => {
     };
     setCanvasSize();
 
-    // Цветовая палитра
-    const colors = [
-      'rgba(59, 130, 246, ',   // blue
-      'rgba(139, 92, 246, ',   // purple
-      'rgba(16, 185, 129, ',   // green
-      'rgba(236, 72, 153, ',   // pink
-      'rgba(251, 146, 60, ',   // orange
-    ];
-
-    // Создание частиц
+    // Создание частиц - звёздное небо
     const particles: Particle[] = [];
-    const particleCount = 150; // Больше частиц!
+    const particleCount = 50; // Меньше, но красивее
 
     for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.2, // Очень медленно
-        vy: (Math.random() - 0.5) * 0.2,
-        size: Math.random() * 1.5 + 2, // Немного больше для видимости
-        color: colors[Math.floor(Math.random() * colors.length)],
-        alpha: Math.random() * 0.5 + 0.3,
+        vx: 0, // Статичные звёзды
+        vy: 0,
+        size: Math.random() * 2 + 1,
+        opacity: Math.random() * 0.8 + 0.2,
+        twinkle: Math.random() * Math.PI * 2, // Фаза мерцания
       });
     }
-
-    // Убираем отслеживание мыши для производительности
 
     // Анимация
     let animationId: number;
     const animate = () => {
-      // Полная очистка для производительности
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Тёмный фон для звёзд
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.02)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      particles.forEach((particle, index) => {
-        // Обновление позиции
-        particle.x += particle.vx;
-        particle.y += particle.vy;
+      const time = Date.now() * 0.001;
 
-        // Граничные условия с плавным отскоком
-        if (particle.x < 0 || particle.x > canvas.width) {
-          particle.vx *= -1;
-          particle.x = Math.max(0, Math.min(canvas.width, particle.x));
-        }
-        if (particle.y < 0 || particle.y > canvas.height) {
-          particle.vy *= -1;
-          particle.y = Math.max(0, Math.min(canvas.height, particle.y));
-        }
+      particles.forEach((particle) => {
+        // Мерцание звёзд
+        const twinkle = Math.sin(time * 2 + particle.twinkle) * 0.5 + 0.5;
+        const currentOpacity = particle.opacity * (0.3 + twinkle * 0.7);
 
-        // Убираем интерактивность с мышью
-
-        // Пульсация размера
-        const pulseSize = particle.size + Math.sin(Date.now() * 0.001 + index) * 0.5;
-
-        // Отрисовка частицы с gradient
-        const gradient = ctx.createRadialGradient(
-          particle.x, particle.y, 0,
-          particle.x, particle.y, pulseSize * 2
-        );
-        gradient.addColorStop(0, particle.color + particle.alpha + ')');
-        gradient.addColorStop(1, particle.color + '0)');
-
+        // Отрисовка звезды
+        ctx.fillStyle = `rgba(255, 255, 255, ${currentOpacity})`;
         ctx.beginPath();
-        ctx.arc(particle.x, particle.y, pulseSize * 2, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         ctx.fill();
 
-        // Свечение вокруг частицы
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = particle.color + particle.alpha + ')';
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, pulseSize, 0, Math.PI * 2);
-        ctx.fillStyle = particle.color + (particle.alpha * 0.8) + ')';
-        ctx.fill();
-        ctx.shadowBlur = 0;
-
-        // Связи между близкими частицами
-        particles.forEach((other, otherIndex) => {
-          if (otherIndex <= index) return;
-
-          const dx = other.x - particle.x;
-          const dy = other.y - particle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < 120) {
-            const alpha = (1 - distance / 120) * 0.3;
-            ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(other.x, other.y);
-            ctx.strokeStyle = `rgba(59, 130, 246, ${alpha})`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
-        });
+        // Свечение для больших звёзд
+        if (particle.size > 1.5) {
+          ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+          ctx.shadowBlur = 10;
+          ctx.fillStyle = `rgba(255, 255, 255, ${currentOpacity * 0.3})`;
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size * 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
       });
 
       animationId = requestAnimationFrame(animate);
@@ -134,7 +87,7 @@ const ParticlesBackground = () => {
 
     animate();
 
-    // Изменение размера
+    // Обработчик изменения размера
     const handleResize = () => {
       setCanvasSize();
     };
@@ -155,11 +108,10 @@ const ParticlesBackground = () => {
       className="fixed inset-0 pointer-events-none"
       style={{
         zIndex: 1,
-        opacity: 0.6
+        opacity: 0.8
       }}
     />
   );
 };
 
 export default ParticlesBackground;
-
