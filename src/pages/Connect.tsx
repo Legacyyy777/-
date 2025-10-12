@@ -296,23 +296,15 @@ const Connect = () => {
 
                         // Показываем диалог как в оригинале
                         const confirmed = confirm(`Открыть ${deepLink}?`);
-
+                        
                         if (confirmed) {
-                            // Пробуем открыть как в оригинале через window.open
-                            const testWindow = window.open(deepLink, '_blank');
-
-                            // Если не открылось (например, приложение не установлено)
-                            setTimeout(() => {
-                                if (testWindow) {
-                                    testWindow.close();
-                                }
-                                // Показываем альтернативные варианты
-                                const fallback = confirm('Приложение не открылось. Скопировать ссылку подписки?');
-                                if (fallback) {
-                                    navigator.clipboard.writeText(subscriptionUrl);
-                                    alert('✅ Ссылка скопирована в буфер обмена!');
-                                }
-                            }, 1000);
+                            // Сразу копируем ссылку и показываем инструкцию
+                            navigator.clipboard.writeText(subscriptionUrl);
+                            hapticFeedback('medium');
+                            hapticNotification('success');
+                            
+                            // Показываем инструкцию
+                            alert(`✅ Ссылка скопирована!\n\n1. Закройте Telegram\n2. Откройте ${app.name}\n3. Нажмите "+" для добавления\n4. Вставьте ссылку (Ctrl+V)\n5. Подключитесь!`);
                         }
                     }}
                     className="mb-3 py-6 text-xl"
