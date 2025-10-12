@@ -430,10 +430,10 @@ const Connect = () => {
                                         key={app.id}
                                         hover
                                         className={`cursor-pointer transition-all ${isSelected
-                                                ? 'ring-2 ring-tg-link bg-tg-link/5'
-                                                : isFirst && !selectedApp
-                                                    ? 'ring-2 ring-tg-link/50'
-                                                    : ''
+                                            ? 'ring-2 ring-tg-link bg-tg-link/5'
+                                            : isFirst && !selectedApp
+                                                ? 'ring-2 ring-tg-link/50'
+                                                : ''
                                             }`}
                                     >
                                         {/* Выбор приложения (радио кнопка) */}
@@ -457,8 +457,8 @@ const Connect = () => {
                                             </div>
                                             {/* Радио индикатор */}
                                             <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${isSelected
-                                                    ? 'border-tg-link bg-tg-link'
-                                                    : 'border-tg-hint'
+                                                ? 'border-tg-link bg-tg-link'
+                                                : 'border-tg-hint'
                                                 }`}>
                                                 {isSelected && (
                                                     <div className="w-3 h-3 bg-white rounded-full" />
