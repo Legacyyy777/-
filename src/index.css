@@ -227,13 +227,13 @@ html {
 
 /* Светлая тема */
 [data-theme='light'] {
-    --tg-theme-bg-color: #ffffff;
+    --tg-theme-bg-color: #f8fafc;
     --tg-theme-text-color: #1e293b;
     --tg-theme-hint-color: #64748b;
     --tg-theme-link-color: #2563eb;
     --tg-theme-button-color: #2563eb;
     --tg-theme-button-text-color: #ffffff;
-    --tg-theme-secondary-bg-color: rgba(248, 250, 252, 0.85);
+    --tg-theme-secondary-bg-color: rgba(255, 255, 255, 0.9);
 }
 
 /* Предотвращение масштабирования на мобильных */
@@ -285,14 +285,9 @@ html {
 
 .card {
     @apply rounded-xl p-4 shadow-lg transition-all duration-300;
-    background: rgba(255, 255, 255, 0.7);
+    background: var(--tg-theme-secondary-bg-color);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-[data-theme='dark'] .card {
-    background: rgba(30, 41, 59, 0.7);
     border: 1px solid rgba(148, 163, 184, 0.2);
 }
 

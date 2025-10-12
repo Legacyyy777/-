@@ -32,8 +32,9 @@ function App() {
         // Проверяем авторизацию через Telegram
         checkAuth();
 
-        // Устанавливаем тему из Telegram
-        if (theme) {
+        // Устанавливаем тему из Telegram только если нет сохранённой темы
+        const savedTheme = localStorage.getItem('app_theme');
+        if (theme && !savedTheme) {
             setTheme(theme);
         }
 
@@ -43,6 +44,7 @@ function App() {
                 version: tg.version,
                 platform: tg.platform,
                 theme: theme,
+                savedTheme: savedTheme,
                 isExpanded: tg.isExpanded,
             });
         }

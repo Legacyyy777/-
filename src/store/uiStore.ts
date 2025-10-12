@@ -76,13 +76,19 @@ export const useUIStore = create<UIState>((set, get) => ({
     enable3D: localStorage.getItem('enable_3d') !== 'false', // По умолчанию включено
     enableParticles: localStorage.getItem('enable_particles') !== 'false', // По умолчанию включено
 
-    // Управление темой - новая система
+    // Управление темой
     setTheme: (theme) => {
         set({ theme });
         localStorage.setItem('app_theme', theme);
-        // Применяем data-theme атрибут для новой системы тем
+        // Применяем изменения к DOM
         if (typeof document !== 'undefined') {
             document.documentElement.setAttribute('data-theme', theme);
+            // Управляем классом dark для Tailwind
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
         }
     },
 
@@ -180,8 +186,11 @@ export const useUIStore = create<UIState>((set, get) => ({
 if (typeof window !== 'undefined') {
     const theme = useUIStore.getState().theme;
     document.documentElement.setAttribute('data-theme', theme);
+    // Управляем классом dark для Tailwind
     if (theme === 'dark') {
         document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
     }
 }
 
