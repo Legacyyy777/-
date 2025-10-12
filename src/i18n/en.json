@@ -200,6 +200,13 @@
     },
     "connect": {
         "title": "Connect",
+        "your_device": "Your Device",
+        "change": "Change",
+        "select_app": "Select Application",
+        "download_app": "Download App",
+        "connect_now": "Connect Now",
+        "copy_link": "Just Copy Link",
+        "manual_instructions": "Manual Instructions",
         "no_subscription": "No Active Subscription",
         "need_subscription": "You need to purchase a subscription to connect to VPN",
         "buy_subscription": "Buy Subscription",

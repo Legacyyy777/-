@@ -200,6 +200,13 @@
     },
     "connect": {
         "title": "Подключение",
+        "your_device": "Ваше устройство",
+        "change": "Изменить",
+        "select_app": "Выберите приложение",
+        "download_app": "Скачать приложение",
+        "connect_now": "Подключиться сейчас",
+        "copy_link": "Просто скопировать ссылку",
+        "manual_instructions": "Ручная инструкция",
         "no_subscription": "Нет активной подписки",
         "need_subscription": "Для подключения к VPN необходимо приобрести подписку",
         "buy_subscription": "Купить подписку",
