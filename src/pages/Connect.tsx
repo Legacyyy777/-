@@ -126,14 +126,14 @@ const Connect = () => {
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
         document.body.appendChild(link);
-        
+
         try {
             link.click();
             console.log('✅ Method 1: link.click() executed');
         } catch (err) {
             console.error('❌ Method 1 failed:', err);
         }
-        
+
         // МЕТОД 2: Пробуем через Telegram API (может не работать для custom schemes)
         setTimeout(() => {
             try {
@@ -143,7 +143,7 @@ const Connect = () => {
                 console.error('❌ Method 2 failed:', err);
             }
         }, 100);
-        
+
         // МЕТОД 3: Пробуем прямую ссылку через Telegram API
         setTimeout(() => {
             try {
@@ -225,8 +225,8 @@ const Connect = () => {
                                         setShowDeviceSelect(false);
                                     }}
                                     className={`p-2 rounded-lg transition-all active:scale-95 ${deviceType === type
-                                            ? 'bg-tg-link/10 border-2 border-tg-link'
-                                            : 'bg-tg-secondaryBg border-2 border-transparent'
+                                        ? 'bg-tg-link/10 border-2 border-tg-link'
+                                        : 'bg-tg-secondaryBg border-2 border-transparent'
                                         }`}
                                 >
                                     <div className="text-2xl mb-1">{deviceIcons[type]}</div>
@@ -249,8 +249,8 @@ const Connect = () => {
                                     setSelectedApp(app.id);
                                 }}
                                 className={`p-3 rounded-lg border-2 transition-all active:scale-95 ${selectedApp === app.id
-                                        ? 'border-tg-link bg-tg-link/10 shadow-md'
-                                        : 'border-transparent bg-tg-secondaryBg hover:border-tg-link/30'
+                                    ? 'border-tg-link bg-tg-link/10 shadow-md'
+                                    : 'border-transparent bg-tg-secondaryBg hover:border-tg-link/30'
                                     }`}
                             >
                                 <div className="text-3xl mb-1">{app.icon}</div>
@@ -280,11 +280,11 @@ const Connect = () => {
                     )}
                 </Card>
 
-                {/* Большая кнопка подключения - используем HTML ссылку */}
+                {/* Большая кнопка подключения - прямая HTML ссылка */}
                 {selectedApp && (() => {
                     const app = currentApps.find(a => a.id === selectedApp);
                     if (!app) return null;
-                    
+
                     let deepLink: string;
                     if (app.urlScheme === 'sub://') {
                         deepLink = `sub://${btoa(subscriptionUrl)}`;
@@ -293,18 +293,21 @@ const Connect = () => {
                     } else {
                         deepLink = `${app.urlScheme}${encodeURIComponent(subscriptionUrl)}`;
                     }
-                    
+
                     return (
                         <a
                             href={deepLink}
                             onClick={(e) => {
-                                hapticFeedback('medium');
                                 // Копируем ссылку в буфер обмена
                                 navigator.clipboard.writeText(subscriptionUrl);
+                                hapticFeedback('medium');
                                 hapticNotification('success');
-                                console.log('🚀 Opening:', app.name, deepLink);
+                                console.log('🚀 App:', app.name);
+                                console.log('🔗 Deep link:', deepLink);
+                                // НЕ preventDefault - пусть браузер обработает ссылку
                             }}
-                            className="block w-full btn-primary py-6 text-xl text-center mb-3"
+                            className="block w-full btn-primary py-6 text-xl text-center mb-3 no-underline"
+                            style={{ textDecoration: 'none' }}
                         >
                             <span className="mr-2">🚀</span>
                             {t('connect.connect_now')}

@@ -11,8 +11,8 @@ export const useTelegram = () => {
     const tg = window.Telegram?.WebApp;
 
     useEffect(() => {
-        if (tg) {
-            // Сигнализируем Telegram что приложение готово
+        if (tg && !isReady) {
+            // Сигнализируем Telegram что приложение готово (только один раз)
             tg.ready();
             setIsReady(true);
 
@@ -21,10 +21,10 @@ export const useTelegram = () => {
                 tg.expand();
             }
 
-            // Отключаем подтверждение закрытия (чтобы не раздражать пользователя)
+            // Отключаем подтверждение закрытия
             tg.disableClosingConfirmation();
         }
-    }, [tg]);
+    }, [tg, isReady]);
 
     /**
      * Закрытие приложения
