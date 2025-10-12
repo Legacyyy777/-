@@ -124,8 +124,9 @@ const Connect = () => {
         // Копируем ссылку в буфер обмена
         navigator.clipboard.writeText(subscriptionUrl).then(() => {
             hapticNotification('success');
-        }).catch(() => {
-            console.error('Failed to copy to clipboard');
+            console.log('✅ Link copied to clipboard');
+        }).catch((err) => {
+            console.error('Failed to copy to clipboard:', err);
         });
 
         // Формируем deep link в зависимости от платформы
@@ -142,17 +143,24 @@ const Connect = () => {
             deepLinkUrl = `clash://install-config?url=${encodeURIComponent(subscriptionUrl)}`;
         }
 
+        console.log('📱 Device type:', deviceType);
+        console.log('🔗 Deep link:', deepLinkUrl);
+        console.log('📋 Original URL:', subscriptionUrl);
+
         // Используем Telegram API для открытия ссылок
         try {
             // Открываем через Telegram API
+            console.log('🚀 Calling openLink...');
             openLink(deepLinkUrl);
+            console.log('✅ openLink called successfully');
 
-            // Показываем инструкцию через 1.5 секунды
-            setTimeout(() => {
-                setStep(4);
-            }, 1500);
+            // НЕ переходим автоматически! Пусть пользователь сам нажмет кнопку назад если нужно
+            // setTimeout(() => {
+            //     setStep(4);
+            // }, 1500);
         } catch (err) {
-            console.error('Failed to open link:', err);
+            console.error('❌ Failed to open link:', err);
+            // Только если ошибка - переходим к инструкции
             setStep(4);
         }
     };
@@ -427,11 +435,24 @@ const Connect = () => {
                             </Button>
                         )}
 
-                        <Card>
+                        <Card className="mb-4">
                             <p className="text-xs text-tg-hint text-center">
                                 {t('connect.step3.manual_hint')}
                             </p>
                         </Card>
+
+                        {/* Кнопка для перехода к ручной инструкции */}
+                        <Button
+                            variant="outline"
+                            fullWidth
+                            onClick={() => {
+                                hapticFeedback('light');
+                                setStep(4);
+                            }}
+                            className="mb-2"
+                        >
+                            {t('connect.step3.manual_instruction')}
+                        </Button>
 
                         <Button
                             variant="secondary"
@@ -440,7 +461,6 @@ const Connect = () => {
                                 hapticFeedback('light');
                                 setStep(2);
                             }}
-                            className="mt-4"
                         >
                             {t('common.back')}
                         </Button>

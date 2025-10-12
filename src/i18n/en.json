@@ -222,7 +222,8 @@
             "your_link": "Your subscription link:",
             "connect_button": "Connect",
             "open_link": "Open Link Directly",
-            "manual_hint": "Link copied to clipboard. If the app didn't open automatically, paste the link manually."
+            "manual_hint": "Link copied to clipboard. If the app didn't open, see instructions below.",
+            "manual_instruction": "📖 Show Instructions"
         },
         "step4": {
             "title": "Manual Connection",
