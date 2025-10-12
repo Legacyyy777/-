@@ -23,7 +23,7 @@ const Connect = () => {
     const { t } = useTranslation();
     const { hapticFeedback, hapticNotification, openLink } = useTelegram();
     const { subscription, loadSubscription } = useSubscription();
-    
+
     const [deviceType, setDeviceType] = useState<DeviceType>('unknown');
     const [selectedApp, setSelectedApp] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
@@ -147,7 +147,7 @@ const Connect = () => {
     return (
         <>
             <Header title={t('connect.title')} showBack />
-            
+
             <Container>
                 {/* Быстрый выбор устройства */}
                 <Card className="mb-4">
@@ -182,11 +182,10 @@ const Connect = () => {
                                         setSelectedApp(null);
                                         setShowDeviceSelect(false);
                                     }}
-                                    className={`p-2 rounded-lg transition-all active:scale-95 ${
-                                        deviceType === type
+                                    className={`p-2 rounded-lg transition-all active:scale-95 ${deviceType === type
                                             ? 'bg-tg-link/10 border-2 border-tg-link'
                                             : 'bg-tg-secondaryBg border-2 border-transparent'
-                                    }`}
+                                        }`}
                                 >
                                     <div className="text-2xl mb-1">{deviceIcons[type]}</div>
                                     <div className="text-[10px] font-medium">{type.toUpperCase()}</div>
@@ -207,11 +206,10 @@ const Connect = () => {
                                     hapticFeedback('light');
                                     setSelectedApp(app.id);
                                 }}
-                                className={`p-3 rounded-lg border-2 transition-all active:scale-95 ${
-                                    selectedApp === app.id
+                                className={`p-3 rounded-lg border-2 transition-all active:scale-95 ${selectedApp === app.id
                                         ? 'border-tg-link bg-tg-link/10 shadow-md'
                                         : 'border-transparent bg-tg-secondaryBg hover:border-tg-link/30'
-                                }`}
+                                    }`}
                             >
                                 <div className="text-3xl mb-1">{app.icon}</div>
                                 <div className="text-sm font-medium mb-1">{app.name}</div>
@@ -285,7 +283,7 @@ const Connect = () => {
                             ▼
                         </span>
                     </button>
-                    
+
                     {showManualInstructions && (
                         <ol className="mt-4 space-y-2 text-sm animate-fade-in">
                             <li className="flex gap-2">
