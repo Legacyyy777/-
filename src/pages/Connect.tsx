@@ -128,23 +128,31 @@ const Connect = () => {
             console.error('Failed to copy to clipboard');
         });
 
-        // Используем Telegram API для открытия ссылок
-        if (deviceType === 'ios' || deviceType === 'android') {
-            try {
-                // Для мобильных открываем ссылку через Telegram API
-                // Это позволяет системе определить какое приложение должно открыться
-                openLink(subscriptionUrl);
-
-                // Показываем инструкцию через 1.5 секунды
-                setTimeout(() => {
-                    setStep(4);
-                }, 1500);
-            } catch (err) {
-                console.error('Failed to open link:', err);
-                setStep(4);
-            }
+        // Формируем deep link в зависимости от платформы
+        let deepLinkUrl = subscriptionUrl;
+        
+        if (deviceType === 'ios') {
+            // Для iOS используем happ://add/
+            deepLinkUrl = `happ://add/${encodeURIComponent(subscriptionUrl)}`;
+        } else if (deviceType === 'android') {
+            // Для Android используем happ://add/
+            deepLinkUrl = `happ://add/${encodeURIComponent(subscriptionUrl)}`;
         } else {
-            // Для десктопа показываем инструкцию
+            // Для десктопа используем clash://install-config?url=
+            deepLinkUrl = `clash://install-config?url=${encodeURIComponent(subscriptionUrl)}`;
+        }
+
+        // Используем Telegram API для открытия ссылок
+        try {
+            // Открываем через Telegram API
+            openLink(deepLinkUrl);
+
+            // Показываем инструкцию через 1.5 секунды
+            setTimeout(() => {
+                setStep(4);
+            }, 1500);
+        } catch (err) {
+            console.error('Failed to open link:', err);
             setStep(4);
         }
     };
