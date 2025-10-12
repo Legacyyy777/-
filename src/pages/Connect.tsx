@@ -296,10 +296,23 @@ const Connect = () => {
 
                         // Показываем диалог как в оригинале
                         const confirmed = confirm(`Открыть ${deepLink}?`);
-
+                        
                         if (confirmed) {
-                            // Пробуем открыть как в оригинале
-                            window.location.href = deepLink;
+                            // Пробуем открыть как в оригинале через window.open
+                            const testWindow = window.open(deepLink, '_blank');
+                            
+                            // Если не открылось (например, приложение не установлено)
+                            setTimeout(() => {
+                                if (testWindow) {
+                                    testWindow.close();
+                                }
+                                // Показываем альтернативные варианты
+                                const fallback = confirm('Приложение не открылось. Скопировать ссылку подписки?');
+                                if (fallback) {
+                                    navigator.clipboard.writeText(subscriptionUrl);
+                                    alert('✅ Ссылка скопирована в буфер обмена!');
+                                }
+                            }, 1000);
                         }
                     }}
                     className="mb-3 py-6 text-xl"
