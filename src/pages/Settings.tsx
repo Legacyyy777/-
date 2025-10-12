@@ -8,7 +8,6 @@ import Card from '@/components/ui/Card';
 import { useTranslation } from '@/i18n';
 import { useTelegram } from '@/hooks/useTelegram';
 import { useSubscription } from '@/hooks/useSubscription';
-import { formatPrice } from '@/utils/format';
 
 /**
  * Страница настроек подписки
@@ -22,8 +21,6 @@ const Settings = () => {
         loading,
         loadSettings,
         updateServers,
-        updateTraffic,
-        updateDevices,
         deleteDevice,
         toggleAutopay,
     } = useSubscription();

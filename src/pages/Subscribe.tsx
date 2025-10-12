@@ -7,7 +7,7 @@ import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import { useTranslation } from '@/i18n';
 import { useTelegram } from '@/hooks/useTelegram';
-import { getPurchaseOptions, previewPurchase, purchaseSubscription, activateTrial } from '@/api/subscriptions';
+import { getPurchaseOptions, purchaseSubscription } from '@/api/subscriptions';
 import { formatPrice } from '@/utils/format';
 import type { PurchaseOptions, PurchasePeriod } from '@/types/api';
 
@@ -22,7 +22,6 @@ const Subscribe = () => {
     const [purchasing, setPurchasing] = useState(false);
     const [options, setOptions] = useState<PurchaseOptions | null>(null);
     const [selectedPeriod, setSelectedPeriod] = useState<string | null>(null);
-    const [preview, setPreview] = useState<any>(null);
 
     // Загрузка опций при монтировании
     useEffect(() => {
@@ -49,19 +48,9 @@ const Subscribe = () => {
         }
     };
 
-    const loadPreview = async (periodId: string) => {
-        try {
-            const data = await previewPurchase({ periodId });
-            setPreview(data);
-        } catch (err) {
-            console.error('Error loading preview:', err);
-        }
-    };
-
     const handlePeriodSelect = (periodId: string) => {
         hapticFeedback('light');
         setSelectedPeriod(periodId);
-        loadPreview(periodId);
     };
 
     const handlePurchase = async () => {
@@ -138,8 +127,8 @@ const Subscribe = () => {
                             hover
                             onClick={() => handlePeriodSelect(period.id)}
                             className={`cursor-pointer transition-all ${selectedPeriod === period.id
-                                    ? 'ring-2 ring-tg-link'
-                                    : ''
+                                ? 'ring-2 ring-tg-link'
+                                : ''
                                 }`}
                         >
                             <div className="flex items-center justify-between">

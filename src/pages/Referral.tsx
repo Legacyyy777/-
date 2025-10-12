@@ -8,7 +8,7 @@ import Card from '@/components/ui/Card';
 import { useTranslation } from '@/i18n';
 import { useTelegram } from '@/hooks/useTelegram';
 import { getReferralInfo } from '@/api/referrals';
-import { formatPrice, formatDateTime } from '@/utils/format';
+import { formatDateTime } from '@/utils/format';
 import type { ReferralInfo } from '@/types/api';
 
 /**
@@ -16,7 +16,7 @@ import type { ReferralInfo } from '@/types/api';
  */
 const Referral = () => {
     const { t } = useTranslation();
-    const { hapticFeedback, hapticNotification, showAlert } = useTelegram();
+    const { hapticNotification, showAlert } = useTelegram();
 
     const [loading, setLoading] = useState(true);
     const [referral, setReferral] = useState<ReferralInfo | null>(null);
