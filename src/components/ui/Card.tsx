@@ -41,7 +41,7 @@ const Card = ({
         ${variantStyles[variant]}
         ${paddingStyles[padding]}
         rounded-xl
-        ${hover ? 'cursor-pointer hover:scale-[1.02] hover:-translate-y-0.5 hover:shadow-lg transform transition-all duration-300' : 'transition-all duration-200'}
+        ${hover ? 'cursor-pointer hover:scale-[1.01] hover:-translate-y-0.5 hover:shadow-md transform transition-all duration-200' : 'transition-all duration-150'}
         ${className}
       `}
             {...props}

@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
  * @param duration - длительность анимации в мс
  * @returns текущее анимированное значение
  */
-export const useCountUp = (target: number, duration: number = 1500): number => {
+export const useCountUp = (target: number, duration: number = 800): number => {
     const [count, setCount] = useState(0);
 
     useEffect(() => {
