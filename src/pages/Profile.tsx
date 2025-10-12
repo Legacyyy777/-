@@ -102,8 +102,8 @@ const Profile = () => {
                                     key={code}
                                     onClick={() => handleLanguageChange(code)}
                                     className={`flex-1 py-2 rounded-lg font-medium transition-all ${language === code
-                                            ? 'bg-tg-link text-white'
-                                            : 'bg-tg-secondaryBg text-tg-text hover:opacity-80'
+                                        ? 'bg-tg-link text-white'
+                                        : 'bg-tg-secondaryBg text-tg-text hover:opacity-80'
                                         }`}
                                 >
                                     {name}
