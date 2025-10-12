@@ -1,7 +1,7 @@
 // Компонент input с валидацией
 
 import { InputHTMLAttributes, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     label?: string;
@@ -44,11 +44,7 @@ const Input = ({
                 )}
 
                 {/* Input */}
-                <motion.input
-                    animate={{
-                        scale: isFocused ? 1.01 : 1,
-                    }}
-                    transition={{ duration: 0.2 }}
+                <input
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
                     className={`

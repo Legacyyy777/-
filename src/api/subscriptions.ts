@@ -1,6 +1,6 @@
 // API endpoints для работы с подписками
 
-import { post, get, handleApiError } from './client';
+import { post, handleApiError } from './client';
 import { getInitData } from './auth';
 import type {
     Subscription,

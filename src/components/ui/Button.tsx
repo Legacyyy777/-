@@ -1,7 +1,6 @@
 // Компонент кнопки с анимациями
 
 import { ButtonHTMLAttributes, ReactNode } from 'react';
-import { motion } from 'framer-motion';
 import { useTelegram } from '@/hooks/useTelegram';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -51,8 +50,7 @@ const Button = ({
     };
 
     return (
-        <motion.button
-            whileTap={{ scale: disabled || isLoading ? 1 : 0.95 }}
+        <button
             onClick={handleClick}
             disabled={disabled || isLoading}
             className={`
@@ -63,6 +61,7 @@ const Button = ({
         transition-all duration-200
         disabled:opacity-50 disabled:cursor-not-allowed
         flex items-center justify-center gap-2
+        active:scale-95 transform
         ${className}
       `}
             {...props}
@@ -75,7 +74,7 @@ const Button = ({
             ) : (
                 children
             )}
-        </motion.button>
+        </button>
     );
 };
 
