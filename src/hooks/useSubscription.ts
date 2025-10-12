@@ -1,6 +1,6 @@
 // Хук для работы с подпиской
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
     getSubscription,
     getSubscriptionSettings,
@@ -18,8 +18,16 @@ import type { Subscription, SubscriptionSettings } from '@/types/api';
  * Хук для управления подпиской
  */
 export const useSubscription = () => {
-    const [subscription, setSubscription] = useState<Subscription | null>(null);
-    const [settings, setSettings] = useState<SubscriptionSettings | null>(null);
+    const [subscription, setSubscription] = useState<Subscription | null>(() => {
+        // Загружаем из localStorage при инициализации
+        const saved = localStorage.getItem('subscription_data');
+        return saved ? JSON.parse(saved) : null;
+    });
+    const [settings, setSettings] = useState<SubscriptionSettings | null>(() => {
+        // Загружаем настройки из localStorage
+        const saved = localStorage.getItem('subscription_settings');
+        return saved ? JSON.parse(saved) : null;
+    });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -33,10 +41,17 @@ export const useSubscription = () => {
         try {
             const data = await getSubscription();
             setSubscription(data);
+            // Автосохранение в localStorage
+            localStorage.setItem('subscription_data', JSON.stringify(data));
             return data;
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Ошибка загрузки подписки';
             setError(errorMessage);
+            // При ошибке загружаем сохранённые данные
+            const saved = localStorage.getItem('subscription_data');
+            if (saved) {
+                setSubscription(JSON.parse(saved));
+            }
             throw err;
         } finally {
             setLoading(false);
@@ -53,6 +68,8 @@ export const useSubscription = () => {
         try {
             const response = await getSubscriptionSettings(subscriptionId);
             setSettings(response.settings);
+            // Автосохранение настроек
+            localStorage.setItem('subscription_settings', JSON.stringify(response.settings));
             return response.settings;
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Ошибка загрузки настроек';
@@ -262,6 +279,34 @@ export const useSubscription = () => {
         const percent = (used / limit) * 100;
         return Math.min(100, Math.max(0, percent));
     }, [subscription]);
+
+    // Автосохранение при изменении данных
+    useEffect(() => {
+        if (subscription) {
+            localStorage.setItem('subscription_data', JSON.stringify(subscription));
+        }
+    }, [subscription]);
+
+    useEffect(() => {
+        if (settings) {
+            localStorage.setItem('subscription_settings', JSON.stringify(settings));
+        }
+    }, [settings]);
+
+    // Сохранение при закрытии приложения
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            if (subscription) {
+                localStorage.setItem('subscription_data', JSON.stringify(subscription));
+            }
+            if (settings) {
+                localStorage.setItem('subscription_settings', JSON.stringify(settings));
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    }, [subscription, settings]);
 
     return {
         subscription,
