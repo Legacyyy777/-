@@ -24,7 +24,7 @@ const Card = ({
     const variantStyles = {
         default: 'bg-tg-secondaryBg',
         elevated: 'bg-tg-secondaryBg shadow-md',
-        glass: 'glass dark:glass-dark',
+        glass: 'bg-white/5 backdrop-blur-sm border border-white/10',
     };
 
     // Стили padding

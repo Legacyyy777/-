@@ -51,9 +51,9 @@ const ParticlesBackground = () => {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5, // Медленнее
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 2 + 1, // Меньше
+        vx: (Math.random() - 0.5) * 0.2, // Очень медленно
+        vy: (Math.random() - 0.5) * 0.2,
+        size: Math.random() * 1.5 + 2, // Немного больше для видимости
         color: colors[Math.floor(Math.random() * colors.length)],
         alpha: Math.random() * 0.5 + 0.3,
       });
