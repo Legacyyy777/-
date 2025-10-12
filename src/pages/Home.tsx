@@ -80,7 +80,7 @@ const Home = () => {
                 {/* Статус подписки */}
                 <div className="theme-card mb-4">
                     <div className="flex items-center justify-between mb-3">
-                        <h2 className="text-lg font-semibold theme-text-primary">
+                        <h2 className="theme-heading-6">
                             Статус подписки
                         </h2>
                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${hasSubscription
