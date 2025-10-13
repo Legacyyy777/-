@@ -3,6 +3,7 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { useTranslation } from '@/i18n';
 import { useTelegram } from '@/hooks/useTelegram';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * Нижняя панель навигации с иконками
@@ -11,6 +12,8 @@ const TabBar = () => {
     const { t } = useTranslation();
     const { hapticSelection } = useTelegram();
     const location = useLocation();
+    const navRef = useRef<HTMLDivElement>(null);
+    const [maskStyle, setMaskStyle] = useState({ left: 0, width: 0 });
 
     // Навигационные элементы
     const navItems = [
@@ -24,6 +27,29 @@ const TabBar = () => {
     // Находим индекс активного элемента
     const activeIndex = navItems.findIndex(item => item.path === location.pathname);
 
+    // Оптимизированное обновление позиции маски
+    useEffect(() => {
+        if (navRef.current && activeIndex >= 0) {
+            const updateMask = () => {
+                const navItems = navRef.current?.querySelectorAll('[data-nav-item]');
+                const activeItem = navItems?.[activeIndex] as HTMLElement;
+
+                if (activeItem && navRef.current) {
+                    const navRect = navRef.current.getBoundingClientRect();
+                    const itemRect = activeItem.getBoundingClientRect();
+
+                    setMaskStyle({
+                        left: itemRect.left - navRect.left,
+                        width: itemRect.width
+                    });
+                }
+            };
+
+            // Используем requestAnimationFrame для оптимизации
+            requestAnimationFrame(updateMask);
+        }
+    }, [activeIndex]);
+
     return (
         <nav className="fixed bottom-4 left-4 right-4 safe-area-inset-bottom z-50">
             {/* Liquid Glass Background */}
@@ -35,19 +61,20 @@ const TabBar = () => {
                 <div
                     className="liquid-glass-active absolute top-1 bottom-1 rounded-2xl transition-all duration-500 ease-out"
                     style={{
-                        left: `calc(${(100 / navItems.length) * activeIndex}% + 8px)`,
-                        width: `calc(${100 / navItems.length}% - 16px)`,
+                        left: `${maskStyle.left}px`,
+                        width: `${maskStyle.width}px`,
                         transform: activeIndex >= 0 ? 'translateX(0)' : 'translateX(-100%)'
                     }}
                 />
 
                 {/* Navigation items */}
-                <div className="relative flex justify-around items-center h-16 px-2">
+                <div ref={navRef} className="relative flex justify-around items-center h-16 px-2">
                     {navItems.map((item, index) => (
                         <NavLink
                             key={item.path}
                             to={item.path}
                             onClick={() => hapticSelection()}
+                            data-nav-item
                             className={`relative flex flex-col items-center justify-center w-full h-full transition-colors duration-300 rounded-2xl z-10 ${activeIndex === index
                                 ? 'text-white'
                                 : 'text-white/70 hover:text-white'
