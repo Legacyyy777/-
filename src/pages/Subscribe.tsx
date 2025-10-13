@@ -23,7 +23,7 @@ const Subscribe = () => {
     const [options, setOptions] = useState<PurchaseOptions | null>(null);
     const [selectedPeriod, setSelectedPeriod] = useState<string | null>(null);
     const [subscription, setSubscription] = useState<any>(null);
-    
+
     // Получаем периоды из options
     const periods = options?.data?.periods as PurchasePeriod[] | undefined;
 
@@ -74,11 +74,11 @@ const Subscribe = () => {
         if (!selectedPeriod) return;
 
         // Проверяем баланс перед покупкой
-        const selectedPeriodData = periods?.find(p => p.id === selectedPeriod);
+        const selectedPeriodData = periodsData?.find(p => p.id === selectedPeriod);
         if (selectedPeriodData && subscription) {
             const periodPrice = selectedPeriodData.price_kopeks || selectedPeriodData.priceKopeks || 0;
             const currentBalance = subscription.balance_kopeks || 0;
-            
+
             if (currentBalance < periodPrice) {
                 hapticNotification('error');
                 showAlert(
@@ -105,10 +105,10 @@ const Subscribe = () => {
             });
         } catch (err: any) {
             hapticNotification('error');
-            
+
             // Улучшенная обработка ошибок
             let errorMessage = 'Ошибка при покупке подписки';
-            
+
             if (err.message?.includes('Payment Required') || err.message?.includes('недостаточно средств')) {
                 errorMessage = 'Недостаточно средств на балансе. Пополните баланс для покупки подписки.';
             } else if (err.message?.includes('402')) {
@@ -116,7 +116,7 @@ const Subscribe = () => {
             } else if (err.message) {
                 errorMessage = err.message;
             }
-            
+
             showAlert(errorMessage);
         } finally {
             setPurchasing(false);
@@ -138,15 +138,15 @@ const Subscribe = () => {
     const root = options?.data || options?.config || options;
 
     if (root?.periods) {
-        periods = root.periods as PurchasePeriod[];
+        periodsData = root.periods as PurchasePeriod[];
     } else if (root?.available_periods) {
-        periods = root.available_periods as PurchasePeriod[];
+        periodsData = root.available_periods as PurchasePeriod[];
     } else if (root?.options?.periods) {
-        periods = root.options.periods as PurchasePeriod[];
+        periodsData = root.options.periods as PurchasePeriod[];
     } else if (options?.data?.renewal_periods) {
-        periods = options.data.renewal_periods as PurchasePeriod[];
+        periodsData = options.data.renewal_periods as PurchasePeriod[];
     } else if (Array.isArray(options?.data)) {
-        periods = options.data as PurchasePeriod[];
+        periodsData = options.data as PurchasePeriod[];
     } else if (options?.data) {
         // Возможно периоды находятся в другом месте
         const dataKeys = Object.keys(options.data);
@@ -156,7 +156,7 @@ const Subscribe = () => {
         for (const key of dataKeys) {
             if (Array.isArray(options.data[key])) {
                 console.log(`Found array in data.${key}`);
-                periods = options.data[key] as PurchasePeriod[];
+                periodsData = options.data[key] as PurchasePeriod[];
                 break;
             }
         }
@@ -164,13 +164,13 @@ const Subscribe = () => {
 
     const balance = subscription?.balance_kopeks || options?.balance_kopeks || 0;
 
-    console.log('🎯 Rendering with periods:', periods);
-    console.log('🎯 Periods length:', periods?.length);
+    console.log('🎯 Rendering with periods:', periodsData);
+    console.log('🎯 Periods length:', periodsData?.length);
 
     // Если тарифы не загрузились, показываем fallback тарифы
-    if (!periods || periods.length === 0) {
+    if (!periodsData || periodsData.length === 0) {
         console.log('⚠️ No periods found, using fallback tariffs');
-        periods = [
+        periodsData = [
             {
                 id: '1-month',
                 days: 30,
@@ -211,8 +211,8 @@ const Subscribe = () => {
     }
 
     console.log('📦 Full options object:', options);
-    console.log('📋 Extracted periods:', periods);
-    console.log('📋 Periods length:', periods?.length);
+    console.log('📋 Extracted periods:', periodsData);
+    console.log('📋 Periods length:', periodsData?.length);
     console.log('💰 Balance:', balance);
 
     return (
@@ -235,7 +235,7 @@ const Subscribe = () => {
 
 
                 <div className="space-y-3 mb-6">
-                    {periods?.map((period) => (
+                    {periodsData?.map((period) => (
                         <Card
                             key={period.id}
                             hover
