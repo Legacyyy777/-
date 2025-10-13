@@ -98,7 +98,7 @@ const Subscribe = () => {
     let periods: PurchasePeriod[] | undefined;
 
     const root = options?.data || options?.config || options;
-    
+
     if (root?.periods) {
         periods = root.periods as PurchasePeriod[];
     } else if (root?.available_periods) {
