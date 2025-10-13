@@ -133,7 +133,7 @@ const Subscribe = () => {
 
     // Периоды могут быть в разных местах в зависимости от структуры ответа
     // Пробуем разные варианты структуры API как в оригинале
-    let periods: PurchasePeriod[] | undefined;
+    let periodsData: PurchasePeriod[] | undefined;
 
     const root = options?.data || options?.config || options;
 
