@@ -30,20 +30,45 @@ const TabBar = () => {
     // Обновляем позицию маски при изменении активного элемента
     useEffect(() => {
         if (navRef.current && activeIndex >= 0) {
+            // Используем requestAnimationFrame для оптимизации
+            const updateMask = () => {
+                const navItems = navRef.current?.querySelectorAll('[data-nav-item]');
+                const activeItem = navItems?.[activeIndex] as HTMLElement;
+                
+                if (activeItem && navRef.current) {
+                    const navRect = navRef.current.getBoundingClientRect();
+                    const itemRect = activeItem.getBoundingClientRect();
+                    
+                    setMaskStyle({
+                        left: itemRect.left - navRect.left,
+                        width: itemRect.width
+                    });
+                }
+            };
+
+            // Небольшая задержка для завершения рендера
+            const timeoutId = setTimeout(updateMask, 50);
+            return () => clearTimeout(timeoutId);
+        }
+    }, [activeIndex]);
+
+    // Инициализация маски при монтировании
+    useEffect(() => {
+        if (navRef.current && activeIndex >= 0) {
             const navItems = navRef.current.querySelectorAll('[data-nav-item]');
             const activeItem = navItems[activeIndex] as HTMLElement;
-
+            
             if (activeItem) {
                 const navRect = navRef.current.getBoundingClientRect();
                 const itemRect = activeItem.getBoundingClientRect();
-
+                
                 setMaskStyle({
                     left: itemRect.left - navRect.left,
                     width: itemRect.width
                 });
             }
         }
-    }, [activeIndex]);
+    }, []); // Только при монтировании
 
     return (
         <nav className="fixed bottom-4 left-4 right-4 safe-area-inset-bottom z-50">
