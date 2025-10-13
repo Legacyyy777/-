@@ -33,10 +33,10 @@ const TabBar = () => {
 
                 {/* Moving selection mask */}
                 <div
-                    className="liquid-glass-active absolute top-1 bottom-1 rounded-xl transition-all duration-500 ease-out"
+                    className="liquid-glass-active absolute top-2 bottom-2 rounded-2xl transition-all duration-500 ease-out"
                     style={{
-                        left: `${8 + (activeIndex * (84 / navItems.length))}%`,
-                        width: `${84 / navItems.length}%`,
+                        left: `calc(${(100 / navItems.length) * activeIndex}% + 8px)`,
+                        width: `calc(${100 / navItems.length}% - 16px)`,
                         transform: activeIndex >= 0 ? 'translateX(0)' : 'translateX(-100%)'
                     }}
                 />
