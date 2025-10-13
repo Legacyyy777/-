@@ -37,11 +37,13 @@ const Subscribe = () => {
                 getPurchaseOptions(),
                 getSubscription()
             ]);
-
-            console.log('Purchase options loaded:', optionsData);
-            console.log('Subscription loaded:', subscriptionData);
-            console.log('🔍 Options data structure:', JSON.stringify(optionsData, null, 2));
-
+            
+            console.log('📦 Full Options Response:', optionsData);
+            console.log('👤 Full Subscription Response:', subscriptionData);
+            console.log('🔑 Options keys:', Object.keys(optionsData || {}));
+            console.log('📊 Options.data keys:', Object.keys(optionsData?.data || {}));
+            console.log('🎯 Options.data.periods:', optionsData?.data?.periods);
+            
             setOptions(optionsData);
             setSubscription(subscriptionData);
 
@@ -98,16 +100,23 @@ const Subscribe = () => {
     let periods: PurchasePeriod[] | undefined;
 
     const root = options?.data || options?.config || options;
-
+    console.log('🔍 Root object for periods:', root);
+    console.log('🔍 Root keys:', root ? Object.keys(root) : 'root is null/undefined');
+    
     if (root?.periods) {
+        console.log('✅ Found periods in root.periods');
         periods = root.periods as PurchasePeriod[];
     } else if (root?.available_periods) {
+        console.log('✅ Found periods in root.available_periods');
         periods = root.available_periods as PurchasePeriod[];
     } else if (root?.options?.periods) {
+        console.log('✅ Found periods in root.options.periods');
         periods = root.options.periods as PurchasePeriod[];
     } else if (options?.data?.renewal_periods) {
+        console.log('✅ Found periods in options.data.renewal_periods');
         periods = options.data.renewal_periods as PurchasePeriod[];
     } else if (Array.isArray(options?.data)) {
+        console.log('✅ Found periods - options.data is array');
         periods = options.data as PurchasePeriod[];
     } else if (options?.data) {
         // Возможно периоды находятся в другом месте
@@ -123,6 +132,8 @@ const Subscribe = () => {
             }
         }
     }
+    
+    console.log('📊 Final periods:', periods);
 
     const balance = subscription?.balance_kopeks || options?.balance_kopeks || 0;
 
