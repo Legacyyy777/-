@@ -94,11 +94,17 @@ const Subscribe = () => {
     }
 
     // Периоды могут быть в разных местах в зависимости от структуры ответа
-    // Пробуем разные варианты структуры API
+    // Пробуем разные варианты структуры API как в оригинале
     let periods: PurchasePeriod[] | undefined;
 
-    if (options?.data?.periods) {
-        periods = options.data.periods as PurchasePeriod[];
+    const root = options?.data || options?.config || options;
+    
+    if (root?.periods) {
+        periods = root.periods as PurchasePeriod[];
+    } else if (root?.available_periods) {
+        periods = root.available_periods as PurchasePeriod[];
+    } else if (root?.options?.periods) {
+        periods = root.options.periods as PurchasePeriod[];
     } else if (options?.data?.renewal_periods) {
         periods = options.data.renewal_periods as PurchasePeriod[];
     } else if (Array.isArray(options?.data)) {
