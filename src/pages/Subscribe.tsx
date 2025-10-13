@@ -37,16 +37,19 @@ const Subscribe = () => {
                 getPurchaseOptions(),
                 getSubscription()
             ]);
-            
+
             console.log('Options loaded:', optionsData);
             console.log('Subscription loaded:', subscriptionData);
-            
+
             setOptions(optionsData);
             setSubscription(subscriptionData);
 
             // Автоматически выбираем рекомендованный тариф
             const periods = optionsData.data?.periods as PurchasePeriod[] | undefined;
             console.log('Periods:', periods);
+            if (periods && periods.length > 0) {
+                console.log('First period structure:', JSON.stringify(periods[0], null, 2));
+            }
             if (periods && periods.length > 0) {
                 const recommended = periods.find(p => p.isRecommended);
                 setSelectedPeriod(recommended?.id || periods[0].id);
@@ -97,7 +100,7 @@ const Subscribe = () => {
     let periods: PurchasePeriod[] | undefined;
 
     const root = options?.data || options?.config || options;
-    
+
     if (root?.periods) {
         periods = root.periods as PurchasePeriod[];
     } else if (root?.available_periods) {
@@ -124,6 +127,9 @@ const Subscribe = () => {
     }
 
     const balance = subscription?.balance_kopeks || options?.balance_kopeks || 0;
+
+    console.log('🎯 Rendering with periods:', periods);
+    console.log('🎯 Periods length:', periods?.length);
 
     // Если тарифы не загрузились, показываем fallback тарифы
     if (!periods || periods.length === 0) {
