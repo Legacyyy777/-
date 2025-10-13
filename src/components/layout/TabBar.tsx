@@ -35,7 +35,7 @@ const TabBar = () => {
                 <div
                     className="liquid-glass-active absolute top-1 bottom-1 rounded-xl transition-all duration-500 ease-out"
                     style={{
-                        left: `${2 + (activeIndex * (100 / navItems.length))}%`,
+                        left: `${(100 / navItems.length) * activeIndex + 2}%`,
                         width: `${96 / navItems.length}%`,
                         transform: activeIndex >= 0 ? 'translateX(0)' : 'translateX(-100%)'
                     }}
@@ -49,8 +49,8 @@ const TabBar = () => {
                             to={item.path}
                             onClick={() => hapticSelection()}
                             className={`relative flex flex-col items-center justify-center w-full h-full transition-colors duration-300 rounded-2xl z-10 ${activeIndex === index
-                                    ? 'text-white'
-                                    : 'text-white/70 hover:text-white'
+                                ? 'text-white'
+                                : 'text-white/70 hover:text-white'
                                 }`}
                         >
                             {/* Icon */}
