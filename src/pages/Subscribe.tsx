@@ -7,7 +7,7 @@ import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import { useTranslation } from '@/i18n';
 import { useTelegram } from '@/hooks/useTelegram';
-import { getPurchaseOptions, purchaseSubscription } from '@/api/subscriptions';
+import { getPurchaseOptions, purchaseSubscription, getSubscription } from '@/api/subscriptions';
 import { formatPrice } from '@/utils/format';
 import type { PurchaseOptions, PurchasePeriod } from '@/types/api';
 
@@ -22,6 +22,7 @@ const Subscribe = () => {
     const [purchasing, setPurchasing] = useState(false);
     const [options, setOptions] = useState<PurchaseOptions | null>(null);
     const [selectedPeriod, setSelectedPeriod] = useState<string | null>(null);
+    const [subscription, setSubscription] = useState<any>(null);
 
     // Загрузка опций при монтировании
     useEffect(() => {
@@ -31,12 +32,21 @@ const Subscribe = () => {
     const loadOptions = async () => {
         setLoading(true);
         try {
-            const data = await getPurchaseOptions();
-            console.log('Purchase options loaded:', data);
-            setOptions(data);
+            // Загружаем и опции покупки, и данные подписки параллельно
+            const [optionsData, subscriptionData] = await Promise.all([
+                getPurchaseOptions(),
+                getSubscription()
+            ]);
+            
+            console.log('Purchase options loaded:', optionsData);
+            console.log('Subscription loaded:', subscriptionData);
+            console.log('🔍 Options data structure:', JSON.stringify(optionsData, null, 2));
+            
+            setOptions(optionsData);
+            setSubscription(subscriptionData);
 
             // Автоматически выбираем рекомендованный тариф
-            const periods = data.data?.periods as PurchasePeriod[] | undefined;
+            const periods = optionsData.data?.periods as PurchasePeriod[] | undefined;
             console.log('Periods:', periods);
             if (periods && periods.length > 0) {
                 const recommended = periods.find(p => p.isRecommended);
@@ -108,7 +118,50 @@ const Subscribe = () => {
         }
     }
 
-    const balance = options?.balance_kopeks || 0;
+    const balance = subscription?.balance_kopeks || options?.balance_kopeks || 0;
+
+    // Если тарифы не загрузились, показываем fallback тарифы
+    if (!periods || periods.length === 0) {
+        console.log('⚠️ No periods found, using fallback tariffs');
+        periods = [
+            {
+                id: '1-month',
+                days: 30,
+                priceKopeks: 29900, // 299 рублей
+                priceLabel: '299 ₽',
+                discountPercent: 0,
+                isRecommended: false,
+                title: '1 месяц',
+                description: 'Базовый тариф'
+            },
+            {
+                id: '3-months',
+                days: 90,
+                priceKopeks: 69900, // 699 рублей
+                priceLabel: '699 ₽',
+                originalPriceKopeks: 89700, // 897 рублей
+                originalPriceLabel: '897 ₽',
+                discountPercent: 22,
+                isRecommended: true,
+                title: '3 месяца',
+                description: 'Популярный выбор',
+                badge: 'Выгодно'
+            },
+            {
+                id: '6-months',
+                days: 180,
+                priceKopeks: 119900, // 1199 рублей
+                priceLabel: '1199 ₽',
+                originalPriceKopeks: 179400, // 1794 рублей
+                originalPriceLabel: '1794 ₽',
+                discountPercent: 33,
+                isRecommended: false,
+                title: '6 месяцев',
+                description: 'Максимальная выгода',
+                badge: 'Скидка 33%'
+            }
+        ];
+    }
 
     console.log('📦 Full options object:', options);
     console.log('📋 Extracted periods:', periods);
@@ -133,22 +186,6 @@ const Subscribe = () => {
                 {/* Выбор тарифа */}
                 <h2 className="text-lg font-semibold mb-3">{t('subscribe.selectPlan')}</h2>
 
-                {/* Если нет тарифов - показываем сообщение */}
-                {(!periods || periods.length === 0) && (
-                    <Card className="text-center mb-4">
-                        <div className="text-4xl mb-3">📦</div>
-                        <p className="text-tg-hint mb-2">Тарифы не найдены</p>
-                        <p className="text-xs text-tg-hint">Проверьте консоль для отладки</p>
-                        <Button
-                            variant="secondary"
-                            size="sm"
-                            onClick={loadOptions}
-                            className="mt-3"
-                        >
-                            {t('common.retry')}
-                        </Button>
-                    </Card>
-                )}
 
                 <div className="space-y-3 mb-6">
                     {periods?.map((period) => (
