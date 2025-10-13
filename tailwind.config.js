@@ -48,7 +48,7 @@ export default {
                 },
                 float: {
                     '0%, 100%': { transform: 'translateY(0px)' },
-                    '50%': { transform: 'translateY(-20px)' },
+                    '50%': { transform: 'translateY(-2px)' },
                 },
                 glow: {
                     '0%': { boxShadow: '0 0 5px rgba(59, 130, 246, 0.5)' },

@@ -1,6 +1,6 @@
 // Нижняя панель навигации
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useTranslation } from '@/i18n';
 import { useTelegram } from '@/hooks/useTelegram';
 
@@ -10,6 +10,7 @@ import { useTelegram } from '@/hooks/useTelegram';
 const TabBar = () => {
     const { t } = useTranslation();
     const { hapticSelection } = useTelegram();
+    const location = useLocation();
 
     // Навигационные элементы
     const navItems = [
@@ -19,6 +20,9 @@ const TabBar = () => {
         { path: '/referral', label: t('navigation.referral'), icon: '👥' },
         { path: '/profile', label: t('navigation.profile'), icon: '👤' },
     ];
+
+    // Находим индекс активного элемента
+    const activeIndex = navItems.findIndex(item => item.path === location.pathname);
 
     return (
         <nav className="fixed bottom-4 left-4 right-4 safe-area-inset-bottom z-50">
