@@ -35,8 +35,8 @@ const TabBar = () => {
                 <div
                     className="liquid-glass-active absolute top-1 bottom-1 rounded-2xl transition-all duration-500 ease-out"
                     style={{
-                        left: `calc(${(100 / navItems.length) * activeIndex}% + 4px)`,
-                        width: `calc(${100 / navItems.length}% - 8px)`,
+                        left: `calc(${(100 / navItems.length) * activeIndex}% + 8px)`,
+                        width: `calc(${100 / navItems.length}% - 16px)`,
                         transform: activeIndex >= 0 ? 'translateX(0)' : 'translateX(-100%)'
                     }}
                 />
