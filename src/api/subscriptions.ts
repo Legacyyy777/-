@@ -225,10 +225,22 @@ export const purchaseSubscription = async (data: {
             throw new Error('Отсутствуют данные авторизации');
         }
 
-        return await post('/miniapp/subscription/purchase', {
-            initData,
-            ...data,
-        });
+        // Пробуем разные возможные эндпоинты для покупки
+        try {
+            return await post('/miniapp/subscription/purchase', {
+                initData,
+                ...data,
+            });
+        } catch (error: any) {
+            if (error?.response?.status === 404) {
+                // Пробуем альтернативный эндпоинт
+                return await post('/miniapp/purchase', {
+                    initData,
+                    ...data,
+                });
+            }
+            throw error;
+        }
     } catch (error) {
         throw new Error(handleApiError(error));
     }

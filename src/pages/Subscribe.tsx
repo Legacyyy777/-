@@ -23,6 +23,9 @@ const Subscribe = () => {
     const [options, setOptions] = useState<PurchaseOptions | null>(null);
     const [selectedPeriod, setSelectedPeriod] = useState<string | null>(null);
     const [subscription, setSubscription] = useState<any>(null);
+    
+    // Получаем периоды из options
+    const periods = options?.data?.periods as PurchasePeriod[] | undefined;
 
     // Загрузка опций при монтировании
     useEffect(() => {
@@ -45,14 +48,14 @@ const Subscribe = () => {
             setSubscription(subscriptionData);
 
             // Автоматически выбираем рекомендованный тариф
-            const periods = optionsData.data?.periods as PurchasePeriod[] | undefined;
-            console.log('Periods:', periods);
-            if (periods && periods.length > 0) {
-                console.log('First period structure:', JSON.stringify(periods[0], null, 2));
+            const periodsData = optionsData.data?.periods as PurchasePeriod[] | undefined;
+            console.log('Periods:', periodsData);
+            if (periodsData && periodsData.length > 0) {
+                console.log('First period structure:', JSON.stringify(periodsData[0], null, 2));
             }
-            if (periods && periods.length > 0) {
-                const recommended = periods.find(p => p.isRecommended);
-                setSelectedPeriod(recommended?.id || periods[0].id);
+            if (periodsData && periodsData.length > 0) {
+                const recommended = periodsData.find(p => p.isRecommended);
+                setSelectedPeriod(recommended?.id || periodsData[0].id);
             }
         } catch (err) {
             console.error('Error loading options:', err);
@@ -69,6 +72,27 @@ const Subscribe = () => {
 
     const handlePurchase = async () => {
         if (!selectedPeriod) return;
+
+        // Проверяем баланс перед покупкой
+        const selectedPeriodData = periods?.find(p => p.id === selectedPeriod);
+        if (selectedPeriodData && subscription) {
+            const periodPrice = selectedPeriodData.price_kopeks || selectedPeriodData.priceKopeks || 0;
+            const currentBalance = subscription.balance_kopeks || 0;
+            
+            if (currentBalance < periodPrice) {
+                hapticNotification('error');
+                showAlert(
+                    `Недостаточно средств на балансе.\n\n` +
+                    `Цена тарифа: ${Math.floor(periodPrice / 100)}₽\n` +
+                    `Текущий баланс: ${Math.floor(currentBalance / 100)}₽\n\n` +
+                    `Пополните баланс для покупки подписки.`,
+                    () => {
+                        window.location.href = '/balance';
+                    }
+                );
+                return;
+            }
+        }
 
         setPurchasing(true);
         hapticFeedback('medium');

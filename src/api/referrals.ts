@@ -20,11 +20,34 @@ export const getReferralInfo = async (
             throw new Error('Отсутствуют данные авторизации');
         }
 
-        return await post('/miniapp/referral', {
-            initData,
-            page,
-            limit,
-        });
+        // Сначала пробуем получить данные из подписки
+        try {
+            const subscription = await post('/miniapp/subscription', { initData });
+            if (subscription?.referral) {
+                return subscription.referral;
+            }
+        } catch (error) {
+            console.log('Referral data not found in subscription, trying direct API');
+        }
+
+        // Если в подписке нет реферальных данных, пробуем прямой API
+        try {
+            return await post('/miniapp/referral', {
+                initData,
+                page,
+                limit,
+            });
+        } catch (error: any) {
+            if (error?.response?.status === 404) {
+                // Пробуем альтернативный эндпоинт
+                return await post('/miniapp/referrals', {
+                    initData,
+                    page,
+                    limit,
+                });
+            }
+            throw error;
+        }
     } catch (error: any) {
         // Если API недоступен, возвращаем заглушку
         if (error?.response?.status === 404 || error?.message?.includes('Not Found')) {

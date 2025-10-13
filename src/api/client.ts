@@ -5,7 +5,7 @@ import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'ax
 // Получение базового URL из переменных окружения
 // Если открыто через HTTPS - используем относительный путь для избежания Mixed Content
 const API_BASE_URL = window.location.protocol === 'https:'
-    ? ''  // Пустой baseURL, т.к. пути уже содержат /miniapp/
+    ? 'https://testminiapp.legacyyy777.site'  // Используем полный URL для production
     : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080');
 
 // Создание экземпляра Axios
@@ -54,6 +54,16 @@ apiClient.interceptors.response.use(
         if (import.meta.env.DEV) {
             console.error('API Error:', error.response?.data || error.message);
         }
+        
+        // Логирование в production для отладки
+        console.error('API Error Details:', {
+            url: error.config?.url,
+            method: error.config?.method,
+            status: error.response?.status,
+            statusText: error.response?.statusText,
+            data: error.response?.data,
+            message: error.message
+        });
 
         // Обработка специфичных кодов ошибок
         if (error.response) {
