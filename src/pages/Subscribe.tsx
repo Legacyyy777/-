@@ -37,11 +37,11 @@ const Subscribe = () => {
                 getPurchaseOptions(),
                 getSubscription()
             ]);
-            
+
             console.log('Purchase options loaded:', optionsData);
             console.log('Subscription loaded:', subscriptionData);
             console.log('🔍 Options data structure:', JSON.stringify(optionsData, null, 2));
-            
+
             setOptions(optionsData);
             setSubscription(subscriptionData);
 
