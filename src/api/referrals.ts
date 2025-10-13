@@ -25,7 +25,21 @@ export const getReferralInfo = async (
             page,
             limit,
         });
-    } catch (error) {
+    } catch (error: any) {
+        // Если API недоступен, возвращаем заглушку
+        if (error?.response?.status === 404 || error?.message?.includes('Not Found')) {
+            return {
+                referral_link: '',
+                total_referrals: 0,
+                total_earned_kopeks: 0,
+                referrals: {
+                    total: 0,
+                    page: 1,
+                    limit: 20,
+                    items: []
+                }
+            };
+        }
         throw new Error(handleApiError(error));
     }
 };
@@ -70,7 +84,16 @@ export const getReferralStats = async (): Promise<any> => {
         return await post('/miniapp/referral/stats', {
             initData,
         });
-    } catch (error) {
+    } catch (error: any) {
+        // Если API недоступен, возвращаем заглушку
+        if (error?.response?.status === 404 || error?.message?.includes('Not Found')) {
+            return {
+                total_referrals: 0,
+                active_referrals: 0,
+                total_earned_kopeks: 0,
+                conversion_rate: 0
+            };
+        }
         throw new Error(handleApiError(error));
     }
 };

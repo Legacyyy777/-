@@ -51,6 +51,15 @@ const Balance = () => {
         const method = methods.find(m => m.id === selectedMethod);
         if (!method) return;
 
+        // Проверяем сумму для методов, которые требуют ввод суммы
+        if (method.requires_amount) {
+            const amountValue = parseFloat(amount);
+            if (!amount || isNaN(amountValue) || amountValue <= 0) {
+                showAlert('Пожалуйста, введите корректную сумму');
+                return;
+            }
+        }
+
         setPaying(true);
         hapticFeedback('medium');
 

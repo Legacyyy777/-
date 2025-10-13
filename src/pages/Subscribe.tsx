@@ -81,7 +81,19 @@ const Subscribe = () => {
             });
         } catch (err: any) {
             hapticNotification('error');
-            showAlert(err.message || 'Ошибка при покупке подписки');
+            
+            // Улучшенная обработка ошибок
+            let errorMessage = 'Ошибка при покупке подписки';
+            
+            if (err.message?.includes('Payment Required') || err.message?.includes('недостаточно средств')) {
+                errorMessage = 'Недостаточно средств на балансе. Пополните баланс для покупки подписки.';
+            } else if (err.message?.includes('402')) {
+                errorMessage = 'Недостаточно средств. Текущий баланс: ' + (subscription?.balance_kopeks ? Math.floor(subscription.balance_kopeks / 100) + '₽' : '0₽');
+            } else if (err.message) {
+                errorMessage = err.message;
+            }
+            
+            showAlert(errorMessage);
         } finally {
             setPurchasing(false);
         }
