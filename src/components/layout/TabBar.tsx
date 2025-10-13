@@ -21,24 +21,47 @@ const TabBar = () => {
     ];
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 safe-area-inset-bottom z-50 backdrop-blur-xl bg-tg-secondaryBg/80 border-t border-tg-hint/20 shadow-2xl">
-            <div className="flex justify-around items-center h-16 max-w-screen-lg mx-auto">
-                {navItems.map((item) => (
-                    <NavLink
-                        key={item.path}
-                        to={item.path}
-                        onClick={() => hapticSelection()}
-                        className={({ isActive }) =>
-                            `flex flex-col items-center justify-center w-full h-full transition-colors ${isActive
-                                ? 'text-tg-link'
-                                : 'text-tg-hint hover:text-tg-text'
-                            }`
-                        }
-                    >
-                        <span className="text-2xl mb-0.5">{item.icon}</span>
-                        <span className="text-xs font-medium">{item.label}</span>
-                    </NavLink>
-                ))}
+        <nav className="fixed bottom-4 left-4 right-4 safe-area-inset-bottom z-50">
+            {/* Liquid Glass Background */}
+            <div className="liquid-glass rounded-3xl overflow-hidden">
+                {/* Animated gradient overlay */}
+                <div className="absolute inset-0 animate-liquidGlow opacity-50"></div>
+
+                {/* Navigation items */}
+                <div className="relative flex justify-around items-center h-16 px-2">
+                    {navItems.map((item) => (
+                        <NavLink
+                            key={item.path}
+                            to={item.path}
+                            onClick={() => hapticSelection()}
+                            className={({ isActive }) =>
+                                `relative flex flex-col items-center justify-center w-full h-full transition-all duration-300 rounded-2xl ${isActive
+                                    ? 'text-white animate-float'
+                                    : 'text-white/70 hover:text-white hover:animate-float'
+                                }`
+                            }
+                        >
+                            {({ isActive }) => (
+                                <>
+                                    {/* Active background with liquid glass effect */}
+                                    {isActive && (
+                                        <div className="liquid-glass-active absolute inset-1 rounded-xl"></div>
+                                    )}
+
+                                    {/* Icon with glow effect */}
+                                    <span className={`relative text-2xl mb-0.5 transition-all duration-300 ${isActive ? 'drop-shadow-lg filter brightness-110' : ''}`}>
+                                        {item.icon}
+                                    </span>
+
+                                    {/* Label */}
+                                    <span className="relative text-xs font-medium transition-all duration-300">
+                                        {item.label}
+                                    </span>
+                                </>
+                            )}
+                        </NavLink>
+                    ))}
+                </div>
             </div>
         </nav>
     );

@@ -31,7 +31,7 @@ const Layout = ({ children }: LayoutProps) => {
             {enableParticles && <ParticlesBackground />}
 
             {/* Контент страницы */}
-            <main className="flex-1 pb-20 relative" style={{ zIndex: 5 }}>
+            <main className="flex-1 pb-24 relative" style={{ zIndex: 5 }}>
                 {children}
             </main>
 
