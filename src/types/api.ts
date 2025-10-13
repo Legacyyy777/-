@@ -377,14 +377,24 @@ export interface PurchaseOptions {
 export interface PurchasePeriod {
     id: string;
     days?: number;
+    period_days?: number; // snake_case от API
     months?: number;
+    period?: number; // от API
     priceKopeks?: number;
+    price_kopeks?: number; // snake_case от API
     priceLabel?: string;
+    price_label?: string; // snake_case от API
+    label?: string; // от API
     originalPriceKopeks?: number;
+    original_price_kopeks?: number; // snake_case от API
     originalPriceLabel?: string;
-    discountPercent: number;
+    original_price_label?: string; // snake_case от API
+    discountPercent?: number;
+    discount_percent?: number; // snake_case от API
     pricePerMonthKopeks?: number;
+    per_month_price_kopeks?: number; // snake_case от API
     pricePerMonthLabel?: string;
+    per_month_price_label?: string; // snake_case от API
     isRecommended: boolean;
     description?: string;
     badge?: string;

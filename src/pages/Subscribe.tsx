@@ -213,7 +213,7 @@ const Subscribe = () => {
                                 <div className="flex-1">
                                     <div className="flex items-center gap-2">
                                         <h3 className="font-semibold text-tg-text">
-                                            {period.title || `${period.days} дней`}
+                                            {period.label || period.title || `${period.period_days || period.days} дней`}
                                         </h3>
                                         {period.isRecommended && (
                                             <span className="px-2 py-0.5 bg-tg-link text-white text-xs rounded-full">
@@ -231,21 +231,21 @@ const Subscribe = () => {
                                         <p className="text-sm text-tg-hint mt-1">{period.description}</p>
                                     )}
 
-                                    {period.pricePerMonthLabel && (
+                                    {(period.per_month_price_label || period.pricePerMonthLabel) && (
                                         <p className="text-xs text-tg-hint mt-1">
-                                            {period.pricePerMonthLabel} {t('subscribe.perMonth')}
+                                            {period.per_month_price_label || period.pricePerMonthLabel} {t('subscribe.perMonth')}
                                         </p>
                                     )}
                                 </div>
 
                                 <div className="text-right">
-                                    {period.discountPercent > 0 && period.originalPriceLabel && (
+                                    {(period.discount_percent || period.discountPercent || 0) > 0 && (period.original_price_label || period.originalPriceLabel) && (
                                         <p className="text-xs text-tg-hint line-through">
-                                            {period.originalPriceLabel}
+                                            {period.original_price_label || period.originalPriceLabel}
                                         </p>
                                     )}
                                     <p className="text-lg font-bold text-tg-link">
-                                        {period.priceLabel}
+                                        {period.price_label || period.priceLabel}
                                     </p>
                                 </div>
                             </div>
