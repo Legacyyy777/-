@@ -31,9 +31,10 @@ app.get('/health', (req, res) => {
 });
 
 // API routes (с валидацией Telegram initData)
-app.use('/api/subscription', validateInitData, subscriptionRoutes);
-app.use('/api/balance', validateInitData, balanceRoutes);
-app.use('/api/referral', validateInitData, referralRoutes);
+// Используем /miniapp/* для совместимости с существующим frontend
+app.use('/miniapp/subscription', validateInitData, subscriptionRoutes);
+app.use('/miniapp/balance', validateInitData, balanceRoutes);
+app.use('/miniapp/referral', validateInitData, referralRoutes);
 
 // Error handler
 app.use(errorHandler);
