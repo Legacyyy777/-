@@ -104,7 +104,7 @@ POSTGRES_USER=miniapp_readonly
 POSTGRES_PASSWORD=$DB_PASSWORD
 
 # Порт API
-PORT=3001
+PORT=3002
 
 # CORS
 ALLOWED_ORIGINS=http://localhost:3000,https://testminiapp.legacyyy777.site
@@ -160,11 +160,11 @@ services:
     env_file:
       - .env
     ports:
-      - "127.0.0.1:3001:3001"
+      - "127.0.0.1:3002:3002"
     networks:
       - $PG_NETWORK
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3001/health"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3002/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -188,8 +188,12 @@ echo -e "${GREEN}✅ Backend запущен!${NC}"
 echo ""
 echo -e "${BLUE}📊 Проверка:${NC}"
 echo "  Логи:        docker logs -f remnawave_miniapp_backend"
-echo "  Health:      curl http://localhost:3001/health"
-echo "  Остановить:  cd backend && docker-compose down"
+echo "  Health:      curl http://localhost:3002/health"
+echo "  Остановить:  cd backend && docker compose down"
+echo ""
+echo -e "${YELLOW}📝 Порты:${NC}"
+echo "  Frontend (miniapp): http://localhost:3001"
+echo "  Backend (API):      http://localhost:3002"
 echo ""
 
 # Ждём запуска и показываем логи
