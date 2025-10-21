@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход - VPN Subscription</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .telegram-login-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .features {
+            text-align: left;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .error.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="logo">🚀</div>
+        <h1>VPN Subscription</h1>
+        <p>Войдите через Telegram чтобы управлять своей подпиской</p>
+
+        <div class="telegram-login-wrapper">
+            <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="YOUR_BOT_USERNAME"
+                data-size="large" data-radius="10" data-onauth="onTelegramAuth(user)" data-request-access="write">
+                </script>
+        </div>
+
+        <div class="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 15px; color: #666;">Авторизация...</p>
+        </div>
+
+        <div class="error">
+            <strong>Ошибка авторизации</strong>
+            <p id="error-message"></p>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <span class="feature-icon">⚡</span>
+                <span>Быстрый доступ к подписке</span>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">💳</span>
+                <span>Пополнение баланса</span>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">📊</span>
+                <span>Статистика использования</span>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🎁</span>
+                <span>Реферальная программа</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Конфигурация
+        const API_URL = window.location.origin + '/api';
+
+        // Обработчик успешной авторизации Telegram
+        function onTelegramAuth(user) {
+            console.log('Telegram Auth:', user);
+
+            // Показываем лоадер
+            document.querySelector('.loading').classList.add('active');
+            document.querySelector('.error').classList.remove('active');
+
+            // Отправляем данные на backend для проверки
+            fetch(API_URL + '/miniapp/auth/telegram-login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: user.id,
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    username: user.username,
+                    photo_url: user.photo_url,
+                    auth_date: user.auth_date,
+                    hash: user.hash,
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Сохраняем токен в localStorage
+                        localStorage.setItem('auth_token', data.token);
+                        localStorage.setItem('user_id', user.id);
+
+                        // Редирект на главную страницу
+                        window.location.href = '/';
+                    } else {
+                        throw new Error(data.error || 'Ошибка авторизации');
+                    }
+                })
+                .catch(error => {
+                    console.error('Auth error:', error);
+                    document.querySelector('.loading').classList.remove('active');
+                    document.querySelector('.error').classList.add('active');
+                    document.getElementById('error-message').textContent = error.message;
+                });
+        }
+
+        // Проверяем, уже авторизован ли пользователь
+        window.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('auth_token');
+            if (token) {
+                // Проверяем валидность токена
+                fetch(API_URL + '/miniapp/auth/verify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token,
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Уже авторизован, редирект
+                            window.location.href = '/';
+                        }
+                    })
+                    .catch(() => {
+                        // Токен невалидный, удаляем
+                        localStorage.removeItem('auth_token');
+                        localStorage.removeItem('user_id');
+                    });
+            }
+        });
+    </script>
+</body>
+
+</html>

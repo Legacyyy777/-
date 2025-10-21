@@ -6,6 +6,7 @@ import subscriptionRoutes from './routes/subscription';
 import balanceRoutes from './routes/balance';
 import referralRoutes from './routes/referral';
 import paymentsRoutes from './routes/payments';
+import authRoutes from './routes/auth';
 import { errorHandler } from './middleware/errorHandler';
 import { validateInitData } from './middleware/auth';
 
@@ -30,6 +31,9 @@ app.get('/health', (req, res) => {
         service: 'miniapp-backend',
     });
 });
+
+// Public API routes (без валидации)
+app.use('/miniapp/auth', authRoutes);
 
 // API routes (с валидацией Telegram initData)
 // Используем /miniapp/* для совместимости с существующим frontend
