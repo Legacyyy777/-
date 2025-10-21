@@ -46,6 +46,9 @@ WORKDIR /app
 # Копируем собранное приложение из builder
 COPY --from=builder /app/dist ./dist
 
+# Копируем дополнительные файлы из public (login.html и т.д.)
+COPY --from=builder /app/public/ ./dist/
+
 # Порт приложения
 EXPOSE 3000
 
