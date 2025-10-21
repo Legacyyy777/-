@@ -1,0 +1,53 @@
+# Пример добавления MiniApp Backend в docker-compose.yml бота
+#
+# ИНСТРУКЦИЯ:
+# 1. Скопируйте этот блок в ваш docker-compose.yml
+# 2. Вставьте ПЕРЕД секциями volumes: и networks:
+# 3. Измените пути на правильные для вашего сервера
+# 4. Запустите: docker-compose up -d --build
+
+# MiniApp Backend - прямое чтение из PostgreSQL
+miniapp-backend:
+  build:
+    context: /var/www/miniapp/backend # ИЗМЕНИТЬ: путь к папке backend
+    dockerfile: Dockerfile
+  image: remnawave-miniapp-backend:latest
+  container_name: remnawave_miniapp_backend
+  restart: unless-stopped
+
+  # Зависимость от БД бота
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+  # Файл с переменными (создаётся setup-db-access.sh)
+  env_file:
+    - /var/www/miniapp/backend/.env # ИЗМЕНИТЬ: путь к backend/.env
+
+  # Порт доступен только на localhost (безопасность)
+  ports:
+    - "127.0.0.1:3001:3001"
+
+  # Та же сеть что и бот
+  networks:
+    - bot_network
+
+  # Health check
+  healthcheck:
+    test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3001/health" ]
+    interval: 30s
+    timeout: 10s
+    retries: 3
+    start_period: 10s
+
+  # Логирование
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+# Если у вас нет секции networks, добавьте:
+# networks:
+#   bot_network:
+#     driver: bridge
