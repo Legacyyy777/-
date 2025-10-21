@@ -21,6 +21,10 @@ export default defineConfig({
         target: 'es2015',
         rollupOptions: {
             output: {
+                // Добавляем timestamp чтобы при каждой сборке хеш менялся
+                entryFileNames: `assets/[name]-[hash]-${Date.now()}.js`,
+                chunkFileNames: `assets/[name]-[hash]-${Date.now()}.js`,
+                assetFileNames: `assets/[name]-[hash].[ext]`,
                 manualChunks: {
                     // Простое разделение на чанки
                     'react-vendor': ['react', 'react-dom', 'react-router-dom'],
