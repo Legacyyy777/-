@@ -116,6 +116,7 @@ router.post('/', async (req: Request, res: Response) => {
             success: true,
             subscription_id: user.subscription_id,
             remnawave_short_uuid: user.remnawave_short_uuid,
+            balance_kopeks: parseInt(user.balance_kopeks) || 0,
             user: {
                 telegram_id: user.telegram_id,
                 has_active_subscription: hasActiveSubscription,
