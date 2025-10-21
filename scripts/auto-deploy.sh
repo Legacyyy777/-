@@ -95,13 +95,13 @@ if [ -z "$DB_PASSWORD" ]; then
     DB_PASSWORD=$(openssl rand -base64 24 | tr -d "=+/" | cut -c1-20)
 fi
 
-cat > backend/.env << EOF
+cat > backend/.env << ENVEOF
 # База данных бота
 POSTGRES_HOST=postgres
 POSTGRES_PORT=5432
 POSTGRES_DB=remnawave_bot
 POSTGRES_USER=miniapp_readonly
-POSTGRES_PASSWORD=$DB_PASSWORD
+POSTGRES_PASSWORD=${DB_PASSWORD}
 
 # Порт API
 PORT=3003
@@ -113,8 +113,8 @@ ALLOWED_ORIGINS=http://localhost:3000,https://testminiapp.legacyyy777.site
 NODE_ENV=production
 
 # Telegram Bot Token
-BOT_TOKEN=$BOT_TOKEN
-EOF
+BOT_TOKEN=${BOT_TOKEN}
+ENVEOF
 
 echo -e "${GREEN}✅ backend/.env создан${NC}"
 
