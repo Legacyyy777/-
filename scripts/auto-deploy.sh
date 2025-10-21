@@ -16,12 +16,23 @@ echo ""
 
 # 1. Найти PostgreSQL контейнер бота
 echo -e "${YELLOW}📦 Поиск PostgreSQL бота...${NC}"
-PG_CONTAINER=$(docker ps --filter name=postgres --filter name=db --format "{{.Names}}" | grep -E "(bot|remnawave)" | head -1)
 
+# Сначала ищем remnawave_bot_db
+PG_CONTAINER=$(docker ps --format "{{.Names}}" | grep -E "remnawave.*db|remnawave_bot_db" | head -1)
+
+# Если не нашли - показываем список и просим выбрать
 if [ -z "$PG_CONTAINER" ]; then
-    echo -e "${RED}❌ PostgreSQL контейнер бота не найден!${NC}"
-    echo "Убедитесь что бот запущен."
-    exit 1
+    echo -e "${YELLOW}⚠️  remnawave_bot_db не найден автоматически${NC}"
+    echo ""
+    echo "Найденные PostgreSQL контейнеры:"
+    docker ps --filter name=postgres --filter name=db --format "  - {{.Names}}"
+    echo ""
+    read -p "Введите имя контейнера PostgreSQL для Bedolaga бота: " PG_CONTAINER
+    
+    if [ -z "$PG_CONTAINER" ]; then
+        echo -e "${RED}❌ Контейнер не указан!${NC}"
+        exit 1
+    fi
 fi
 
 echo -e "${GREEN}✅ Найден: $PG_CONTAINER${NC}"
