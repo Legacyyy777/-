@@ -1,113 +1,155 @@
-# 🚀 Деплой на VPS (для Bedolaga бота)
+# 🚀 Инструкции по деплою MiniApp
 
-## Для уже работающего бота: https://github.com/Fr1ngg/remnawave-bedolaga-telegram-bot
+## Быстрый старт
 
----
+### Полный деплой (Backend + Frontend)
+```bash
+bash update-and-deploy.sh
+```
 
-## ⚡ Быстрый деплой (5 минут)
+### Деплой только Backend
+```bash
+bash update-and-deploy.sh backend
+```
 
-### 1. Обновите код на VPS
+### Деплой только Frontend
+```bash
+bash update-and-deploy.sh frontend
+```
+
+## Доступные скрипты
+
+### 📥 `update-and-deploy.sh` - Обновление и деплой
+Получает изменения из Git и деплоит проект
 
 ```bash
-cd /var/www/miniapp  # или где у вас клонировали
-git pull origin main
+# Полный деплой
+bash update-and-deploy.sh
+
+# Только backend
+bash update-and-deploy.sh backend
+
+# Только frontend
+bash update-and-deploy.sh frontend
 ```
 
-### 2. Запустите автонастройку БД
+### 📦 `deploy-all.sh` - Деплой без обновления
+Деплоит проект без git pull
 
 ```bash
-bash scripts/setup-db-access.sh
+# Полный деплой
+bash deploy-all.sh
+
+# Только backend
+bash deploy-all.sh backend
+
+# Только frontend
+bash deploy-all.sh frontend
 ```
 
-### 3. Добавьте в docker-compose бота
-
-Откройте `docker-compose.yml` вашего Bedolaga бота:
-
+### 📋 `logs.sh` - Просмотр логов
 ```bash
-cd /путь/к/bedolaga-bot
-nano docker-compose.yml
+# Все логи
+bash logs.sh
+
+# Логи backend (в режиме follow)
+bash logs.sh backend
+
+# Логи frontend
+bash logs.sh frontend
+
+# Логи nginx
+bash logs.sh nginx
 ```
 
-Добавьте в конец (перед `volumes:` или `networks:`):
+## Ручной деплой
 
-```yaml
-  miniapp-backend:
-    build:
-      context: /var/www/miniapp/backend
-    container_name: remnawave_miniapp_backend
-    restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
-    env_file:
-      - /var/www/miniapp/backend/.env
-    ports:
-      - "127.0.0.1:3001:3001"
-    networks:
-      - bot_network
-```
-
-### 4. Соберите и запустите
-
+### Backend
 ```bash
-docker-compose up -d --build
+cd /root/-/backend
+bash deploy.sh
 ```
 
-### 5. Проверьте
-
+### Frontend
 ```bash
-curl http://localhost:3001/health
-docker logs -f remnawave_miniapp_backend
+cd /root/-/docker
+docker compose down
+docker compose up -d --build
 ```
 
-Должно быть:
-```
-✅ PostgreSQL подключен
-✅ Маппинг колонок определен
-🚀 MiniApp Backend запущен на порту 3001
-```
+## Проверка статуса
 
----
-
-## 🎯 Что дальше?
-
-1. **Настройте Nginx** (если нужен HTTPS) - см. [AUTO_DEPLOY_GUIDE.md](AUTO_DEPLOY_GUIDE.md)
-2. **Обновите frontend** - укажите URL backend в `src/api/client.ts`
-3. **Соберите frontend** - `npm run build`
-4. **Протестируйте** через Telegram MiniApp
-
----
-
-## 📚 Подробные инструкции
-
-- [AUTO_DEPLOY_GUIDE.md](AUTO_DEPLOY_GUIDE.md) - полная инструкция с Nginx, SSL и troubleshooting
-- [DB_INTEGRATION_GUIDE.md](DB_INTEGRATION_GUIDE.md) - документация по архитектуре
-- [QUICK_START_DB.md](QUICK_START_DB.md) - краткая справка
-
----
-
-## ⚙️ Автоматическая адаптация
-
-Backend **сам определяет схему БД** бота. Не нужно ничего настраивать вручную!
-
-Поддерживаются любые названия колонок:
-- `telegram_id` / `tg_id` / `user_id`
-- `balance_kopeks` / `balance` / `wallet`
-- `has_active_subscription` / `is_active` / `subscription_active`
-- и т.д.
-
----
-
-## 🔄 Обновление в будущем
-
+### Список контейнеров
 ```bash
-cd /var/www/miniapp
-git pull origin main
-cd /путь/к/bedolaga-bot
-docker-compose up -d --build miniapp-backend
+docker ps | grep remnawave
 ```
 
----
+### Health check
+```bash
+curl http://localhost:3003/health
+```
 
-**Готово! Backend работает в 10x быстрее HTTP запросов.** ⚡
+### Тест API
+```bash
+curl -X POST http://localhost:3003/miniapp/subscription \
+  -H "Content-Type: application/json" \
+  -d '{"initData":"user=%7B%22id%22%3A402695709%7D"}'
+```
 
+## Режим разработки
+
+### Включить DEV режим (работа без Telegram)
+```bash
+echo "SKIP_AUTH=true" >> /root/-/backend/.env
+docker restart remnawave_miniapp_backend
+```
+
+### Выключить DEV режим
+```bash
+sed -i '/SKIP_AUTH=true/d' /root/-/backend/.env
+docker restart remnawave_miniapp_backend
+```
+
+## Полезные команды
+
+### Перезапуск сервисов
+```bash
+# Backend
+docker restart remnawave_miniapp_backend
+
+# Frontend
+docker restart remnawave-miniapp
+
+# Nginx
+docker restart remnawave-nginx
+```
+
+### Очистка Docker
+```bash
+# Удалить неиспользуемые образы
+docker image prune -a
+
+# Очистить кеш сборки
+docker builder prune -af
+```
+
+## Ссылки
+
+- **MiniApp:** https://testminiapp.legacyyy777.site
+- **Panel:** https://testpanel.legacyyy777.site
+- **Backend Health:** http://localhost:3003/health
+
+## Структура проекта
+
+```
+/root/-/
+├── backend/              # Backend API
+│   ├── deploy.sh        # Скрипт деплоя backend
+│   ├── docker-compose.yml
+│   └── src/
+├── docker/              # Frontend MiniApp
+│   └── docker-compose.yml
+├── deploy-all.sh        # Полный деплой
+├── update-and-deploy.sh # Git pull + деплой
+└── logs.sh              # Просмотр логов
+```
