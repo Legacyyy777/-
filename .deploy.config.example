@@ -1,0 +1,44 @@
+# Пример конфигурации деплоя MiniApp
+# 
+# 1. Скопируйте этот файл: cp .deploy.config.example .deploy.config
+# 2. Настройте под свой проект
+# 3. Запустите: bash update-and-deploy.sh
+
+# ========== НАЗВАНИЯ КОНТЕЙНЕРОВ ==========
+# Укажите названия ваших Docker контейнеров
+BACKEND_CONTAINER_NAME="remnawave_miniapp_backend"
+FRONTEND_CONTAINER_NAME="remnawave-miniapp"
+NGINX_CONTAINER_NAME="remnawave-nginx"
+
+# ========== ПУТИ К ДИРЕКТОРИЯМ ==========
+# Путь к директории backend (относительно корня проекта)
+BACKEND_DIR="backend"
+
+# Путь к директории frontend (относительно корня проекта)
+FRONTEND_DIR="docker"
+
+# ========== DOCKER COMPOSE ФАЙЛЫ ==========
+# Названия docker-compose файлов
+BACKEND_COMPOSE_FILE="docker-compose.yml"
+FRONTEND_COMPOSE_FILE="docker-compose.yml"
+
+# ========== DOCKER СЕТИ ==========
+# Префикс названия сетей для фильтрации docker ps
+# Если оставить пустым - покажет все контейнеры
+DOCKER_NETWORK_PREFIX="remnawave"
+
+# ========== URL ДЛЯ ПРОВЕРКИ ==========
+# URL вашего MiniApp
+MINIAPP_URL="https://testminiapp.legacyyy777.site"
+
+# URL Health check backend
+BACKEND_HEALTH_URL="http://localhost:3003/health"
+
+# ========== РЕЖИМ РАЗРАБОТКИ ==========
+# Включить режим разработки (работа без Telegram initData)
+# true - включен, false - выключен
+DEV_MODE_ENABLED="true"
+
+# Telegram ID для тестов в DEV режиме
+DEV_USER_ID="402695709"
+
