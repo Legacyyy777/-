@@ -7,8 +7,22 @@ import crypto from 'crypto';
  */
 export function validateInitData(req: Request, res: Response, next: NextFunction) {
     try {
+        // Режим разработки - пропускаем валидацию для тестов без Telegram
+        if (process.env.NODE_ENV === 'development' || process.env.SKIP_AUTH === 'true') {
+            console.log('⚠️ DEV MODE: Пропускаем валидацию initData');
+            (req as any).telegramUser = {
+                id: 402695709, // Ваш telegram_id для тестов
+                first_name: 'Test',
+                last_name: 'User',
+                username: 'Legacyyy777',
+                language_code: 'ru',
+                is_premium: false,
+            };
+            return next();
+        }
+
         const initData = req.body.initData || req.headers['x-telegram-init-data'];
-        
+
         if (!initData) {
             return res.status(401).json({
                 success: false,
@@ -85,7 +99,7 @@ export function validateInitData(req: Request, res: Response, next: NextFunction
         }
 
         const user = JSON.parse(userParam);
-        
+
         // Добавляем данные пользователя в request
         (req as any).telegramUser = {
             id: user.id,
