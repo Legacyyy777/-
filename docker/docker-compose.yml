@@ -9,7 +9,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile
       args:
-        VITE_API_BASE_URL: http://remnawave_bot:8080
+        VITE_API_BASE_URL: http://remnawave_miniapp_backend:3003
         VITE_BOT_USERNAME: "@your_bot"
         VITE_ENABLE_3D_EFFECTS: "true"
         VITE_ENABLE_PARTICLES: "true"

@@ -170,6 +170,7 @@ services:
       - "127.0.0.1:3003:3003"
     networks:
       - $PG_NETWORK
+      - remnawave-network
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3003/health"]
       interval: 30s
@@ -180,6 +181,9 @@ services:
 networks:
   $PG_NETWORK:
     external: true
+  remnawave-network:
+    external: true
+    name: remnawave-network
 EOF
 
 echo -e "${GREEN}✅ docker-compose.yml создан${NC}"
