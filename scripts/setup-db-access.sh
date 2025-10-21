@@ -74,15 +74,23 @@ fi
 echo ""
 echo "📝 Создание .env файла для backend..."
 
-# Получаем данные из основного .env бота
+# Получаем BOT_TOKEN из .env бота (безопасно)
+BOT_TOKEN_VALUE=""
 if [ -f "../.env" ]; then
-    source ../.env
+    BOT_TOKEN_VALUE=$(grep "^BOT_TOKEN=" ../.env | cut -d '=' -f2- | tr -d '"' | tr -d "'")
 elif [ -f ".env" ]; then
-    source .env
+    BOT_TOKEN_VALUE=$(grep "^BOT_TOKEN=" .env | cut -d '=' -f2- | tr -d '"' | tr -d "'")
+fi
+
+# Если не нашли - используем placeholder
+if [ -z "$BOT_TOKEN_VALUE" ]; then
+    BOT_TOKEN_VALUE="your_bot_token_here"
+    echo -e "${YELLOW}⚠️  BOT_TOKEN не найден в .env бота${NC}"
+    echo "Не забудьте заполнить BOT_TOKEN в backend/.env!"
 fi
 
 # Создаём .env для backend
-cat > backend/.env << EOF
+cat > backend/.env << 'EOF'
 # База данных бота
 POSTGRES_HOST=postgres
 POSTGRES_PORT=5432
@@ -96,12 +104,14 @@ PORT=3001
 # CORS (разрешённые домены)
 ALLOWED_ORIGINS=http://localhost:3000,https://testminiapp.legacyyy777.site
 
-# Telegram Bot Token (для валидации initData)
-BOT_TOKEN=${BOT_TOKEN:-your_bot_token_here}
-
 # Режим
 NODE_ENV=production
 EOF
+
+# Добавляем BOT_TOKEN отдельно (чтобы избежать проблем с heredoc)
+echo "" >> backend/.env
+echo "# Telegram Bot Token (для валидации initData)" >> backend/.env
+echo "BOT_TOKEN=$BOT_TOKEN_VALUE" >> backend/.env
 
 echo -e "${GREEN}✅ Файл backend/.env создан${NC}"
 echo ""
