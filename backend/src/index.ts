@@ -5,6 +5,7 @@ import { dbPool, testConnection } from './db';
 import subscriptionRoutes from './routes/subscription';
 import balanceRoutes from './routes/balance';
 import referralRoutes from './routes/referral';
+import paymentsRoutes from './routes/payments';
 import { errorHandler } from './middleware/errorHandler';
 import { validateInitData } from './middleware/auth';
 
@@ -35,6 +36,7 @@ app.get('/health', (req, res) => {
 app.use('/miniapp/subscription', validateInitData, subscriptionRoutes);
 app.use('/miniapp/balance', validateInitData, balanceRoutes);
 app.use('/miniapp/referral', validateInitData, referralRoutes);
+app.use('/miniapp/payments', validateInitData, paymentsRoutes);
 
 // Error handler
 app.use(errorHandler);

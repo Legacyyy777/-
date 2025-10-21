@@ -326,6 +326,115 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 /**
+ * POST /api/subscription/purchase/options
+ * Получение вариантов покупки подписки
+ */
+router.post('/purchase/options', async (req: Request, res: Response) => {
+    try {
+        const userId = req.telegramUser?.id;
+
+        if (!userId) {
+            return res.status(401).json({
+                success: false,
+                error: 'Пользователь не авторизован',
+            });
+        }
+
+        // Получаем доступные серверы (squads)
+        let squadsResult: any[] = [];
+        try {
+            squadsResult = await query(`
+                SELECT 
+                    squad_uuid as uuid,
+                    display_name as name,
+                    country_code,
+                    is_available,
+                    price_kopeks,
+                    description,
+                    is_trial_eligible
+                FROM server_squads
+                WHERE is_available = true
+                ORDER BY sort_order, display_name
+            `);
+        } catch (err) {
+            console.warn('⚠️ Не удалось загрузить серверы:', err);
+        }
+
+        // Варианты периодов подписки
+        const periods = [
+            {
+                id: '1m',
+                name: '1 месяц',
+                days: 30,
+                price_kopeks: 15000,
+                price_label: '150 ₽',
+                discount_percent: 0,
+            },
+            {
+                id: '3m',
+                name: '3 месяца',
+                days: 90,
+                price_kopeks: 40000,
+                price_label: '400 ₽',
+                discount_percent: 10,
+            },
+            {
+                id: '6m',
+                name: '6 месяцев',
+                days: 180,
+                price_kopeks: 75000,
+                price_label: '750 ₽',
+                discount_percent: 15,
+            },
+            {
+                id: '1y',
+                name: '1 год',
+                days: 365,
+                price_kopeks: 120000,
+                price_label: '1200 ₽',
+                discount_percent: 30,
+            },
+        ];
+
+        res.json({
+            success: true,
+            options: {
+                servers: squadsResult.map(s => ({
+                    uuid: s.uuid,
+                    name: s.name,
+                    country_code: s.country_code,
+                    is_available: s.is_available,
+                    price_kopeks: parseInt(s.price_kopeks) || 0,
+                    price_label: `${(parseInt(s.price_kopeks) || 0) / 100} ₽`,
+                    description: s.description,
+                    is_trial_eligible: s.is_trial_eligible,
+                })),
+                periods: periods,
+                traffic_options: [
+                    { gb: 50, price_kopeks: 0, label: '50 GB' },
+                    { gb: 100, price_kopeks: 0, label: '100 GB' },
+                    { gb: 200, price_kopeks: 5000, label: '200 GB (+50₽)' },
+                    { gb: 500, price_kopeks: 10000, label: '500 GB (+100₽)' },
+                    { gb: 0, price_kopeks: 0, label: 'Безлимит' },
+                ],
+                device_limits: [
+                    { count: 1, price_kopeks: 0, label: '1 устройство' },
+                    { count: 3, price_kopeks: 0, label: '3 устройства' },
+                    { count: 5, price_kopeks: 5000, label: '5 устройств (+50₽)' },
+                    { count: 10, price_kopeks: 10000, label: '10 устройств (+100₽)' },
+                ],
+            },
+        });
+    } catch (error) {
+        console.error('❌ Ошибка получения вариантов покупки:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Ошибка загрузки вариантов покупки',
+        });
+    }
+});
+
+/**
  * GET /api/subscription/settings
  * Получение настроек подписки
  */
