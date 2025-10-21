@@ -45,4 +45,3 @@ docker compose logs --tail 20
 echo ""
 echo "✅ Деплой завершён!"
 echo "📊 Проверить работу: curl http://localhost:3003/health"
-

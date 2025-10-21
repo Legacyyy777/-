@@ -170,6 +170,23 @@ const Profile = () => {
                         </button>
                     </div>
                 </Card>
+
+                {/* Кнопка выхода (если авторизован через браузер) */}
+                {localStorage.getItem('auth_token') && (
+                    <Card className="mt-4">
+                        <button
+                            onClick={() => {
+                                if (confirm('Выйти из аккаунта?')) {
+                                    localStorage.clear();
+                                    window.location.href = '/login';
+                                }
+                            }}
+                            className="w-full py-3 px-4 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors"
+                        >
+                            🚪 Выйти из аккаунта
+                        </button>
+                    </Card>
+                )}
             </Container>
         </>
     );
