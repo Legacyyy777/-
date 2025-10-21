@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  miniapp-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: backend-miniapp-backend:latest
+    container_name: remnawave_miniapp_backend
+    restart: unless-stopped
+
+    # Файл с переменными окружения
+    env_file:
+      - .env
+
+    # Порт доступен только на localhost (безопасность)
+    ports:
+      - "127.0.0.1:3003:3003"
+
+    # Подключаемся к сетям БД бота и remnawave
+    networks:
+      - remnawave-network
+      - mybot_bot_network
+
+    # Health check
+    healthcheck:
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3003/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+    # Логирование
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  remnawave-network:
+    external: true
+    name: remnawave-network
+  mybot_bot_network:
+    external: true
+    name: mybot_bot_network
