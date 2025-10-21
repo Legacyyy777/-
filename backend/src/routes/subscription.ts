@@ -72,38 +72,20 @@ router.post('/', async (req: Request, res: Response) => {
             console.warn('⚠️ Не удалось загрузить серверы:', err);
         }
 
-        // Получаем устройства (если таблица существует)
-        let devicesResult: any[] = [];
+        // Считаем количество подключенных серверов из connected_squads
+        let connectedServersCount = 0;
         try {
-            // Пробуем разные варианты названий таблицы и колонок
-            const deviceQueries = [
-                // Вариант 1: user_devices с user_telegram_id
-                `SELECT hwid, device_name as name, last_seen, created_at 
-                 FROM user_devices 
-                 WHERE user_telegram_id = $1 
-                 ORDER BY last_seen DESC LIMIT 10`,
-                // Вариант 2: devices с telegram_id
-                `SELECT hwid, name, last_seen, created_at 
-                 FROM devices 
-                 WHERE telegram_id = $1 
-                 ORDER BY last_seen DESC LIMIT 10`,
-                // Вариант 3: devices с user_id
-                `SELECT hwid, name, last_seen, created_at 
-                 FROM devices 
-                 WHERE user_id = $1 
-                 ORDER BY last_seen DESC LIMIT 10`,
-            ];
-
-            for (const deviceQuery of deviceQueries) {
-                try {
-                    devicesResult = await query(deviceQuery, [userId]);
-                    break;
-                } catch (err) {
-                    continue;
-                }
+            if (user.subscription_id) {
+                const connectedSquadsResult = await query(`
+                    SELECT 
+                        COALESCE(jsonb_array_length(connected_squads::jsonb), 0) as count
+                    FROM subscriptions
+                    WHERE id = $1
+                `, [user.subscription_id]);
+                connectedServersCount = parseInt(connectedSquadsResult[0]?.count) || 0;
             }
         } catch (err) {
-            console.warn('⚠️ Не удалось загрузить устройства:', err);
+            console.warn('⚠️ Не удалось посчитать connected_squads:', err);
         }
 
         // Получаем транзакции пользователя
@@ -229,7 +211,7 @@ router.post('/', async (req: Request, res: Response) => {
             remnawave_short_uuid: user.remnawave_short_uuid,
             balance_kopeks: parseInt(user.balance_kopeks) || 0,
             total_spent_kopeks: totalSpentKopeks,
-            connected_devices_count: devicesResult.length,
+            connected_devices_count: connectedServersCount,
             user: {
                 telegram_id: user.telegram_id,
                 has_active_subscription: hasActiveSubscription,
@@ -240,18 +222,13 @@ router.post('/', async (req: Request, res: Response) => {
                 device_limit: parseInt(user.device_limit) || 1,
                 balance_kopeks: parseInt(user.balance_kopeks) || 0,
                 referral_code: user.referral_code,
+                connected_servers_count: connectedServersCount,
                 servers: serversResult.map(s => ({
                     uuid: s.uuid,
                     name: s.name,
                     location: s.location,
                     country_code: s.country_code,
                     is_active: s.is_active,
-                })),
-                devices: devicesResult.map(d => ({
-                    hwid: d.hwid,
-                    device_name: d.name || d.device_name,
-                    last_seen: d.last_seen,
-                    created_at: d.created_at,
                 })),
             },
             subscription_url: user.subscription_url,

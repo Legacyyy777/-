@@ -23,7 +23,7 @@ const Home = () => {
     // Анимация счётчиков - ВСЕГДА вызываем хуки!
     const animatedBalance = useCountUp(subscription?.balance_kopeks || 0, 2000);
     const animatedTrafficUsed = useCountUp(subscription?.user?.traffic_used_gb || 0, 1500);
-    const animatedDevicesCount = useCountUp(subscription?.connected_devices_count || 0, 1000);
+    const animatedServersCount = useCountUp(subscription?.connected_devices_count || 0, 1000);
 
     // Загрузка данных при монтировании
     useEffect(() => {
@@ -137,16 +137,16 @@ const Home = () => {
                     </div>
                 )}
 
-                {/* Устройства */}
+                {/* Подключенные серверы */}
                 {hasSubscription && (
                     <div className="card mb-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
                         <h2 className="text-lg font-semibold text-tg-text mb-3">
-                            {t('home.devices.title')}
+                            Подключенные серверы
                         </h2>
                         <div className="flex items-center justify-between">
-                            <span className="text-tg-hint">{t('home.devices.connected')}</span>
+                            <span className="text-tg-hint">Активно / Лимит устройств</span>
                             <span className="text-2xl font-bold text-tg-link tabular-nums">
-                                {animatedDevicesCount} / {user?.device_limit || 0}
+                                {animatedServersCount} / {user?.device_limit || 0}
                             </span>
                         </div>
                     </div>
