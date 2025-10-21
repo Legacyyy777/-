@@ -106,6 +106,117 @@ router.post('/', async (req: Request, res: Response) => {
             console.warn('⚠️ Не удалось загрузить устройства:', err);
         }
 
+        // Получаем транзакции пользователя
+        let transactionsResult: any[] = [];
+        try {
+            transactionsResult = await query(`
+                SELECT 
+                    id,
+                    type,
+                    amount_kopeks,
+                    description,
+                    payment_method,
+                    external_id,
+                    is_completed,
+                    created_at,
+                    completed_at
+                FROM transactions
+                WHERE user_id = $1
+                ORDER BY created_at DESC
+                LIMIT 50
+            `, [user.user_db_id]);
+        } catch (err) {
+            console.warn('⚠️ Не удалось загрузить транзакции:', err);
+        }
+
+        // Получаем список рефералов
+        let referralsResult: any[] = [];
+        let referralEarningsResult: any[] = [];
+        try {
+            // Список приглашенных пользователей
+            referralsResult = await query(`
+                SELECT 
+                    u.id,
+                    u.telegram_id,
+                    u.username,
+                    u.first_name,
+                    u.last_name,
+                    u.created_at,
+                    COALESCE(SUM(re.amount_kopeks), 0) as total_earned_kopeks
+                FROM users u
+                LEFT JOIN referral_earnings re ON re.referral_id = u.id AND re.user_id = $1
+                WHERE u.referred_by_id = $1
+                GROUP BY u.id, u.telegram_id, u.username, u.first_name, u.last_name, u.created_at
+                ORDER BY u.created_at DESC
+                LIMIT 100
+            `, [user.user_db_id]);
+
+            // История заработка с рефералов
+            referralEarningsResult = await query(`
+                SELECT 
+                    re.id,
+                    re.amount_kopeks,
+                    re.reason,
+                    re.created_at,
+                    u.first_name || ' ' || COALESCE(u.last_name, '') as referral_name,
+                    u.username as referral_username
+                FROM referral_earnings re
+                JOIN users u ON u.id = re.referral_id
+                WHERE re.user_id = $1
+                ORDER BY re.created_at DESC
+                LIMIT 50
+            `, [user.user_db_id]);
+        } catch (err) {
+            console.warn('⚠️ Не удалось загрузить рефералов:', err);
+        }
+
+        // Получаем серверы (squads)
+        let squadsResult: any[] = [];
+        try {
+            squadsResult = await query(`
+                SELECT 
+                    uuid,
+                    name,
+                    country_code,
+                    is_available,
+                    price_kopeks,
+                    description
+                FROM squads
+                WHERE is_available = true
+                ORDER BY name
+            `);
+        } catch (err) {
+            console.warn('⚠️ Не удалось загрузить серверы (squads):', err);
+        }
+
+        // Считаем общую сумму потраченную
+        let totalSpentKopeks = 0;
+        try {
+            const totalSpentResult = await query(`
+                SELECT COALESCE(SUM(ABS(amount_kopeks)), 0) as total
+                FROM transactions
+                WHERE user_id = $1 
+                AND amount_kopeks < 0 
+                AND is_completed = true
+            `, [user.user_db_id]);
+            totalSpentKopeks = parseInt(totalSpentResult[0]?.total) || 0;
+        } catch (err) {
+            console.warn('⚠️ Не удалось посчитать total_spent:', err);
+        }
+
+        // Считаем общий заработок с рефералов
+        let totalReferralEarningsKopeks = 0;
+        try {
+            const totalEarningsResult = await query(`
+                SELECT COALESCE(SUM(amount_kopeks), 0) as total
+                FROM referral_earnings
+                WHERE user_id = $1
+            `, [user.user_db_id]);
+            totalReferralEarningsKopeks = parseInt(totalEarningsResult[0]?.total) || 0;
+        } catch (err) {
+            console.warn('⚠️ Не удалось посчитать referral earnings:', err);
+        }
+
         // Проверяем активность подписки
         const hasActiveSubscription = user.subscription_status === 'active' &&
             user.subscribed_until &&
@@ -117,6 +228,8 @@ router.post('/', async (req: Request, res: Response) => {
             subscription_id: user.subscription_id,
             remnawave_short_uuid: user.remnawave_short_uuid,
             balance_kopeks: parseInt(user.balance_kopeks) || 0,
+            total_spent_kopeks: totalSpentKopeks,
+            connected_devices_count: devicesResult.length,
             user: {
                 telegram_id: user.telegram_id,
                 has_active_subscription: hasActiveSubscription,
@@ -143,6 +256,86 @@ router.post('/', async (req: Request, res: Response) => {
             },
             subscription_url: user.subscription_url,
             subscription_crypto_link: user.subscription_crypto_link,
+
+            // Транзакции (история пополнений и списаний)
+            transactions: transactionsResult.map(t => ({
+                id: t.id,
+                type: t.type,
+                amount_kopeks: parseInt(t.amount_kopeks),
+                description: t.description,
+                payment_method: t.payment_method,
+                is_completed: t.is_completed,
+                created_at: t.created_at,
+                completed_at: t.completed_at,
+            })),
+
+            // Реферальная программа
+            referral: {
+                referral_code: user.referral_code,
+                referral_link: user.referral_code
+                    ? `https://t.me/${process.env.BOT_USERNAME || 'your_bot'}?start=ref_${user.referral_code}`
+                    : null,
+                total_referrals: referralsResult.length,
+                total_earned_kopeks: totalReferralEarningsKopeks,
+
+                // Статистика
+                stats: {
+                    invited_count: referralsResult.length,
+                    active_referrals_count: referralsResult.filter(r => r.total_earned_kopeks > 0).length,
+                    total_earned_kopeks: totalReferralEarningsKopeks,
+                    total_earned_label: `${(totalReferralEarningsKopeks / 100).toFixed(2)} ₽`,
+                    conversion_rate: referralsResult.length > 0
+                        ? (referralsResult.filter(r => r.total_earned_kopeks > 0).length / referralsResult.length) * 100
+                        : 0,
+                },
+
+                // Условия (можно настроить через env или БД)
+                terms: {
+                    commission_percent: 10,
+                    inviter_bonus_kopeks: 0,
+                    inviter_bonus_label: '0 ₽',
+                    invited_bonus_kopeks: 0,
+                    invited_bonus_label: '0 ₽',
+                },
+
+                // Список рефералов
+                referrals: {
+                    total: referralsResult.length,
+                    page: 1,
+                    limit: 100,
+                    items: referralsResult.map(r => ({
+                        id: r.id,
+                        telegram_id: r.telegram_id,
+                        username: r.username,
+                        full_name: `${r.first_name || ''} ${r.last_name || ''}`.trim() || 'Пользователь',
+                        created_at: r.created_at,
+                        total_earned_kopeks: parseInt(r.total_earned_kopeks) || 0,
+                        total_earned_label: `${(parseInt(r.total_earned_kopeks) || 0) / 100} ₽`,
+                        status: parseInt(r.total_earned_kopeks) > 0 ? 'active' : 'inactive',
+                    })),
+                },
+
+                // История заработка
+                recent_earnings: referralEarningsResult.map(e => ({
+                    id: e.id,
+                    amount_kopeks: parseInt(e.amount_kopeks),
+                    amount_label: `${(parseInt(e.amount_kopeks) / 100).toFixed(2)} ₽`,
+                    reason: e.reason,
+                    referral_name: e.referral_name?.trim() || e.referral_username || 'Пользователь',
+                    created_at: e.created_at,
+                })),
+            },
+
+            // Доступные серверы (squads)
+            available_squads: squadsResult.map(s => ({
+                uuid: s.uuid,
+                name: s.name,
+                country_code: s.country_code,
+                is_available: s.is_available,
+                price_kopeks: parseInt(s.price_kopeks) || 0,
+                price_label: `${(parseInt(s.price_kopeks) || 0) / 100} ₽`,
+                description: s.description,
+            })),
         };
 
         res.json(response);
