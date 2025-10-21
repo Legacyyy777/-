@@ -15,14 +15,28 @@ import type {
  */
 export const getSubscription = async (): Promise<Subscription> => {
     try {
-        const initData = getInitData();
-        if (!initData) {
-            throw new Error('Отсутствуют данные авторизации');
+        // Проверяем JWT токен (для браузера)
+        const jwtToken = localStorage.getItem('auth_token');
+
+        // Если нет JWT - используем initData (для Telegram WebApp)
+        if (!jwtToken) {
+            const initData = getInitData();
+            if (!initData) {
+                throw new Error('Отсутствуют данные авторизации');
+            }
+
+            const response = await post<{ success: boolean; } & Subscription>(
+                '/miniapp/subscription',
+                { initData }
+            );
+
+            return response;
         }
 
+        // Для JWT - просто делаем запрос (interceptor добавит Authorization)
         const response = await post<{ success: boolean; } & Subscription>(
             '/miniapp/subscription',
-            { initData }
+            {}
         );
 
         return response;
