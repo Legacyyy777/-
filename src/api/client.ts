@@ -3,10 +3,10 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 // Получение базового URL из переменных окружения
-// Если открыто через HTTPS - используем относительный путь для избежания Mixed Content
+// Backend на порту 3003 (прямой доступ к БД бота)
 const API_BASE_URL = window.location.protocol === 'https:'
-    ? 'https://testminiapp.legacyyy777.site'  // Используем полный URL для production
-    : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080');
+    ? 'https://api.testminiapp.legacyyy777.site'  // Production API (настроить Nginx)
+    : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:3003');
 
 // Создание экземпляра Axios
 export const apiClient: AxiosInstance = axios.create({
@@ -54,7 +54,7 @@ apiClient.interceptors.response.use(
         if (import.meta.env.DEV) {
             console.error('API Error:', error.response?.data || error.message);
         }
-        
+
         // Логирование в production для отладки
         console.error('API Error Details:', {
             url: error.config?.url,
