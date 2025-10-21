@@ -20,25 +20,29 @@ router.post('/', async (req: Request, res: Response) => {
             });
         }
 
-        // Получаем маппинг колонок (автоопределение схемы)
-        const mapping = await getColumnMapping();
-        const u = mapping.users;
-
-        // Универсальный запрос с автоматическим маппингом
+        // Для Bedolaga бота используем JOIN users + subscriptions
         const userResult = await query(`
             SELECT 
-                ${u.telegram_id} as telegram_id,
-                ${u.balance} as balance_kopeks,
-                ${u.referral_code} as referral_code,
-                ${u.referred_by} as referred_by,
-                ${u.subscription_active} as subscription_active,
-                ${u.subscription_expires} as subscribed_until,
-                ${u.traffic_limit} as traffic_limit_gb,
-                ${u.traffic_used} as traffic_used_gb,
-                ${u.device_limit} as device_limit,
-                ${u.created_at} as created_at
-            FROM users
-            WHERE ${u.telegram_id} = $1
+                u.id as user_db_id,
+                u.telegram_id,
+                u.balance_kopeks,
+                u.referral_code,
+                u.referred_by_id,
+                u.created_at as user_created_at,
+                s.id as subscription_id,
+                s.status as subscription_status,
+                s.end_date as subscribed_until,
+                s.traffic_limit_gb,
+                s.traffic_used_gb,
+                s.device_limit,
+                s.subscription_url,
+                s.remnawave_short_uuid,
+                s.subscription_crypto_link
+            FROM users u
+            LEFT JOIN subscriptions s ON s.user_id = u.id
+            WHERE u.telegram_id = $1
+            ORDER BY s.id DESC
+            LIMIT 1
         `, [userId]);
 
         if (userResult.length === 0) {
@@ -103,17 +107,19 @@ router.post('/', async (req: Request, res: Response) => {
         }
 
         // Проверяем активность подписки
-        const hasActiveSubscription = user.subscribed_until
-            ? new Date(user.subscribed_until) > new Date()
-            : Boolean(user.subscription_active);
+        const hasActiveSubscription = user.subscription_status === 'active' &&
+            user.subscribed_until &&
+            new Date(user.subscribed_until) > new Date();
 
-        // Формируем ответ в формате API
+        // Формируем ответ в формате API (совместимый с текущим frontend)
         const response = {
             success: true,
+            subscription_id: user.subscription_id,
+            remnawave_short_uuid: user.remnawave_short_uuid,
             user: {
                 telegram_id: user.telegram_id,
                 has_active_subscription: hasActiveSubscription,
-                subscription_status: hasActiveSubscription ? 'active' : 'inactive',
+                subscription_status: user.subscription_status || 'inactive',
                 subscribed_until: user.subscribed_until,
                 traffic_limit_gb: parseFloat(user.traffic_limit_gb) || 0,
                 traffic_used_gb: parseFloat(user.traffic_used_gb) || 0,
@@ -134,6 +140,8 @@ router.post('/', async (req: Request, res: Response) => {
                     created_at: d.created_at,
                 })),
             },
+            subscription_url: user.subscription_url,
+            subscription_crypto_link: user.subscription_crypto_link,
         };
 
         res.json(response);
