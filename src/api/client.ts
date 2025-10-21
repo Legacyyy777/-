@@ -4,9 +4,10 @@ import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'ax
 
 // Получение базового URL из переменных окружения
 // Backend на порту 3003 (прямой доступ к БД бота)
-const API_BASE_URL = window.location.protocol === 'https:'
-    ? 'https://api.testminiapp.legacyyy777.site'  // Production API (настроить Nginx)
-    : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:3003');
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ||
+    (window.location.protocol === 'https:'
+        ? 'https://api.testminiapp.legacyyy777.site'  // Production API (настроить Nginx)
+        : 'http://localhost:3003');
 
 // Создание экземпляра Axios
 export const apiClient: AxiosInstance = axios.create({
