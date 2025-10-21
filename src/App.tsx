@@ -15,6 +15,7 @@ import Referral from './pages/Referral';
 import Profile from './pages/Profile';
 import Help from './pages/Help';
 import Connect from './pages/Connect';
+import Login from './pages/Login';
 
 // Импорт Layout компонентов (будут созданы позже)
 import Layout from './components/layout/Layout';
@@ -62,21 +63,23 @@ function App() {
 
     return (
         <Router>
-            <Layout>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/connect" element={<Connect />} />
-                    <Route path="/subscribe" element={<Subscribe />} />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="/balance" element={<Balance />} />
-                    <Route path="/referral" element={<Referral />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/help" element={<Help />} />
+            <Routes>
+                {/* Страница авторизации без Layout */}
+                <Route path="/login" element={<Login />} />
 
-                    {/* Redirect любых неизвестных путей на главную */}
-                    <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-            </Layout>
+                {/* Остальные страницы с Layout */}
+                <Route path="/" element={<Layout><Home /></Layout>} />
+                <Route path="/connect" element={<Layout><Connect /></Layout>} />
+                <Route path="/subscribe" element={<Layout><Subscribe /></Layout>} />
+                <Route path="/settings" element={<Layout><Settings /></Layout>} />
+                <Route path="/balance" element={<Layout><Balance /></Layout>} />
+                <Route path="/referral" element={<Layout><Referral /></Layout>} />
+                <Route path="/profile" element={<Layout><Profile /></Layout>} />
+                <Route path="/help" element={<Layout><Help /></Layout>} />
+
+                {/* Redirect любых неизвестных путей на главную */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
         </Router>
     );
 }
