@@ -7,7 +7,7 @@ COPY package*.json ./
 COPY tsconfig.json ./
 
 # Устанавливаем зависимости
-RUN npm ci
+RUN npm install
 
 # Копируем исходники
 COPY src ./src
@@ -22,7 +22,7 @@ WORKDIR /app
 
 # Копируем только production зависимости
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm install --omit=dev
 
 # Копируем скомпилированный код
 COPY --from=builder /app/dist ./dist
