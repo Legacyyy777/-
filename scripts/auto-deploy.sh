@@ -95,28 +95,28 @@ if [ -z "$DB_PASSWORD" ]; then
     DB_PASSWORD=$(openssl rand -base64 24 | tr -d "=+/" | cut -c1-20)
 fi
 
-cat > backend/.env << ENVEOF
-# База данных бота
-POSTGRES_HOST=postgres
-POSTGRES_PORT=5432
-POSTGRES_DB=remnawave_bot
-POSTGRES_USER=miniapp_readonly
-POSTGRES_PASSWORD=${DB_PASSWORD}
-
-# Порт API
-PORT=3003
-
-# CORS
-ALLOWED_ORIGINS=http://localhost:3000,https://testminiapp.legacyyy777.site
-
-# Режим
-NODE_ENV=production
-
-# Telegram Bot Token
-BOT_TOKEN=${BOT_TOKEN}
-ENVEOF
+# Создаём .env построчно для правильной подстановки переменных
+echo "# База данных бота" > backend/.env
+echo "POSTGRES_HOST=postgres" >> backend/.env
+echo "POSTGRES_PORT=5432" >> backend/.env
+echo "POSTGRES_DB=remnawave_bot" >> backend/.env
+echo "POSTGRES_USER=miniapp_readonly" >> backend/.env
+echo "POSTGRES_PASSWORD=${DB_PASSWORD}" >> backend/.env
+echo "" >> backend/.env
+echo "# Порт API" >> backend/.env
+echo "PORT=3003" >> backend/.env
+echo "" >> backend/.env
+echo "# CORS" >> backend/.env
+echo "ALLOWED_ORIGINS=http://localhost:3000,https://testminiapp.legacyyy777.site" >> backend/.env
+echo "" >> backend/.env
+echo "# Режим" >> backend/.env
+echo "NODE_ENV=production" >> backend/.env
+echo "" >> backend/.env
+echo "# Telegram Bot Token" >> backend/.env
+echo "BOT_TOKEN=${BOT_TOKEN}" >> backend/.env
 
 echo -e "${GREEN}✅ backend/.env создан${NC}"
+echo -e "${GREEN}   Пароль БД: ${DB_PASSWORD}${NC}"
 
 # 5. Создать read-only пользователя в PostgreSQL (если не существует)
 echo -e "${YELLOW}🔐 Настройка доступа к БД...${NC}"
