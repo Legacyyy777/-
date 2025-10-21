@@ -180,8 +180,8 @@ echo -e "${GREEN}✅ docker-compose.yml создан${NC}"
 # 7. Запустить backend
 echo -e "${YELLOW}🚀 Запуск backend...${NC}"
 cd backend
-docker-compose down 2>/dev/null || true
-docker-compose up -d --build
+docker compose down 2>/dev/null || true
+docker compose up -d --build
 
 echo ""
 echo -e "${GREEN}✅ Backend запущен!${NC}"
