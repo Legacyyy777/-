@@ -21,6 +21,45 @@ export function validateInitData(req: Request, res: Response, next: NextFunction
             return next();
         }
 
+        // Проверяем JWT токен (для входа через браузер)
+        const authHeader = req.headers.authorization;
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            const token = authHeader.substring(7);
+            const jwtSecret = process.env.JWT_SECRET || process.env.BOT_TOKEN;
+
+            if (!jwtSecret) {
+                return res.status(500).json({
+                    success: false,
+                    error: 'Ошибка конфигурации сервера',
+                });
+            }
+
+            try {
+                const jwt = require('jsonwebtoken');
+                const decoded = jwt.verify(token, jwtSecret) as any;
+
+                // Устанавливаем данные пользователя из JWT
+                (req as any).telegramUser = {
+                    id: decoded.id,
+                    first_name: decoded.first_name,
+                    last_name: decoded.last_name,
+                    username: decoded.username,
+                    language_code: 'ru',
+                    is_premium: false,
+                };
+
+                console.log('✅ JWT авторизация:', decoded.id);
+                return next();
+            } catch (error) {
+                console.error('JWT verification failed:', error);
+                return res.status(401).json({
+                    success: false,
+                    error: 'Невалидный токен авторизации',
+                });
+            }
+        }
+
+        // Проверяем initData (для Telegram WebApp)
         const initData = req.body.initData || req.headers['x-telegram-init-data'];
 
         if (!initData) {

@@ -19,21 +19,31 @@ export const apiClient: AxiosInstance = axios.create({
 });
 
 /**
- * Интерсептор для добавления initData к каждому запросу
+ * Интерсептор для добавления авторизации к каждому запросу
  */
 apiClient.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-        // Получаем initData от Telegram
-        const initData = window.Telegram?.WebApp?.initData;
+        // Проверяем JWT токен (для входа через браузер)
+        const jwtToken = localStorage.getItem('auth_token');
 
-        if (initData && config.headers) {
-            // Если в теле запроса уже есть initData, не перезаписываем
-            if (config.data && typeof config.data === 'object' && !config.data.initData) {
-                config.data.initData = initData;
+        if (jwtToken && config.headers) {
+            // Используем JWT токен в заголовке Authorization
+            config.headers['Authorization'] = `Bearer ${jwtToken}`;
+            console.log('🔑 Используем JWT авторизацию');
+        } else {
+            // Получаем initData от Telegram WebApp
+            const initData = window.Telegram?.WebApp?.initData;
+
+            if (initData && config.headers) {
+                // Если в теле запроса уже есть initData, не перезаписываем
+                if (config.data && typeof config.data === 'object' && !config.data.initData) {
+                    config.data.initData = initData;
+                }
+
+                // Также добавляем в заголовок для некоторых запросов
+                config.headers['X-Telegram-Init-Data'] = initData;
+                console.log('🔑 Используем Telegram initData');
             }
-
-            // Также добавляем в заголовок для некоторых запросов
-            config.headers['X-Telegram-Init-Data'] = initData;
         }
 
         return config;
