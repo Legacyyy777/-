@@ -52,6 +52,26 @@ function App() {
         }
     }, [checkAuth, setTheme, theme, tg]);
 
+    // Проверка авторизации - если нет ни JWT ни initData, редирект на /login
+    useEffect(() => {
+        // Если мы уже на странице /login, не редиректим
+        if (window.location.pathname === '/login') {
+            return;
+        }
+
+        // Проверяем есть ли JWT токен (браузерная авторизация)
+        const jwtToken = localStorage.getItem('auth_token');
+
+        // Проверяем есть ли Telegram initData (WebApp авторизация)
+        const hasInitData = window.Telegram?.WebApp?.initData;
+
+        // Если нет ни того ни другого - редирект на login
+        if (!jwtToken && !hasInitData) {
+            console.log('⚠️ Нет авторизации - редирект на /login');
+            window.location.href = '/login';
+        }
+    }, []);
+
     // Показываем loader пока Telegram WebApp не готов
     if (!isReady) {
         return (
